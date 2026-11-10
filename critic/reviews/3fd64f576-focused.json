@@ -1,0 +1,662 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-11-10T10:25:00.000Z",
+  "build": {
+    "mainSha": "3fd64f576"
+  },
+  "targetVersion": "1d05c392cb7a763b5ebc74fc1814694f06c4e3b6c610470efa866d23640e047d",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No regression against live found: Seymour Flux (FFX) and Ixion Djose (FFX-2) and Isaaru Via Purifico play to victory on the candidate with real keys; Seymour Flux continuity on candidate and live reads the same (CHK-026 FAIL and CHK-027 PASS on both); Ixion Djose reaches victory in 27 turns on both builds with the same first enemy action.",
+    "The three new hidden chapters (blitz, dragon, debut) open by their words and play to their own results with their own lines; Wendigo opens by its word on desktop, stays shut on a 390 px phone window, and plays to a result by real keys with its models loaded.",
+    "The Special dresspheres stay unreachable: specialDressUp defaults false in the bundle (specialDressUp ?? false), and the FFX-2 command menu of Ixion Djose reads Attack, Skill, Change, Item with no Special.",
+    "The one failing check (CHK-027 ghosting on the Oblitzerator, FFX, a brand-new hidden chapter on stand-in art) is inside a new feature and does not exist live, so it is disclosed, not held."
+  ],
+  "checks": [
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "reason": "Words wendigo, blitz, dragon and debut typed with real keys on the chapter-select board each opened party prep; real Enter and Attack presses played the fights to results (1600x900); Ixion Djose and Isaaru Via Purifico routed by real keys to victory. Debug API used only for HP floors, named in each log.",
+      "game": "both",
+      "chapter": "wendigo, oblitzerator, ffx2-gullwings-ch1, ffx2-luca-opener, isaaru-via-purifico, ffx2-ixion-djose",
+      "state": "chapter select to results",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/log-wendigo.txt",
+        "critic/reviews/3fd64f576-focused/log-oblitz.txt",
+        "critic/reviews/3fd64f576-focused/log-gull.txt",
+        "critic/reviews/3fd64f576-focused/log-luca.txt",
+        "critic/reviews/3fd64f576-focused/route-cand/isaaru-via-purifico-win-cand/run.json",
+        "critic/reviews/3fd64f576-focused/route-cand/ffx2-ixion-djose-win-cand/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 25
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "reason": "Every smoke asserts the screen with assertScreen before each capture; the first prepcheck failure (title not yet passed) threw instead of shooting, and was fixed and rerun.",
+      "game": "both",
+      "chapter": "all run",
+      "state": "asserted per capture",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/prepcheck.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 1
+    },
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "reason": "Candidate dist-gate serves bundle index-C26ETj4I.js (the expected one); art-derive verify PASS (5783 masters, 0 problems), art-derive audit PASS (0 dangling), lake-models-verify --dir PASS (28 files, 164.1 MiB); approved-hash check 0 mismatched, 0 missing. The deploy runs the live byte compare itself.",
+      "game": "both",
+      "chapter": "build",
+      "state": "candidate artifact",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/art-verify.out",
+        "critic/reviews/3fd64f576-focused/serve.log"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 10
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "reason": "Both games played: FFX (Wendigo, Oblitzerator, Isaaru, Seymour Flux) and FFX-2 (Gullwings, Luca opener, Ixion Djose); the shared party-prep title fix checked on an FFX chapter and an FFX-2 chapter at all three sizes.",
+      "game": "both",
+      "chapter": "see coverage",
+      "state": "prep and fights",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/prepcheck.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 3
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "reason": "Cases: Wendigo and Oblitzerator FFX only; Special dresspheres, Gullwings, Luca opener and the stat table FFX-2 only; prep fix both. Presence: each hidden chapter opens in its own game. Absence: no Special in the FFX-2 menu and the specialDressUp default is false in the bundle; the stat-table fix leaves Ixion Djose identical to live (27 turns, same first action); no FFX chapter row carries an FFX-2 command.",
+      "game": "both",
+      "chapter": "see coverage",
+      "state": "menus and bundle",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/route-cand/ffx2-ixion-djose-win-cand/run.json",
+        "critic/reviews/3fd64f576-focused/route-live/ffx2-ixion-djose-win-live/run.json",
+        "<driver scratch>/r80/cand/special-switch.out"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 4
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "reason": "Fights reach results with real keys: Wendigo (52 turns, victory), Oblitzerator, Gullwings act 2 seam, Luca opener to its post scene lines, Isaaru (38 turns), Ixion Djose (27 turns).",
+      "game": "both",
+      "chapter": "see coverage",
+      "state": "to results",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/log-route-cand-ffx2-ixion-djose.txt",
+        "critic/reviews/3fd64f576-focused/log-route-cand-isaaru-via-purifico.txt"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 15
+    },
+    {
+      "id": "CHK-026",
+      "result": "FAIL",
+      "reason": "Seymour Flux FAILs on the candidate and identically on live (head jump 10.8 percent on both): a defect the live build already has. Oblitzerator PASSes (135 swaps, head 0.1 percent). Wendigo UNVERIFIED (the probe saw no battle on its 3D stage).",
+      "game": "FFX",
+      "chapter": "seymour-flux, oblitzerator, wendigo",
+      "state": "fights",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/continuity-cand/continuity-summary.json",
+        "critic/reviews/3fd64f576-focused/continuity-live/continuity-summary.json",
+        "critic/reviews/3fd64f576-focused/continuity-summary-oblitz.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 17
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "reason": "Oblitzerator FAILs: 39 of 94 ghost swaps over the fail line, 2,628 ghost ms a minute (cross-dissolves of Kimahri and Tidus poses), 0 snaps, 0 jerks, 59.8 fps. Seymour Flux PASSes on both candidate (428 ghost ms a minute) and live (391). Wendigo UNVERIFIED.",
+      "game": "FFX",
+      "chapter": "oblitzerator, seymour-flux, wendigo",
+      "state": "fights",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/continuity-summary-oblitz.json",
+        "critic/reviews/3fd64f576-focused/continuity/oblitzerator-win-oblitz/continuity/strips/swap-028-kimahri-hurt-idle.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 17
+    },
+    {
+      "id": "CHK-002",
+      "result": "UNVERIFIED",
+      "reason": "Not swept at the six viewports; only the prep and first-menu screens were looked at (390, 1600, 2000 for prep).",
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-003",
+      "result": "NOT APPLICABLE",
+      "reason": "No change to text size or HUD legibility in this release beyond the prep title, which was measured uncut.",
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-004",
+      "result": "NOT APPLICABLE",
+      "reason": "No panel naming an action was changed.",
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-005",
+      "result": "NOT APPLICABLE",
+      "reason": "No recommendation logic was tested on a broken board; the move advisor was not exercised beyond appearing in the first menu.",
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-006",
+      "result": "NOT APPLICABLE",
+      "reason": "No transient overlay change in scope.",
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "reason": "The first menus and prep screens of the new chapters were read in screenshots; no raw ids or debug text in the HUD (Wendigo menu, Luca and Gullwings prep).",
+      "game": "both",
+      "chapter": "wendigo, ffx2-luca-opener, ffx2-gullwings-ch1",
+      "state": "first menu, prep",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/shots-wendigo/desk-3a-first-menu-clear.jpg",
+        "critic/reviews/3fd64f576-focused/shots-gull/desk-1-party-prep.jpg",
+        "critic/reviews/3fd64f576-focused/shots-luca-phone/phone-1-party-prep.jpg"
+      ],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 3
+    },
+    {
+      "id": "CHK-008",
+      "result": "NOT APPLICABLE",
+      "reason": "Panel-versus-actor measuring not run; the Wendigo first menu was looked at once and showed no overlap.",
+      "game": "FFX",
+      "chapter": "wendigo",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-009",
+      "result": "NOT APPLICABLE",
+      "reason": "No name truncation sweep run; prep titles measured whole.",
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-010",
+      "result": "NOT APPLICABLE",
+      "reason": "Selection design unchanged.",
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-011",
+      "result": "PASS",
+      "reason": "Wendigo and both Guado Guardians, the Oblitzerator and its crane, and the Luca and Gullwings foes were all targetable by real keys in the smokes.",
+      "game": "both",
+      "chapter": "wendigo, oblitzerator",
+      "state": "targeting",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/log-wendigo.txt",
+        "critic/reviews/3fd64f576-focused/log-oblitz.txt"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 1
+    },
+    {
+      "id": "CHK-013",
+      "result": "UNVERIFIED",
+      "reason": "Art not judged against the written rubric; the new chapters play on stand-in art (disclosed). Approved-art hashes match (0 mismatched, 0 missing).",
+      "game": "both",
+      "chapter": "new chapters",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-023",
+      "result": "NOT APPLICABLE",
+      "reason": "No change to the audio or timing area judged by this check.",
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    }
+  ],
+  "continuity": {
+    "chapters": [
+      {
+        "chapter": "oblitzerator",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 112.5,
+        "swaps": 135,
+        "snapsPerMinute": 0,
+        "ghostMsPerMinute": 2628,
+        "maxHeadJumpPct": 0.1,
+        "maxFeetShiftPx": 0.7,
+        "worstJerkPx": 0,
+        "minStature": 0.903,
+        "heightOverBand": 0,
+        "feetSilOver": 0,
+        "swapJerksWorstPx": 0,
+        "dashesWorstPx": 0,
+        "frameP99Ms": 20.6,
+        "frameP99MsIsPacing": false,
+        "jerksCovered": 0,
+        "fps": 59.8,
+        "dedicated": true,
+        "strips": 15,
+        "worstSwapStrips": [
+          "oblitzerator-win-oblitz/continuity/strips/swap-028-kimahri-hurt-idle.jpg",
+          "oblitzerator-win-oblitz/continuity/strips/swap-026-kimahri-idle-hurt.jpg",
+          "oblitzerator-win-oblitz/continuity/strips/swap-123-tidus-ready-attack.jpg",
+          "oblitzerator-win-oblitz/continuity/strips/swap-135-kimahri-idle-victory.jpg",
+          "oblitzerator-win-oblitz/continuity/strips/swap-125-tidus-attack-follow.jpg",
+          "oblitzerator-win-oblitz/continuity/strips/swap-008-kimahri-idle-ready.jpg",
+          "oblitzerator-win-oblitz/continuity/strips/swap-107-kimahri-ready-idle.jpg",
+          "oblitzerator-win-oblitz/continuity/strips/swap-126-tidus-follow-idle.jpg",
+          "oblitzerator-win-oblitz/continuity/strips/swap-077-kimahri-follow-idle.jpg",
+          "oblitzerator-win-oblitz/continuity/strips/swap-117-kimahri-ready-attack.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "schema": "continuity-summary/1",
+    "battleSeconds": 112.5,
+    "counted": 135,
+    "swaps": 136,
+    "size": {
+      "judged": 135,
+      "costumeSwaps": 0,
+      "sameArtSwaps": 0,
+      "costumeWorstHeadPct": 0,
+      "costumeWorstFeetPx": 0,
+      "maxHeadJumpPct": 0.1,
+      "maxHeadJumpPctRegistration": 0.1,
+      "headOverTolerance": 0,
+      "maxFeetShiftPx": 0.7,
+      "feetOverTolerance": 0,
+      "feetDesigned": 0,
+      "feetDesignedWorstPx": 0,
+      "headMeasured": 94,
+      "headRegistration": 53,
+      "headRig": 41,
+      "rigSwaps": 41,
+      "headSilhouette": 0,
+      "headUnmeasured": 41,
+      "heightMeasured": 94,
+      "heightOverBand": 0,
+      "heightWaived": 0,
+      "minStature": 0.903,
+      "maxStature": 1.1,
+      "koLengthMeasured": 0,
+      "minKoLength": null,
+      "koLengthReported": 1,
+      "feetSilMeasured": 53,
+      "feetSilOver": 0,
+      "feetSilWaived": 0,
+      "maxFeetSilPx": 4.2,
+      "holdSwaps": 53,
+      "worstRealHeadPct": 14,
+      "realHeadOutsideBand": 0,
+      "realHeadWaived": 0,
+      "variantHeadSwaps": 0,
+      "worstVariantHeadPct": 0,
+      "variantHeadOutsideBand": 0,
+      "unregisteredSwaps": 0
+    },
+    "motion": {
+      "snaps": 0,
+      "snapsPerMinute": 0,
+      "hardCuts": 0,
+      "hardCutsPerMinute": 0,
+      "ghostSwaps": 94,
+      "ghostFrames": 306,
+      "worstGhostSeverity": 0.424,
+      "ghostOverFail": 39,
+      "jerks": 0,
+      "worstJerkPx": 0,
+      "jerksOverFail": 0,
+      "jerksCovered": 0,
+      "worstCoveredJerkPx": 0,
+      "lowestIou": 0.123,
+      "maxCentroidShiftPx": 96.6,
+      "heldSwaps": 0,
+      "longestHeldFrames": 0,
+      "stagedChanges": 0,
+      "stagedSteps": 0,
+      "stagedSnapsExcused": 0,
+      "jerksAtStaged": 0,
+      "smearsPlanned": 0,
+      "smearSwaps": 0,
+      "smearSnapsExcused": 0,
+      "jerksSmeared": 0,
+      "worstSmearedJerkPx": 0,
+      "swapJerks": 0,
+      "swapJerksWorstPx": 0,
+      "swapJerksOverFail": 0,
+      "teleports": 0,
+      "teleportsWorstPx": 0,
+      "dashes": 0,
+      "dashesWorstPx": 0,
+      "dashesOverFail": 0,
+      "jerksLongFrame": 0,
+      "swapJerksLongFrame": 0,
+      "swapJerksSteadyOverFail": 0,
+      "ghostMs": 4929,
+      "ghostMsPerMinute": 2629,
+      "ghostFramesPerMinute": 163.2,
+      "ghostFrames60PerMinute": 157.7
+    },
+    "frameTime": {
+      "frames": 6727,
+      "longFrames": 10,
+      "longFramePct": 0.1,
+      "worstP99Ms": 20.6,
+      "maxMs": 165.1,
+      "longMs": 34,
+      "source": "continuity-probe",
+      "pacingNumber": false
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "PASS",
+        "reasons": [],
+        "note": "53 of 94 measured swaps had a registered head (tolerance 3 percent); 41 were read from a rig's own head mesh (tolerance 3 percent; 41 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 41 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 94 swap(s) (stature 0.903 to 1.1, 0 out of band but waived), the silhouette's own feet 53 swap(s) (worst 4.2 px, 0 waived), 53 swap(s) across a recorded hold (real head worst 14 percent from the idle's), 0 on a painting with no fresh registration record"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "39 swap(s) show a double image of severity 0.4 or more (worst 0.424)"
+        ]
+      }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 112.5 s of battle, 59.8 to 59.8 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (39 swap(s) show a double image of severity 0.4 or more (worst 0.424)); 2,629 ms of see-through a minute (157.7 frames a minute at 60 Hz) Read by harness a049fd3a79a9 (38 files; tree <release tree> at 3fd64f576; policy 5ef4a3ed; probe v3 2c2bfe73; pose table 47535b71 (156 subjects); waivers f6829c4b (115 rows)).",
+    "base": "http://127.0.0.1:5612/",
+    "date": "2026-11-10T10:18:15.738Z",
+    "poseMeasure": {
+      "path": "<release tree>\\docs\\target\\pose-measure.json",
+      "source": "harness-tree",
+      "subjects": 156,
+      "sha256": "47535b71e6171bf53b644daeac431a3f553dabe9802ed35aa396bf127194f1c5",
+      "staleChapters": []
+    },
+    "harness": {
+      "schema": "continuity-harness/1",
+      "id": "a049fd3a79a90da4d177df1450d8bf8e8dbd88234bbd9ecbf40d06802a052028",
+      "tree": {
+        "root": "<release tree>",
+        "head": "3fd64f57647b9693615803ef354290d595f5a3bc",
+        "dirty": []
+      },
+      "files": {
+        "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+        "critic/runner/lib/continuity-analyze.mjs": "4b7874e7dde6a9c25ce8df3a174021f99f552f43",
+        "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+        "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+        "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+        "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+        "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+        "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+        "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+        "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+        "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+        "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+        "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+        "critic/runner/lib/continuity-rig-probe.mjs": "69f5933a74bb3f88d6e2bfbec336c51b602c25a5",
+        "critic/runner/lib/continuity-rig.mjs": "53b59d5a73f29dbcae1d67c3bf3ed8695498d045",
+        "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+        "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+        "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+        "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+        "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+        "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+        "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+        "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+        "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+        "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+        "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+        "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+        "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+        "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+        "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+        "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+        "critic/runner/lib/route-pure.mjs": "fc04ebd234f6719e0c7942b9940d85d9bbab639f",
+        "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+        "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+        "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+        "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+        "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+        "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+      },
+      "policy": {
+        "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+        "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+        "override": false,
+        "overrideSha256": null
+      },
+      "probe": {
+        "version": 3,
+        "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+      },
+      "poseTable": {
+        "path": "<release tree>\\docs\\target\\pose-measure.json",
+        "sha256": "47535b71e6171bf53b644daeac431a3f553dabe9802ed35aa396bf127194f1c5",
+        "subjects": 156,
+        "source": "harness-tree",
+        "buildSha": "3fd64f57",
+        "isCandidate": true
+      },
+      "waivers": {
+        "path": "<release tree>\\docs\\target\\pose-waivers.json",
+        "sha256": "f6829c4ba96180f7c1f371ba64ae263651d81db407071dfb9d79be412c132ed2",
+        "rows": 115
+      },
+      "run": {
+        "query": null,
+        "setArt": null,
+        "browser": "gpu"
+      },
+      "changedDuringRun": false,
+      "chapterIds": [
+        "a049fd3a79a90da4d177df1450d8bf8e8dbd88234bbd9ecbf40d06802a052028"
+      ],
+      "unstamped": [],
+      "chaptersByOtherHarness": [],
+      "aggregateSha256": "b4798cacb670ad756b56479585dc7d6467025bcb2e42be2de3cc3560b5bb5a79"
+    }
+  },
+  "targets": {
+    "required": 0,
+    "matched": 0,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0
+  },
+  "issues": [
+    {
+      "id": "R80-1",
+      "severity": "major",
+      "title": "Oblitzerator (FFX, new hidden chapter): Kimahri and Tidus pose swaps ghost, 2,628 ghost ms a minute, 39 of 94 over the fail line",
+      "game": "FFX",
+      "chapter": "oblitzerator",
+      "expected": "pose swaps at least as clean as Seymour Flux (about 400 ghost ms a minute)",
+      "observed": "CHK-027 FAIL; CHK-026 PASS; 0 snaps, 0 jerks; the strip shows a two-frame cross-dissolve between hurt and idle",
+      "repro": "continuity harness --chapters=oblitzerator on the candidate",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/continuity-summary-oblitz.json",
+        "critic/reviews/3fd64f576-focused/continuity/oblitzerator-win-oblitz/continuity/strips/swap-028-kimahri-hurt-idle.jpg"
+      ],
+      "confidence": "high for the reading; the cause (stand-in art or presenter dissolve) is suspected",
+      "requirement": "CHK-027",
+      "where": "suspected: the pose cross-dissolve timing for the new chapter's actors",
+      "fix": "shorten or hold the dissolve for Kimahri and Tidus in this chapter, then re-run the harness",
+      "acceptanceCheck": "continuity harness on oblitzerator: CHK-027 PASS",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "id": "R80-2",
+      "severity": "major",
+      "title": "Seymour Flux (FFX): CHK-026 FAIL, head jump 10.8 percent on pose swaps, same on live",
+      "game": "FFX",
+      "chapter": "seymour-flux",
+      "expected": "size continuity across pose swaps",
+      "observed": "CHK-026 FAIL on the candidate and on live with the same head jump; jerk 270 px against 240 px live (CHK-027 still PASS)",
+      "repro": "continuity harness --chapters=seymour-flux",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/continuity-cand/continuity-summary.json",
+        "critic/reviews/3fd64f576-focused/continuity-live/continuity-summary.json"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-026",
+      "where": "not traced",
+      "fix": "carried from earlier rounds",
+      "acceptanceCheck": "CHK-026 PASS on seymour-flux",
+      "introducedByCandidate": false,
+      "regressionVsLive": false
+    },
+    {
+      "id": "R80-3",
+      "severity": "polish",
+      "title": "Wendigo: the continuity probe sees no battle on the 3D lake stage, so CHK-026 and CHK-027 cannot be read",
+      "game": "FFX",
+      "chapter": "wendigo",
+      "expected": "a verdict",
+      "observed": "UNVERIFIED: the probe saw no battle (15161 frames, 8 figures)",
+      "repro": "continuity harness --chapters=wendigo",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/log-cont-wendigo.txt"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-026/CHK-027",
+      "where": "the probe, suspected",
+      "fix": "teach the probe the 3D stage",
+      "acceptanceCheck": "harness gives a verdict for wendigo",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "id": "R80-4",
+      "severity": "polish",
+      "title": "Phone party prep: the tab row clips its last tabs at the edge (ACCESSORIES and ITEMS, EQUIPMENT) until scrolled",
+      "game": "both",
+      "chapter": "ffx2-luca-opener, seymour-flux",
+      "expected": "tabs visibly reachable",
+      "observed": "the row is wider than 390 px (558 and 642 px); the last tab is reachable by real tap after scroll; the page has no horizontal scroll; the title is whole at 390, 1600 and 2000",
+      "repro": "390x844 touch, party prep",
+      "evidence": [
+        "critic/reviews/3fd64f576-focused/shots-prep/phone-debut.jpg",
+        "critic/reviews/3fd64f576-focused/shots-prep/phone-board.jpg",
+        "critic/reviews/3fd64f576-focused/prepcheck.json"
+      ],
+      "confidence": "high",
+      "requirement": "party prep tabs uncut",
+      "where": "src/app/screens/PartyPrepScreen.ts tab row",
+      "fix": "a fade or scroll cue at the row edge",
+      "acceptanceCheck": "last tab visibly cued at 390 px"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "dist-gate bundle index-C26ETj4I.js served on 5612 (stopped by PID 38868, port confirmed closed)",
+      "plan: depth deep, deepBeforeDeploy false",
+      "wendigo, blitz, dragon, debut words with real keys to results or first seam (1600x900); dragon and debut at 390x844 (prep and first menu); wendigo word on 390 refused",
+      "party prep title and tabs at 390x844, 1600x900, 2000x1012 for Luca opener and Seymour Flux",
+      "route to victory: isaaru-via-purifico (FFX) and ffx2-ixion-djose (FFX-2, also on live)",
+      "continuity: oblitzerator, wendigo, seymour-flux (candidate and live)",
+      "art-derive verify and audit, lake-models-verify, approved hashes, specialDressUp default false in the bundle"
+    ],
+    "reused": [
+      {
+        "what": "the full unit suite (2,233 files, 36,063 tests)",
+        "from": "<driver scratch>/r80/cand/suite-result.md",
+        "why": "the review budget"
+      },
+      {
+        "what": "Sleep breaks the Wendigo stance, the four 3D aeons, afterTick flag, the stat-table census (22 FFX-2 chapters, 220 of 220 identical)",
+        "from": "the builders' unit tests and census",
+        "why": "not reachable in a short real-key run; not re-run here"
+      }
+    ],
+    "notTested": [
+      "Sleep breaking the Wendigo stance and the four 3D aeons in a browser",
+      "Gullwings and Luca opener full run on live for comparison (their girls are under Lv 20; the chapters do not exist live)",
+      "FFX-2 chapters under Lv 20 other than the two new ones (the census says none on the board is affected)",
+      "the Luca opener's stale handoff screenshots (disclosed; not re-shot)",
+      "layout at the six viewports (CHK-002), art against the rubric (CHK-013), target tile composites (no tile touched)",
+      "dataAudit values re-compared with research by hand (cited from the builders' parity fixtures)"
+    ]
+  },
+  "regressions": [],
+  "nextReview": "deep review on the live build (second deploy while a deep review is owed; release 81 refuses until one is settled)",
+  "elapsedMinutes": 70
+}

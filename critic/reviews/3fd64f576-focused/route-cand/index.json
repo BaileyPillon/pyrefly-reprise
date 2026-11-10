@@ -1,0 +1,1490 @@
+[
+ {
+  "file": "isaaru-via-purifico-win-cand/00-title.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:56:44.765Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/01-briefing.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:56:45.897Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/03-card.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "isaaru-via-purifico",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:56:48.216Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/04-prep.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:56:50.450Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/05-pre-scene.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:56:55.433Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/05b-scene-esc.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:56:56.588Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 71
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 368
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 669
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 970
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1272
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1630
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1939
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2235
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2534
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2835
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:10.519Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/10-first-menu-coach.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:10.583Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/11-advisor.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:10.630Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/12-intent-E.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:12.315Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/13-guide-G.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:13.599Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/14-pause-Esc.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:15.285Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/14-pause-tab-next.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Chapter",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:15.879Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/14-pause-options.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:16.964Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:status-add)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 52
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 283
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 516
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 750
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 985
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1215
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1453
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1682
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1916
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2150
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:33.969Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/seq-party-action/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Valefor)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 45
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 281
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 523
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 767
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1002
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1225
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1461
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1692
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1925
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2159
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:41.291Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/23-midfight.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:57:41.345Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/seq-seam-2/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 1 -> 2 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 48
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 395
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 747
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1103
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1451
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1812
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2169
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2518
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:58:04.155Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/20-link-2.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 2 of 3",
+  "asserted": "screen=battle links=2",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:58:07.246Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/24-seam-2-first-menu.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 2",
+  "asserted": "screen=battle awaitingMenu=true links=2",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 25,
+    "y": 133,
+    "w": 598,
+    "h": 154
+   },
+   "rows": 2,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Yuna Bahamut IN SUMMON NO MP Calls Bahamut onto the field — the party steps out and its counters freeze Bahamut takes the hits while the party’s counters are frozen."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:58:10.055Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/seq-seam-3/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 2 -> 3 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 45
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 394
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 749
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1101
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1451
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1805
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2172
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2519
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:58:37.316Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/20-link-3.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 3 of 3",
+  "asserted": "screen=battle links=3",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:58:40.404Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/24-seam-3-first-menu.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 3",
+  "asserted": "screen=battle awaitingMenu=true links=3",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 25,
+    "y": 133,
+    "w": 598,
+    "h": 154
+   },
+   "rows": 2,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Yuna Ifrit IN SUMMON NO MP Calls Ifrit onto the field — the party steps out and its counters freeze Ifrit takes the hits while the party’s counters are frozen."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T09:58:41.629Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/30-post-scene.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "post-battle scene after a victory",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:01:28.839Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/31-results.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:01:52.614Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/34-board-after.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:01:55.167Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-cand/35-board-reload.jpg",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:01:57.021Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/00-title.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:01:59.282Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/01-briefing.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:00.410Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/03-card.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "ffx2-ixion-djose",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:04.899Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/04-prep.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:07.146Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/05-pre-scene.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:12.115Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/05b-scene-esc.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:13.301Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/seq-transition-into-battle/",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 65
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 380
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 678
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 991
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1295
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1593
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1894
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2191
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2509
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2809
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:27.234Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/10-first-menu-coach.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:27.313Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/11-advisor.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:27.363Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/12-intent-E.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:29.054Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/13-guide-G.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:30.317Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/14-pause-Esc.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:32.000Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/14-pause-tab-next.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Rikku",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:32.567Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/14-pause-options.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:34.688Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/16-target-single.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 1,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:37.997Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/16b-after-cancel.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:39.080Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/seq-party-action/",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Darkness)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 51
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 284
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 515
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 752
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 984
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1216
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1450
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1684
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1919
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2150
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:42.544Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/21-change-open.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "CHANGE opened (Garment Grid)",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:46.517Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/seq-spherechange/",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a spherechange chosen by real input",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 178
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 428
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 695
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 943
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1195
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1445
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1712
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1960
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2221
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2478
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:49.767Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/seq-action-playing/",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:action-end)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 54
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 304
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 540
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 791
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1024
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1276
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1523
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1776
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2025
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2257
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:53.314Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/23-midfight.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 4 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:02:54.717Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/30-post-scene.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "post-battle scene after a victory",
+  "asserted": "UNVERIFIED (screen wanted cutscene got results) screen=results",
+  "verified": false,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:04:38.781Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/31-results.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:04:41.346Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/33-after-confirm-scene.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:04:43.963Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/34-board-after.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:05:50.615Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-cand/35-board-reload.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:05:52.449Z"
+ }
+]

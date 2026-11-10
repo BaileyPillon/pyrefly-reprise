@@ -1,0 +1,511 @@
+{
+ "chapter": "seymour-flux",
+ "game": "ffx",
+ "mode": "gpu",
+ "steps": [
+  {
+   "t": 1794304149569,
+   "k": "freshBoot",
+   "v": {
+    "screen": "title",
+    "briefingNodes": 0,
+    "coachNodes": 0,
+    "bodyText": "AN UNOFFICIAL FAN TRIBUTE PRESS ENTER FINAL FANTASY X AND X-2 ARROWS / WASD MOVE ENTER CONFIRM ESC CANCEL B BRIEFING L CHANGELOG T TITLE ART RELEASE 80 · 3fd64f57"
+   }
+  },
+  {
+   "t": 1794304170440,
+   "k": "chapter-select",
+   "v": {
+    "selectedIndex": 0,
+    "selectedId": "seymour-flux",
+    "tiles": 19,
+    "coming": [],
+    "cleared": [],
+    "order": [
+     "seymour-flux",
+     "yunalesca",
+     "braskas-final-aeon",
+     "seymour-anima-macalania",
+     "evrae-airship",
+     "yojimbo-cavern",
+     "seymour-natus",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "sin-fins-core",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-leblanc",
+     "ffx2-fallen-aeons",
+     "ffx2-trema",
+     "ffx2-den-of-woe",
+     "ffx2-ixion-djose"
+    ],
+    "beaten": 0,
+    "total": 19
+   }
+  },
+  {
+   "t": 1794304173381,
+   "k": "prep.portraits",
+   "v": 10
+  },
+  {
+   "t": 1794304174296,
+   "k": "prep.afterEsc",
+   "v": "party-prep"
+  },
+  {
+   "t": 1794304176301,
+   "k": "afterPrepConfirm",
+   "v": "cutscene"
+  },
+  {
+   "t": 1794304178637,
+   "k": "scene.afterEsc",
+   "v": "pause"
+  },
+  {
+   "t": 1794304195408,
+   "k": "scene.speakers",
+   "v": [
+    "Kimahri/kimahri.png",
+    "Kimahri/kimahri.png",
+    "Kimahri/kimahri.png",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Wakka/wakka.webp",
+    "Wakka/wakka.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Tidus/tidus.webp",
+    "Tidus/tidus.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Seymour/seymour.webp",
+    "Tidus/tidus.webp",
+    "Tidus/tidus.webp",
+    "Tidus/tidus.webp",
+    "Tidus/tidus.webp"
+   ]
+  }
+ ],
+ "shots": [],
+ "freshBoot": {
+  "screen": "title",
+  "briefingNodes": 0,
+  "coachNodes": 0,
+  "bodyText": "AN UNOFFICIAL FAN TRIBUTE PRESS ENTER FINAL FANTASY X AND X-2 ARROWS / WASD MOVE ENTER CONFIRM ESC CANCEL B BRIEFING L CHANGELOG T TITLE ART RELEASE 80 · 3fd64f57"
+ },
+ "prepPortraits": [
+  {
+   "src": "portraits/tidus.webp",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  },
+  {
+   "src": "portraits/yuna.webp",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  },
+  {
+   "src": "portraits/kimahri.png",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  },
+  {
+   "src": "portraits/auron.webp",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  },
+  {
+   "src": "portraits/wakka.webp",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  },
+  {
+   "src": "portraits/lulu.webp",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  },
+  {
+   "src": "portraits/rikku.webp",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  },
+  {
+   "src": "portraits/tidus.webp",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  },
+  {
+   "src": "portraits/yuna.webp",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  },
+  {
+   "src": "portraits/kimahri.png",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  }
+ ],
+ "prepChapterConfirmed": {
+  "chapter": "seymour-flux",
+  "game": "ffx",
+  "tabs": [
+   "chapter",
+   "stats",
+   "sphere-grid",
+   "equipment",
+   "items",
+   "overdrive"
+  ],
+  "tab": "stats",
+  "member": "tidus",
+  "outcome": null,
+  "panelsRegistered": 6
+ },
+ "sceneSpeakers": [
+  {
+   "who": "Kimahri",
+   "img": "kimahri.png",
+   "nw": 832
+  },
+  {
+   "who": "Kimahri",
+   "img": "kimahri.png",
+   "nw": 832
+  },
+  {
+   "who": "Kimahri",
+   "img": "kimahri.png",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Wakka",
+   "img": "wakka.webp",
+   "nw": 832
+  },
+  {
+   "who": "Wakka",
+   "img": "wakka.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Tidus",
+   "img": "tidus.webp",
+   "nw": 832
+  },
+  {
+   "who": "Tidus",
+   "img": "tidus.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Seymour",
+   "img": "seymour.webp",
+   "nw": 832
+  },
+  {
+   "who": "Tidus",
+   "img": "tidus.webp",
+   "nw": 832
+  },
+  {
+   "who": "Tidus",
+   "img": "tidus.webp",
+   "nw": 832
+  },
+  {
+   "who": "Tidus",
+   "img": "tidus.webp",
+   "nw": 832
+  },
+  {
+   "who": "Tidus",
+   "img": "tidus.webp",
+   "nw": 832
+  }
+ ],
+ "error": "Error: ASSERT-FAIL screen expected=battle after 60259ms",
+ "errorScreen": "cutscene",
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "mediaRequests": [
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/characters/yunalesca-1/idle.thumb.png",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/characters/ffx2-bahamut/idle.thumb.png",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/characters/x2-ixion/idle.thumb.png",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/characters/baralai-shade/idle.thumb.png",
+  "art/backdrops/macalania-temple.thumb.webp",
+  "art/characters/anima/idle.thumb.png",
+  "art/backdrops/via-infinito.thumb.webp",
+  "art/characters/trema/idle.thumb.png",
+  "art/backdrops/evrae-airship-deck.thumb.webp",
+  "art/characters/evrae/idle.thumb.png",
+  "art/backdrops/road-to-the-farplane.thumb.webp",
+  "art/characters/x2-shiva/idle.thumb.png",
+  "art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "art/characters/yojimbo-cavern/idle.thumb.png",
+  "art/backdrops/leblanc-last-room.thumb.webp",
+  "art/characters/leblanc/idle.thumb.png",
+  "art/backdrops/bevelle-highbridge.thumb.webp",
+  "art/characters/seymour-natus/idle.thumb.png",
+  "art/backdrops/farplane.thumb.webp",
+  "art/characters/vegnagun-body/idle.thumb.png",
+  "art/backdrops/garden-of-pain.thumb.webp",
+  "art/characters/seymour-omnis/idle.thumb.png",
+  "art/backdrops/via-purifico.thumb.webp",
+  "art/characters/isaaru/idle.thumb.png",
+  "art/backdrops/mushroom-rock-road.thumb.webp",
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "art/characters/sin-left-fin/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "art/characters/overdrive-sin/idle.thumb.png",
+  "art/portraits/auron.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/characters/yunalesca-1/idle.png",
+  "art/portraits/yuna-x2.webp",
+  "art/portraits/rikku-x2.webp",
+  "art/portraits/paine.webp",
+  "art/backdrops/bevelle-underground.webp",
+  "art/characters/ffx2-bahamut/idle.png",
+  "art/backdrops/djose-chamber-provisional.webp",
+  "art/characters/x2-ixion/idle.png",
+  "art/characters/braskas-final-aeon-1/idle.png",
+  "art/backdrops/den-of-woe.webp",
+  "art/characters/nooj-shade/idle.png",
+  "art/characters/gippal-shade/idle.png",
+  "art/characters/baralai-shade/idle.png",
+  "art/portraits/rikku.webp",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/characters/yuna-white-mage/idle.png",
+  "art/characters/rikku-dark-knight/idle.png",
+  "art/characters/paine-warrior/idle.png",
+  "art/characters/paine-dark-knight/idle.png",
+  "art/characters/yuna-dark-knight/idle.png",
+  "art/characters/rikku-alchemist/idle.png",
+  "art/characters/yuna-gunner/idle.png",
+  "art/characters/rikku-thief/idle.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "audio/music/chapter-select.mp3",
+  "art/portraits/seymour.webp",
+  "audio/sfx/parity-ffx-flux.mp3",
+  "audio/sfx/parity-ffx-core.mp3",
+  "audio/music/scene-gagazet.mp3",
+  "art/pause/ch1-seymour-flux.webp",
+  "art/characters/seymour-flux/idle.webp",
+  "audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+  "audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+  "audio/voice/seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+  "audio/voice/seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+  "audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+  "audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+  "audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+  "audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-half.001.mp3",
+  "audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-half.002.mp3",
+  "audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-lance.001.mp3",
+  "audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-lance.002.mp3",
+  "audio/voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.001.mp3",
+  "audio/voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.002.mp3",
+  "audio/voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.003.mp3",
+  "audio/voice-pass/seymour-flux/seymour-flux.mid-talk-kimahri.001.mp3",
+  "audio/voice-pass/seymour-flux/seymour-flux.mid-talk-kimahri.002.mp3",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "art/characters/kimahri/idle.png",
+  "art/characters/tidus/ready.png",
+  "art/characters/yuna/ready.png",
+  "art/characters/kimahri/ready.png",
+  "art/characters/seymour-flux-body/attack.png",
+  "audio/music/boss-seymour.mp3",
+  "art/characters/seymour-flux-body/cast.png",
+  "art/characters/seymour-flux-body/hurt.png",
+  "art/characters/seymour-flux-body/ko.png",
+  "art/characters/seymour-flux-body/telegraph.png",
+  "art/characters/mortiorchis/attack.png",
+  "art/characters/mortiorchis/cast.png",
+  "art/characters/mortiorchis/hurt.png",
+  "art/characters/mortiorchis/ko.png",
+  "art/characters/tidus/attack.png",
+  "art/characters/tidus/cast.png",
+  "art/characters/tidus/item.png",
+  "art/characters/tidus/hurt.png",
+  "art/characters/tidus/ko.png",
+  "art/characters/tidus/defend.webp",
+  "art/characters/yuna/attack.png",
+  "audio/music/victory-ffx.mp3",
+  "art/characters/yuna/cast.png",
+  "art/characters/yuna/item.png",
+  "art/characters/yuna/hurt.png",
+  "art/characters/yuna/ko.png",
+  "art/characters/kimahri/attack.png",
+  "audio/music/defeat-ffx.mp3",
+  "art/characters/kimahri/cast.png",
+  "art/characters/kimahri/item.png",
+  "art/characters/kimahri/hurt.png",
+  "art/characters/kimahri/ko.png",
+  "art/characters/kimahri/defend.png",
+  "art/characters/tidus/victory.png",
+  "art/characters/tidus/sleep.png",
+  "art/characters/tidus/critical.png",
+  "art/characters/tidus/follow.png",
+  "art/characters/tidus/od-energy-rain.png",
+  "art/characters/tidus/od-slice-and-dice.png",
+  "art/characters/yuna/victory.png",
+  "art/characters/yuna/sleep.png",
+  "art/characters/yuna/critical.png",
+  "art/characters/yuna/follow.png",
+  "art/characters/kimahri/victory.png",
+  "art/characters/kimahri/sleep.png",
+  "art/characters/kimahri/critical.png",
+  "art/characters/kimahri/follow.png",
+  "art/pause/tidus.2x.webp",
+  "art/pause/yuna.2x.webp",
+  "art/pause/kimahri.2x.webp",
+  "audio/voice/seymour-flux/seymour-flux.pre.008.mp3",
+  "audio/voice/seymour-flux/seymour-flux.pre.013.mp3",
+  "audio/voice/seymour-flux/seymour-flux.pre.014.mp3",
+  "audio/voice/seymour-flux/seymour-flux.pre.017.mp3",
+  "audio/voice/seymour-flux/seymour-flux.pre.018.mp3",
+  "audio/music/pause.mp3",
+  "art/pause/ch1-seymour-flux.2x.webp",
+  "audio/voice/seymour-flux/seymour-flux.pre.019.mp3",
+  "audio/voice/seymour-flux/seymour-flux.pre.024.mp3"
+ ]
+}

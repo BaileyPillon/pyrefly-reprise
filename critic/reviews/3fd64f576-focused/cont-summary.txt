@@ -1,0 +1,8 @@
+wendigo exit=0 signal=null minutes=4.7
+DONE wendigo
+oblitz exit=0 signal=null minutes=3.0
+DONE oblitz
+sf-cand exit=0 signal=null minutes=9.2
+DONE sf-cand
+sf-live exit=0 signal=null minutes=9.8
+DONE sf-live

@@ -1,0 +1,5 @@
+cand isaaru-via-purifico exit=0 signal=null minutes=5.2
+cand ffx2-ixion-djose exit=0 signal=null minutes=3.9
+DONE
+live ffx2-ixion-djose exit=0 signal=null minutes=4.1
+DONE

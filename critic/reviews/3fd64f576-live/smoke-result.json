@@ -1,0 +1,490 @@
+{
+ "steps": [
+  {
+   "k": "listed.title",
+   "v": true
+  },
+  {
+   "k": "listed.afterDoor",
+   "v": "cutscene"
+  },
+  {
+   "k": "listed.reachedScreen",
+   "v": {
+    "s": "battle",
+    "presses": 62
+   }
+  },
+  {
+   "k": "listed.action",
+   "v": {
+    "before": {
+     "f": null,
+     "l": 14
+    },
+    "after": {
+     "f": null,
+     "l": 19,
+     "s": "battle"
+    }
+   }
+  },
+  {
+   "k": "listed.audio",
+   "v": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-seymour\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"seymour-flux\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":10,\"started\":10,\"current\":null,\"cache\":{\"manifests\":[\"seymour-flux\"],\"buffers\":24,\"decodedBytes\":9825760,\"pinned\":16,\"failed\":0,\"requests\":27},\"plays\":[{\"id\":\"seymour-flux.pre.008\",\"at\":32571,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.013\",\"at\":36487,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.014\",\"at\":37555,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.017\",\"at\":39688,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pr"
+  },
+  {
+   "k": "listed.localStorageKeysBeforeReload",
+   "v": [
+    "pyrefly-reprise:save:v1"
+   ]
+  },
+  {
+   "k": "blitz.afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "k": "blitz.reachedScreen",
+   "v": {
+    "s": "battle",
+    "presses": 25
+   }
+  },
+  {
+   "k": "blitz.menu",
+   "v": {
+    "awaiting": true,
+    "snapshotLen": 3605
+   }
+  },
+  {
+   "k": "blitz.commandRows",
+   "v": {
+    "stackPresent": true,
+    "rows": [
+     {
+      "i": 0,
+      "text": "Use crane",
+      "selected": true,
+      "disabled": false,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 1,
+      "text": "Attack",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 2,
+      "text": "Special",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 3,
+      "text": "White Magic",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 4,
+      "text": "Items",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 5,
+      "text": "Escape",
+      "selected": false,
+      "disabled": true,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     }
+    ]
+   }
+  },
+  {
+   "k": "blitz.audio",
+   "v": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"battle-ffx\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"oblitzerator\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":0,\"started\":0,\"current\":null,\"cache\":{\"manifests\":[],\"buffers\":0,\"decodedBytes\":0,\"pinned\":0,\"failed\":0,\"requests\":1},\"plays\":[]},\"sfxMix\":{\"option\":\"b\",\"trim\":1,\"busGain\":0.7},\"music\":{\"current\":{\"name\":\"battle-ffx\",\"gain\":1},\"fading\":[],\"held\":[\"victory-ffx\",\"defeat-ffx\"]},\"prerendered\":{\"manifest\":true,\"cues\":43,\"sprite\":true,\"spriteDecoded\":true,\"v2\":{\"cues\":92,\"decoded\":true,\"game\":\"ffx\",\"retired\":8},\"parity\":{\"packs\":[\"ffx-core\",\"ffx2-core\",\"ffx-"
+  },
+  {
+   "k": "blitz.escScreen",
+   "v": "pause"
+  },
+  {
+   "k": "blitz.afterEscResume",
+   "v": "battle"
+  },
+  {
+   "k": "blitz.pScreen",
+   "v": "pause"
+  },
+  {
+   "k": "blitz.hHidden",
+   "v": 79
+  },
+  {
+   "k": "blitz.afterPResume",
+   "v": "battle"
+  },
+  {
+   "k": "dragon.afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "k": "dragon.reachedScreen",
+   "v": {
+    "s": "battle",
+    "presses": 18
+   }
+  },
+  {
+   "k": "dragon.menu",
+   "v": {
+    "awaiting": true,
+    "snapshotLen": 6846
+   }
+  },
+  {
+   "k": "dragon.commandRows",
+   "v": {
+    "stackPresent": true,
+    "rows": [
+     {
+      "i": 0,
+      "text": "Attack",
+      "selected": true,
+      "disabled": false,
+      "overdrive": false,
+      "w": 337,
+      "h": 58
+     },
+     {
+      "i": 1,
+      "text": "Skill",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 337,
+      "h": 58
+     },
+     {
+      "i": 2,
+      "text": "Change",
+      "selected": false,
+      "disabled": false,
+      "overdrive": true,
+      "w": 337,
+      "h": 58
+     },
+     {
+      "i": 3,
+      "text": "Item",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 337,
+      "h": 58
+     }
+    ]
+   }
+  },
+  {
+   "k": "dragon.audio",
+   "v": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-ffx2-fallen-aeons\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":null,\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":0,\"started\":0,\"current\":null,\"cache\":{\"manifests\":[],\"buffers\":0,\"decodedBytes\":0,\"pinned\":0,\"failed\":0,\"requests\":0},\"plays\":[]},\"sfxMix\":{\"option\":\"b\",\"trim\":1,\"busGain\":0.7},\"music\":{\"current\":{\"name\":\"boss-ffx2-fallen-aeons\",\"gain\":1},\"fading\":[],\"held\":[\"victory-ffx2\",\"defeat-ffx2\"]},\"prerendered\":{\"manifest\":true,\"cues\":43,\"sprite\":true,\"spriteDecoded\":true,\"v2\":{\"cues\":92,\"decoded\":true,\"game\":\"ffx2\",\"retired\":8},\"parity\":{\"packs\":[\"ffx-core\","
+  },
+  {
+   "k": "dragon.noSpecialRow",
+   "v": true
+  },
+  {
+   "k": "dragon.escScreen",
+   "v": "battle"
+  },
+  {
+   "k": "dragon.afterEscResume",
+   "v": "pause"
+  },
+  {
+   "k": "dragon.pScreen",
+   "v": "battle"
+  },
+  {
+   "k": "dragon.hHidden",
+   "v": 1
+  },
+  {
+   "k": "dragon.afterPResume",
+   "v": "pause"
+  },
+  {
+   "k": "debut.afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "k": "debut.reachedScreen",
+   "v": {
+    "s": "battle",
+    "presses": 25
+   }
+  },
+  {
+   "k": "debut.menu",
+   "v": {
+    "awaiting": true,
+    "snapshotLen": 10076
+   }
+  },
+  {
+   "k": "debut.commandRows",
+   "v": {
+    "stackPresent": true,
+    "rows": [
+     {
+      "i": 0,
+      "text": "Attack",
+      "selected": true,
+      "disabled": false,
+      "overdrive": false,
+      "w": 337,
+      "h": 58
+     },
+     {
+      "i": 1,
+      "text": "Trigger Happy",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 337,
+      "h": 58
+     },
+     {
+      "i": 2,
+      "text": "Item",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 337,
+      "h": 58
+     }
+    ]
+   }
+  },
+  {
+   "k": "debut.audio",
+   "v": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-leblanc\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":null,\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":0,\"started\":0,\"current\":null,\"cache\":{\"manifests\":[],\"buffers\":0,\"decodedBytes\":0,\"pinned\":0,\"failed\":0,\"requests\":0},\"plays\":[]},\"sfxMix\":{\"option\":\"b\",\"trim\":1,\"busGain\":0.7},\"music\":{\"current\":{\"name\":\"boss-leblanc\",\"gain\":1},\"fading\":[],\"held\":[\"victory-ffx2\",\"defeat-ffx2\"]},\"prerendered\":{\"manifest\":true,\"cues\":43,\"sprite\":true,\"spriteDecoded\":true,\"v2\":{\"cues\":92,\"decoded\":true,\"game\":\"ffx2\",\"retired\":8},\"parity\":{\"packs\":[\"ffx-core\",\"ffx2-core\",\"ffx-lad"
+  },
+  {
+   "k": "debut.noSpecialRow",
+   "v": true
+  },
+  {
+   "k": "debut.escScreen",
+   "v": "battle"
+  },
+  {
+   "k": "debut.afterEscResume",
+   "v": "pause"
+  },
+  {
+   "k": "debut.pScreen",
+   "v": "battle"
+  },
+  {
+   "k": "debut.hHidden",
+   "v": 1
+  },
+  {
+   "k": "debut.afterPResume",
+   "v": "pause"
+  },
+  {
+   "k": "wendigo.afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "k": "wendigo.reachedScreen",
+   "v": {
+    "s": "battle",
+    "presses": 14
+   }
+  },
+  {
+   "k": "wendigo.menu",
+   "v": {
+    "awaiting": true,
+    "snapshotLen": 4546
+   }
+  },
+  {
+   "k": "wendigo.commandRows",
+   "v": {
+    "stackPresent": true,
+    "rows": [
+     {
+      "i": 0,
+      "text": "Attack",
+      "selected": true,
+      "disabled": false,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 1,
+      "text": "Special",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 2,
+      "text": "Items",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 3,
+      "text": "Flee",
+      "selected": false,
+      "disabled": true,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 4,
+      "text": "Escape",
+      "selected": false,
+      "disabled": true,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     },
+     {
+      "i": 5,
+      "text": "Switch",
+      "selected": false,
+      "disabled": false,
+      "overdrive": false,
+      "w": 392,
+      "h": 58
+     }
+    ]
+   }
+  },
+  {
+   "k": "wendigo.audio",
+   "v": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-challenge\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"wendigo\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":0,\"started\":0,\"current\":null,\"cache\":{\"manifests\":[],\"buffers\":0,\"decodedBytes\":0,\"pinned\":0,\"failed\":0,\"requests\":1},\"plays\":[]},\"sfxMix\":{\"option\":\"b\",\"trim\":1,\"busGain\":0.7},\"music\":{\"current\":{\"name\":\"boss-challenge\",\"gain\":1},\"fading\":[],\"held\":[\"victory-ffx\",\"defeat-ffx\"]},\"prerendered\":{\"manifest\":true,\"cues\":43,\"sprite\":true,\"spriteDecoded\":true,\"v2\":{\"cues\":92,\"decoded\":true,\"game\":\"ffx\",\"retired\":8},\"parity\":{\"packs\":[\"ffx-core\",\"ffx2-core\",\"f"
+  },
+  {
+   "k": "wendigo.escScreen",
+   "v": "battle"
+  },
+  {
+   "k": "wendigo.afterEscResume",
+   "v": "pause"
+  },
+  {
+   "k": "wendigo.pScreen",
+   "v": "battle"
+  },
+  {
+   "k": "wendigo.hHidden",
+   "v": 1
+  },
+  {
+   "k": "wendigo.afterPResume",
+   "v": "pause"
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": [],
+ "music": [
+  {
+   "label": "listed",
+   "audioFetched": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-flux.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3"
+   ],
+   "n": 34
+  },
+  {
+   "label": "blitz",
+   "audioFetched": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-gagazet.mp3"
+   ],
+   "n": 11
+  },
+  {
+   "label": "dragon",
+   "audioFetched": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-bevelle-underground.mp3"
+   ],
+   "n": 12
+  },
+  {
+   "label": "debut",
+   "audioFetched": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-chateau-leblanc.mp3"
+   ],
+   "n": 10
+  },
+  {
+   "label": "wendigo",
+   "audioFetched": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-macalania-temple.mp3"
+   ],
+   "n": 12
+  }
+ ],
+ "reloadBefore": [
+  "pyrefly-reprise:save:v1"
+ ],
+ "elapsedMin": 5.567366666666667
+}

@@ -1,0 +1,7 @@
+wendigo exit=0 signal=null minutes=1.9
+oblitz exit=0 signal=null minutes=5.3
+gull exit=0 signal=null minutes=1.7
+luca exit=0 signal=null minutes=3.1
+gullphone exit=0 signal=null minutes=1.0
+lucaphone exit=0 signal=null minutes=0.9
+DONE wendigo,oblitz,gull,luca,gullphone,lucaphone

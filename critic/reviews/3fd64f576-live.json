@@ -1,0 +1,62 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-11-10T12:05:00Z",
+  "build": { "mainSha": "3fd64f576", "bundle": "C26ETj4I", "artifactHash": "0ea9f85780ebd0a81e32d9a624021752e46becd46f7634295199050ffeaecbec" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/3fd64f576.json --url https://echoesofspira.com/ --changed-from critic/artifacts/193f6aef4.json -> {result: PASS, artifactHash: 0ea9f85780ebd0a81e32d9a624021752e46becd46f7634295199050ffeaecbec, liveManifest: match, checked: 115, mismatched: [], missing: [], wrongType: [], errors: []}. The live title screen also reads RELEASE 80 and 3fd64f57. A --full run was started and stopped by me after 20+ minutes without output (not needed: the planned review is none, the deep review is owed separately); it is not claimed."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, 1600x900, fresh context per run, cache-busted URL, RIG-RECORD lock held and released. assertScreen/waitBattleMenu throw rather than fall through. Listed Seymour Flux (FFX): title -> chapter-select -> party-prep -> cutscene -> battle menu; Attack, Escape (cancel), Attack, target: battleLog 14 -> 19; pause on Escape after the menu had been up 12 s; music playing boss-seymour. Typed words each on chapter select: blitz -> party-prep -> battle menu (FFX, rows Use crane, Attack, Special, White Magic, Items, Escape; music battle-ffx); dragon -> battle menu (FFX-2 rows Attack, Skill, Change, Item; no Special row; music boss-ffx2-fallen-aeons); debut -> battle menu (FFX-2 rows Attack, Trigger Happy, Item, a lone Gunner; no Special row; music boss-leblanc); wendigo -> battle menu (FFX, desktop, music boss-challenge). Pause: Escape and P toggle pause/battle, H toggles the panels and the setting pausePanelsHidden in the save (false, true, false, true). Prerendered music: audioDebug() shows prerendered.manifest true, sprite decoded, v2 cues decoded, and title, chapter-select and scene mp3 files were fetched in every context. Screenshots in critic/reviews/3fd64f576-live/*.png. 0 console errors, 0 responses >= 400 across all contexts.",
+      "reason": "Observation OBS-1 (not a failure): in dragon, debut and wendigo a first Escape pressed within about 4 s of the battle menu appearing did not pause (the second did); with a 12 to 15 s wait Escape paused on the first press in Seymour Flux and in debut. Not compared with release 79; suspected an input guard just after the menu opens."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke: after one battle attempt (save chapters.seymour-flux.attempts = 1) the pause panels were hidden with H (settings.pausePanelsHidden true in pyrefly-reprise:save:v1), the page was reloaded, the title screen came back, and the save read back pausePanelsHidden true and attempts 1.",
+      "reason": "Full upgrade matrix (fresh, returning, previous-build fixture, invalid storage, reset) not tested; lightweight live check only (RUBRIC section 5)."
+    }
+  ],
+  "staticChecks": {
+    "pose-census": {
+      "subjects": 190, "paintings": 1317, "pass": 995, "waived": 114, "rigged": 0, "fail": 0, "exempt": 208,
+      "byClass": { "idle": 190, "standing": 672, "ko": 127, "low": 71, "wide": 19, "staged": 176, "part": 62 },
+      "byGame": { "FFX-2": 871, "FFX": 314, "unknown": 100, "FF7": 32 },
+      "byRowStatus": { "ok": 909, "held": 86, "waived": 114, "none": 208 }
+    }
+  },
+  "coverage": {
+    "tested": [
+      "artifact identity, 115 files byte-compared against the live site (diffed from 193f6aef4), live title shows release 80 / 3fd64f57",
+      "real-input title -> chapter select -> party prep -> battle menu for one listed FFX chapter, one command with a cancel path",
+      "typed words blitz, dragon, debut and wendigo each opening its chapter to the first battle menu",
+      "FFX-2 command menu in dragon and debut: no Special row",
+      "Escape, P, H pause, resume, hide and restore",
+      "prerendered music fetched and playing in every context",
+      "console and 404 sweep over six browser contexts",
+      "lightweight reload persistence",
+      "static pose census"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix",
+      "the focused review majors R80-1 (Oblitzerator pose swaps ghosting) and R80-2 (Seymour Flux head jump) are not re-measured here",
+      "playing any of the four hidden chapters to a win or loss; the Wendigo chapter motion and aeon models were not inspected beyond reaching the battle menu",
+      "phone tier (wendigo is desktop only), the party-prep two-line title card, the FFX-2 stat table below Level 20 numerically",
+      "pose-census is data only, not a verdict"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 55,
+  "notes": "Live review passes. One informational observation (OBS-1, early Escape right after the menu opens in dragon, debut and wendigo). The debut menu reads Attack, Trigger Happy, Item because its only girl is a Gunner; the Special dressphere engine is not reachable."
+}

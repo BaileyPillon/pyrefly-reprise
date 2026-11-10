@@ -1,0 +1,713 @@
+[
+ {
+  "file": "ffx2-ixion-djose-win-live/00-title.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:14.382Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/01-briefing.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:16.677Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/03-card.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "ffx2-ixion-djose",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:21.565Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/04-prep.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:28.990Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/05-pre-scene.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:33.988Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/05b-scene-esc.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:35.159Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/seq-transition-into-battle/",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 98
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 523
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 836
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1275
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1583
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 2051
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2373
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2721
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 3034
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 3351
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:49.653Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/10-first-menu-coach.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:49.766Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/11-advisor.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:49.834Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/12-intent-E.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:51.572Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/13-guide-G.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:52.869Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/14-pause-Esc.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:54.570Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/14-pause-tab-next.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Rikku",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:55.156Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/14-pause-options.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:06:57.291Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/16-target-single.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 1,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:07:00.651Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/16b-after-cancel.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:07:01.849Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/seq-party-action/",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Darkness)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 77
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 323
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 574
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 839
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1108
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1357
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1607
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1874
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2122
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2372
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:07:05.590Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/21-change-open.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "CHANGE opened (Garment Grid)",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:07:09.808Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/seq-spherechange/",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a spherechange chosen by real input",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 44
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 310
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 560
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 808
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1077
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1324
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1576
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1826
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2078
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2330
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:07:12.908Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/seq-action-playing/",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:action-end)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 56
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 300
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 528
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 781
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1030
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1277
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1512
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1794
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2046
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2297
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:07:18.342Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/23-midfight.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 4 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:07:19.766Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/30-post-scene.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "post-battle scene after a victory",
+  "asserted": "UNVERIFIED (screen wanted cutscene got results) screen=results",
+  "verified": false,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:09:00.661Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/31-results.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:09:03.209Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/33-after-confirm-scene.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:09:05.759Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/34-board-after.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:10:13.885Z"
+ },
+ {
+  "file": "ffx2-ixion-djose-win-live/35-board-reload.jpg",
+  "game": "ffx2",
+  "chapter": "ffx2-ixion-djose",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T10:10:17.011Z"
+ }
+]

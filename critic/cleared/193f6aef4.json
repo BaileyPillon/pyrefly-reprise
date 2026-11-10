@@ -1,0 +1,34 @@
+{
+  "mainSha": "193f6aef4",
+  "bundle": "BYej0WB6",
+  "deployedAt": "2026-11-10T02:13:47.731Z",
+  "liveUrl": "https://echoesofspira.com/",
+  "artFiles": 5408,
+  "artifactHash": "346c86c7676f749bf37a59dcd38337feebdd30dd1bc03d7147bfc8ace59a8b5d",
+  "review": "deep",
+  "obligations": [
+    {
+      "kind": "live",
+      "status": "done",
+      "requires": "exact-artifact verification and real-input smoke on the live URL",
+      "result": "PASS",
+      "settledBy": "critic/reviews/193f6aef4-live.json",
+      "settledAt": "2026-11-10T03:02:59.965Z"
+    },
+    {
+      "kind": "focused",
+      "status": "superseded-unverified",
+      "requires": "acceptance of the changed area",
+      "note": "never verified: the build was replaced by 3fd64f576",
+      "at": "2026-11-10T11:28:33.544Z"
+    },
+    {
+      "kind": "deep",
+      "status": "carried",
+      "requires": "deep review of every affected chapter and system",
+      "carriedTo": "3fd64f576",
+      "at": "2026-11-10T11:28:33.544Z"
+    }
+  ],
+  "supersededBy": "3fd64f576"
+}

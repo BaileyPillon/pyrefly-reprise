@@ -1,0 +1,2153 @@
+[
+ {
+  "turn": 0,
+  "ms": 6,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Petrify Grenade",
+   "target": "all enemies",
+   "menu": "Items"
+  },
+  "took": "Petrify Grenade",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:1200/1200",
+   "wendigo:18000/18000",
+   "lake-guardian-b:1200/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1,
+    "actor": "rikku",
+    "did": "Petrify Grenade",
+    "targets": [
+     "lake-guardian-a",
+     "wendigo",
+     "lake-guardian-b"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 9537,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Auron",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Auron",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:18000/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 2,
+  "ms": 12052,
+  "actor": "command:auron",
+  "want": {
+   "label": "Power Break",
+   "target": "Wendigo",
+   "menu": "Special"
+  },
+  "took": "Power Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:18000/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 13,
+    "actor": "auron",
+    "did": "Power Break",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 18012,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Rikku",
+   "menu": "Items"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:0/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:17070/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 23,
+    "actor": "yuna",
+    "did": "Phoenix Down",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 21745,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:425/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:17070/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 30,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 25883,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Wakka",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Wakka",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:17070/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 6,
+  "ms": 27849,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Dark Attack",
+   "target": "Wendigo",
+   "menu": "Special"
+  },
+  "took": "Dark Attack",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:17070/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 37,
+    "actor": "wakka",
+    "did": "Dark Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 32977,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:16686/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 48,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 37783,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:0/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:15689/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 58,
+    "actor": "wakka",
+    "did": "Phoenix Down",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 41384,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:591/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:15689/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 63,
+    "actor": "auron",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 47311,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Dark Attack",
+   "target": "Wendigo",
+   "menu": "Special"
+  },
+  "took": "Dark Attack",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:15689/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 74,
+    "actor": "wakka",
+    "did": "Dark Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 50860,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:15294/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 81,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 55430,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:15294/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 85,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 58915,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:14353/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 94,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 60552,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:13965/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 100,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 64972,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:13965/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 104,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 68470,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:12957/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 114,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 70098,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:12555/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 120,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 77503,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:485/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:12555/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 131,
+    "actor": "auron",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 81571,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Dark Attack",
+   "target": "Wendigo",
+   "menu": "Special"
+  },
+  "took": "Dark Attack",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:12555/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 137,
+    "actor": "wakka",
+    "did": "Dark Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 85148,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:12192/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 143,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 88652,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:12142/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 152,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 92152,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:11164/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 161,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 94040,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:11056/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 165,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 95680,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:10676/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 170,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 100065,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:485/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:9773/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 182,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 103984,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Dark Attack",
+   "target": "Wendigo",
+   "menu": "Special"
+  },
+  "took": "Dark Attack",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:9773/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 188,
+    "actor": "wakka",
+    "did": "Dark Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 107648,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:9377/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 193,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 112032,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:8406/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 202,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 29,
+  "ms": 115764,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:597/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:8356/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 210,
+    "actor": "wakka",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 119439,
+  "actor": "command:auron",
+  "want": {
+   "label": "Armor Break",
+   "target": "Wendigo",
+   "menu": "Special"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1453/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:8356/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 215,
+    "actor": "auron",
+    "did": "Armor Break",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 125673,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:879/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:7449/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 228,
+    "actor": "wakka",
+    "did": "Hi-Potion",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 129867,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1879/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:7449/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 233,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 133953,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:625/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1879/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:7398/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 244,
+    "actor": "wakka",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 137690,
+  "actor": "command:auron",
+  "want": {
+   "label": "Magic Break",
+   "target": "Wendigo",
+   "menu": "Special"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1879/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:7398/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 249,
+    "actor": "auron",
+    "did": "Magic Break",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 35,
+  "ms": 143700,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:6405/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 259,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 36,
+  "ms": 148791,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:611/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:6350/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 270,
+    "actor": "wakka",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 37,
+  "ms": 153617,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:6350/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 278,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 38,
+  "ms": 155317,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Dark Attack",
+   "target": "Wendigo",
+   "menu": "Special"
+  },
+  "took": "Dark Attack",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:6297/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 283,
+    "actor": "wakka",
+    "did": "Dark Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 39,
+  "ms": 158720,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:5910/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 288,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 40,
+  "ms": 161528,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:4980/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 297,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 41,
+  "ms": 163187,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:4926/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 301,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 42,
+  "ms": 164884,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:4564/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 305,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 43,
+  "ms": 167685,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:3589/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 314,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 44,
+  "ms": 169372,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:3539/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 318,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 45,
+  "ms": 171045,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:3180/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 322,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 46,
+  "ms": 175260,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:2258/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 331,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 47,
+  "ms": 178882,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:625/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:2205/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 339,
+    "actor": "wakka",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 48,
+  "ms": 182711,
+  "actor": "command:auron",
+  "want": {
+   "label": "Poison Fang",
+   "target": "Wendigo",
+   "menu": "Items"
+  },
+  "took": "Poison Fang",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:2205/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 344,
+    "actor": "auron",
+    "did": "Poison Fang",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 49,
+  "ms": 187414,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Wendigo",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:213/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 348,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "wendigo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 50,
+  "ms": 191351,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:553/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:164/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 357,
+    "actor": "wakka",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 51,
+  "ms": 195261,
+  "actor": "command:auron",
+  "want": {
+   "label": "Silence Grenade",
+   "target": "all enemies",
+   "menu": "Items"
+  },
+  "took": "Silence Grenade",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1316/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "lake-guardian-a:0/1200",
+   "wendigo:164/18000",
+   "lake-guardian-b:0/1200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

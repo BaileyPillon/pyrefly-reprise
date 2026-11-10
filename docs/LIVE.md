@@ -8,38 +8,38 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `193f6aef4` (Release 79 (r79)) |
-| Bundle | `BYej0WB6` |
-| Deployed | 2026-11-10T02:13:47.731Z (2026-11-09 21:13 EST) |
-| Deploy log | `docs/deploys.log` line 96: cloudflare, 5408 art files |
-| Artifact (SHA-256) | `346c86c7676f749bf37a59dcd38337feebdd30dd1bc03d7147bfc8ace59a8b5d` |
-| The deploy's own byte check | PASS (297 files compared with the build) |
-| Marker | `critic/pending/193f6aef4.json` (pending) |
+| Commit | `3fd64f576` (Release 80 (r80)) |
+| Bundle | `C26ETj4I` |
+| Deployed | 2026-11-10T11:28:33.544Z (2026-11-10 06:28 EST) |
+| Deploy log | `docs/deploys.log` line 97: cloudflare, 5408 art files |
+| Artifact (SHA-256) | `0ea9f85780ebd0a81e32d9a624021752e46becd46f7634295199050ffeaecbec` |
+| The deploy's own byte check | PASS (115 files compared with the build) |
+| Marker | `critic/pending/3fd64f576.json` (pending) |
 | Owner override | none |
-| CHANGELOG entry | 2026-11-09 · Release 79 (r79), three more hidden chapters (45 Belgemine's Challenge in FFX, 47 Garik Ronso and the Ronso Youths in FFX-2, 48 Shinryu in FFX), the paintings of five hidden chapters (42 the Youth League, 45, 46 Ifrit at Kilika Temple, 47 and 48), and a boss card that no longer asks for a painting the build does not hold; nineteen of the nineteen listed chapters stay treated (each item says which game) |
-| Focused review | critic/reviews/193f6aef4-focused.json: ship SHIP, changed area UNVERIFIED |
-| Live check | critic/reviews/193f6aef4-live.json: deployment PASS |
+| CHANGELOG entry | 2026-11-10 · Release 80 (r80), the hidden Wendigo chapter finished (FFX), three more hidden chapters (50 the Oblitzerator in FFX, 51 the Gullwings' first mission and 52 the Luca opener, both FFX-2), the Special dresspheres' engine built behind a switch that is off (FFX-2), a fix to the FFX-2 stat table below Level 20, and a party prep card that makes room for a two-line title; nineteen of the nineteen listed chapters stay treated (each item says which game) |
+| Focused review | critic/reviews/3fd64f576-focused.json: ship SHIP, changed area FAIL |
+| Live check | critic/reviews/3fd64f576-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor 193f6aef4 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor 3fd64f576 origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `193f6aef4` | focused | acceptance of the changed area |
-| `193f6aef4` | deep | deep review of every affected chapter and system |
+| `3fd64f576` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 1 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-From `critic/reviews/193f6aef4-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
+From `critic/reviews/3fd64f576-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
 
 | Issue | Severity | Introduced by this build | Regression against the previous live build | What |
 |---|---|---|---|---|
-| R79-1 | major | no | no | Jenova LIFE (FF7): the painted figures still cut between idle and hurt frames with a visible foot shift, 27.6 hard cuts a minute (the release 78 reading, unchanged by the r79 pose fix) |
+| R80-1 | major | yes | no | Oblitzerator (FFX, new hidden chapter): Kimahri and Tidus pose swaps ghost, 2,628 ghost ms a minute, 39 of 94 over the fail line |
+| R80-2 | major | no | no | Seymour Flux (FFX): CHK-026 FAIL, head jump 10.8 percent on pose swaps, same on live |
 
-## Branches in flight (as of 2026-11-09, the release 79 records pass (release 79 live: main 193f6aef4, bundle BYej0WB6, deployed 2026-11-10T02:13:47Z; the hidden chapters 45 Belgemine's Challenge (FFX, word sidequest), 47 Garik Ronso and the Ronso Youths (FFX-2, word braveheart) and 48 Shinryu (FFX, word shinryu), the paintings of five hidden chapters (42, 45, 46, 47, 48) and a boss card that no longer asks for a painting the build does not hold; its focused review read SHIP with one disclosed major (R79-1, Jenova LIFE in FF7, the same as release 78), its live check PASS; its focused and deep obligations are pending and deep round 37 is owed by release 79, planned after release 80; release 81 refuses until it is settled; queued for release 80: ffx2-specials, wendigo-finish, ch-luca-opener, ch-oblitzerator and ch-gullwings-ch1, none merged))
+## Branches in flight (as of 2026-11-10, the release 80 records pass (release 80 live: main 3fd64f576, bundle C26ETj4I, deployed 2026-11-10T11:28:33Z; the hidden Wendigo chapter finished (FFX, word wendigo), the hidden Oblitzerator (FFX, word blitz), Gullwings Chapter 1 (FFX-2, word dragon) and the Luca opener (FFX-2, word debut), the Special dresspheres' engine behind a switch that is off (FFX-2), a fix to the FFX-2 stat table below Level 20 and a party prep card that makes room for a two-line title; its focused review read SHIP with two disclosed majors (R80-1, the Oblitzerator's pose-swap ghosting in FFX, and R80-2, Seymour Flux's head jump in FFX, the same as release 79), its live check PASS; its deep obligation is pending and deep round 37 is owed by release 79 and release 80; release 81 refuses until it is settled; queued for release 81: ch-fiend-superbosses (FFX-2) and ch-gauntlet (FFX); the Specials' presentation is on ffx2-specials, not merged))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -55,11 +55,9 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `saves-portable` | `c1852fa05` | both (save-data class) | ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054) |
 | `rigs-v2` | `9f90c3441` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed |
 | `rigs-v3` | `f2dd94f79` | both (Tidus FFX, Rikku Dark Knight FFX-2) | pushed; three rounds done on 2026-10-29 and 10-30 (A-1089): rigs-v2 on r68-final plus the painting’s knock-out topple and rise for a rig, the held pose through each cut, the settle before a KO from a flinch and the harness’s stature reading for rigs (D-1401); behind ?partyrigs=, off by default; not merged, nothing installed; the clips for him come first |
-| `ffx2-specials` | `8e72c5191` | FFX-2 only (the Specials: Floral Fallal, Machina Maw, Full Throttle; engine, data and tests; shared plumbing is additive and inert while the flag is off) | pushed (origin/ffx2-specials 8e72c5191, final); the Specials engine behind the specialDressUp switch, OFF: every number matches the raw command.bin and job.bin; the review's two engine majors (an Ejected girl came back when another girl's form ended; the form's Auto-Life never came off) and its minors fixed; flag off = 210 of 210 seeded runs identical to main; the presentation (one connected figure a Special with three HUD plates, main, right part and left part: Bailey's "G" of 2026-11-09; the other reading, three bodies, is not built) waits for his answers on how the figure is drawn, the part mark and the size on screen; ledger rows on the branch (D-1504 to D-1511, A-1275, A-1276) renumber at the merge; not merged, not deployed, queued for release 80 |
-| `wendigo-finish` | `40608ee1e` | FFX only (hidden Chapter 49, the Wendigo on frozen Lake Macalania, desktop only; the finish pass) | pushed (origin/wendigo-finish 40608ee1e, final); the Wendigo and both Guardians on the game's own motion banks, four aeons as 3D models (Valefor, Ifrit, Ixion, Shiva, skinned to the game's skeletons; Bahamut not built, the preset owns four aeons; 140 Meshy credits, 2,570 to 2,430), Sleep breaks the raised-fist stance; 28 model files, 164.1 MiB, GPU 1,843 MiB at the first menu; review: no critical, no major, 11 minors, all answered; open: minor 6 (Sleep wearing off with no hit leaves the engine's arms-up flag) and Bailey's eye on the motion, the aeons and Valefor's size; not merged, not deployed, queued for release 80 |
-| `ch-luca-opener` | `b54bbcd5d` | FFX-2 only (hidden Chapter 52, the Luca opener, word debut; one additive EnemyGroupDef.partyBuildRef, inert elsewhere) | pushed (origin/ch-luca-opener b54bbcd5d, final of wave 5); two acts with Yuna held as Songstress; bench 200 of 200 in every cell; review: no critical, no major, ten minors, fixed; open and the driver's to settle at the integration: the Dressphere stat interpolation below Lv 20 (ch-gullwings-ch1 carries the fix; re-bench this chapter after merging it); art owed (stand-ins in use); not merged, not deployed, queued for release 80 |
-| `ch-oblitzerator` | `04236c5c1` | FFX only (hidden Chapter 50, the Oblitzerator, word blitz); shared plumbing is the opt-in afterTick reaction flag in the FFX AI hooks (inert without the flag) | pushed (origin/ch-oblitzerator 04236c5c1, final of wave 5); the crane line wins 200 of 200; the review's major M1 (a ball's status never outlasts the swing) fixed from the game's own code with an opt-in afterTick flag (24 FFX chapters x 3 seeds x 2 policies: 144 of 144 event-log hashes identical to base); the driver read the diff (opt-in and inert without the flag); open for Bailey: whether every script's reactions run after the tick as the game does (a shared-engine change, needs his yes) and the cursor starting on "Use crane"; art owed; not merged, not deployed, queued for release 80 |
-| `ch-gullwings-ch1` | `ffcd0ab60` | FFX-2 only (hidden Chapter 51, Gullwings Chapter 1, word dragon); carries the one non-additive shared change of the wave: battle/ffx2/dressphere-stats.ts interpolate fixed below Lv 20 (no shipped build has a girl under Lv 20) | pushed (origin/ch-gullwings-ch1 ffcd0ab60, interim: the finish pass was still running); four fights, benches 100/100, 100/100, 97/100 and 99/100 (the Guardian Beast on the Active clock 19 of 50); review: no critical, no major, ten minors; art owed (about 19 poses); not merged, not deployed, queued for release 80 (merge it before ch-luca-opener and re-bench that chapter) |
+| `ffx2-specials` | `280679bb9` | FFX-2 only (the Specials: Floral Fallal, Machina Maw, Full Throttle; engine, data, tests and now the presentation; shared plumbing is additive and inert while the switch is off) | pushed (origin/ffx2-specials 280679bb9 at 06:20 EST on 2026-11-10); the ENGINE (up to 8e72c5191) went into release 80 with the specialDressUp switch OFF (a flag-off census of 220 of 220 runs identical to main; the menu reads Attack, Skill, Change, Item); the PRESENTATION under Bailey's "G" of 2026-11-09 (one connected figure a Special with three HUD plates, main, right part and left part) is built in steps A to D2 on this branch, switch off, NOT merged: the stage 1 close-out found that the FFX-2 engine accepts a forged Change command naming any dress on a linked node, so a Special can be worn with the switch off from the debug console only (no menu builds that command; release 80 is live with this as a disclosed note), and a second close-out round is adding an engine gate (FFX-2 only) for release 81 (D-1524, the driver's call, his to overturn); the exp-leblanc art namespace holds no Special paintings, so the switch may not go on for that chapter until namespaced paintings or a fallback exist (D-1523); waits for his answers on how the figure is drawn, the part mark and the size on screen, and motion clips come to him before anything is switched on |
+| `ch-fiend-superbosses` | `070fce016` | FFX-2 only (hidden chapter, word legion; the Fiend Arena superbosses in two acts; one HUD CSS rule keyed on the Numerus heads' actor ids) | pushed (origin/ch-fiend-superbosses 070fce016); 8 enemies in two acts; the base party wins neither act (0 of 200 in all 58 cells; Shinra's Clione lands 2.6 s in and wipes 158 of 200; only Invincible for good wins), nothing tuned, the options sheet is docs/plans/ch-fiend-superbosses-options.md and Bailey's answer is owed; act 2 opens as a separate battle (a lane call, his to overturn); its fix pass and second full suite (2,174 files, 35,415 tests, 0 failed on d9e7cb516) are done; the Unum stand-in sits behind the left HUD column so its target ring draws over the Quattour gauge; not merged, not deployed, queued for release 81 (release 81 refuses until deep round 37 is settled) |
+| `ch-gauntlet` | `a348f09b7` | FFX only (hidden chapter, word gauntlet; nine acts in three tiers) | pushed (origin/ch-gauntlet a348f09b7); nine acts in three tiers; the advisor's line wins every act (100 of 100 in tiers 2 and 3) and the shipped line 200 of 200 everywhere, the careless line wins Neslug 0 and Ultima Buster 0 (a cliff), so docs/plans/ch-gauntlet-options.md carries seven measured options and nothing is tuned; 19 lane files 499 tests pass, smoke passed, five screenshots; its two reviewers are done and a fix pass was running at 06:49 EST (the tip may move); not merged, not deployed, queued for release 81 (release 81 refuses until deep round 37 is settled) |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -67,9 +65,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-11-10T11:28:33.544Z | `3fd64f576` | `C26ETj4I` | 97 |
 | 2026-11-10T02:13:47.731Z | `193f6aef4` | `BYej0WB6` | 96 |
 | 2026-11-09T05:54:49.312Z | `cc0fea14a` | `BAH_qvc7` | 95 |
 | 2026-11-08T03:41:51.229Z | `6429ff15e` | `DQzgTgdc` | 94 |
 | 2026-11-07T09:53:17.136Z | `36b6e851d` | `jYm-0mrJ` | 93 |
 | 2026-11-06T12:03:55.678Z | `f91ff81d0` | `CrrbwEak` | 92 |
-| 2026-11-04T00:44:28.732Z | `2342fe666` | `eSs6-WR_` | 91 |

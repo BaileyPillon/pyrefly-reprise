@@ -1,0 +1,1 @@
+art-derive verify (exact): PASS: 5783 masters checked (1576 WebP, 4207 PNG, 5367 pixel-compared); strip thumbnails: 38 checked (19 WebP, 19 PNG, 0 none), each decoded and compared with its master resized by the rule; sidecars: 1634 art JSON checked, 1624 painting sidecars each only the fields the game reads (22724 key(s) left out), 10 other as they are; 0 problem(s), 209 s

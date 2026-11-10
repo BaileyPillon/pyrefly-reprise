@@ -1,0 +1,827 @@
+[
+ {
+  "turn": 0,
+  "ms": 8,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Lulu",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:709/709",
+   "lulu:521/521",
+   "kimahri:810/810",
+   "oblitzerator:6000/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 3,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 3779,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Thunder",
+   "target": "Oblitzerator",
+   "menu": "Black Magic"
+  },
+  "took": "Thunder",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:709/709",
+   "lulu:521/521",
+   "kimahri:810/810",
+   "oblitzerator:6000/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 8,
+    "actor": "lulu",
+    "did": "Thunder",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 8531,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Attack",
+   "target": "Oblitzerator",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:709/709",
+   "lulu:521/521",
+   "kimahri:810/810",
+   "oblitzerator:5538/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 12,
+    "actor": "kimahri",
+    "did": "Attack",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 10111,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Thunder",
+   "target": "Oblitzerator",
+   "menu": "Black Magic"
+  },
+  "took": "Thunder",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:709/709",
+   "lulu:521/521",
+   "kimahri:810/810",
+   "oblitzerator:5364/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 17,
+    "actor": "lulu",
+    "did": "Thunder",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 20330,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Echo Screen",
+   "target": "Lulu",
+   "menu": "Items"
+  },
+  "took": "Echo Screen",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:318/521",
+   "kimahri:743/810",
+   "oblitzerator:4883/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 50,
+    "actor": "kimahri",
+    "did": "Echo Screen",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 23567,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:318/521",
+   "kimahri:743/810",
+   "oblitzerator:4883/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 54,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "lulu",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 27011,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Thunder",
+   "target": "Oblitzerator",
+   "menu": "Black Magic"
+  },
+  "took": "Thunder",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:318/521",
+   "kimahri:743/810",
+   "oblitzerator:4883/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 61,
+    "actor": "lulu",
+    "did": "Thunder",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 30845,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Thunder",
+   "target": "Oblitzerator",
+   "menu": "Black Magic"
+  },
+  "took": "Thunder",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:318/521",
+   "kimahri:743/810",
+   "oblitzerator:4411/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 66,
+    "actor": "lulu",
+    "did": "Thunder",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 34683,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:318/521",
+   "kimahri:743/810",
+   "oblitzerator:3921/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 70,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "lulu",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 38099,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Attack",
+   "target": "Oblitzerator",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:318/521",
+   "kimahri:743/810",
+   "oblitzerator:3921/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 76,
+    "actor": "kimahri",
+    "did": "Attack",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 39988,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Thunder",
+   "target": "Oblitzerator",
+   "menu": "Black Magic"
+  },
+  "took": "Thunder",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:318/521",
+   "kimahri:743/810",
+   "oblitzerator:3441/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 81,
+    "actor": "lulu",
+    "did": "Thunder",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 46505,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Echo Screen",
+   "target": "Lulu",
+   "menu": "Items"
+  },
+  "took": "Echo Screen",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:265/521",
+   "kimahri:743/810",
+   "oblitzerator:2987/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 92,
+    "actor": "tidus",
+    "did": "Echo Screen",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 50069,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Thunder",
+   "target": "Oblitzerator",
+   "menu": "Black Magic"
+  },
+  "took": "Thunder",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:265/521",
+   "kimahri:743/810",
+   "oblitzerator:2987/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 97,
+    "actor": "lulu",
+    "did": "Thunder",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 54012,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Attack",
+   "target": "Oblitzerator",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:265/521",
+   "kimahri:743/810",
+   "oblitzerator:2498/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 101,
+    "actor": "kimahri",
+    "did": "Attack",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 55662,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:564/709",
+   "lulu:265/521",
+   "kimahri:743/810",
+   "oblitzerator:2246/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 105,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "lulu",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 63212,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Potion",
+   "target": "Lulu",
+   "menu": "Items"
+  },
+  "took": "Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:509/709",
+   "lulu:151/521",
+   "kimahri:634/810",
+   "oblitzerator:2246/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 135,
+    "actor": "lulu",
+    "did": "Potion",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 66397,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:509/709",
+   "lulu:351/521",
+   "kimahri:634/810",
+   "oblitzerator:2246/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 140,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "lulu",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 69882,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Thunder",
+   "target": "Oblitzerator",
+   "menu": "Black Magic"
+  },
+  "took": "Thunder",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:509/709",
+   "lulu:351/521",
+   "kimahri:634/810",
+   "oblitzerator:2246/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 147,
+    "actor": "lulu",
+    "did": "Thunder",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 76233,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Echo Screen",
+   "target": "Lulu",
+   "menu": "Items"
+  },
+  "took": "Echo Screen",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:509/709",
+   "lulu:307/521",
+   "kimahri:634/810",
+   "oblitzerator:1763/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 157,
+    "actor": "kimahri",
+    "did": "Echo Screen",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 79495,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:509/709",
+   "lulu:307/521",
+   "kimahri:634/810",
+   "oblitzerator:1763/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 161,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "lulu",
+     "kimahri"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 82995,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Thunder",
+   "target": "Oblitzerator",
+   "menu": "Black Magic"
+  },
+  "took": "Thunder",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:509/709",
+   "lulu:307/521",
+   "kimahri:634/810",
+   "oblitzerator:1763/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 168,
+    "actor": "lulu",
+    "did": "Thunder",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 86937,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Attack",
+   "target": "Oblitzerator",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:509/709",
+   "lulu:307/521",
+   "kimahri:634/810",
+   "oblitzerator:1286/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 172,
+    "actor": "kimahri",
+    "did": "Attack",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 88681,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Oblitzerator",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:509/709",
+   "lulu:307/521",
+   "kimahri:634/810",
+   "oblitzerator:947/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 176,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "oblitzerator"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 90537,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Thunder",
+   "target": "Oblitzerator",
+   "menu": "Black Magic"
+  },
+  "took": "Thunder",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:509/709",
+   "lulu:307/521",
+   "kimahri:634/810",
+   "oblitzerator:345/6000",
+   "luca-crane:65535/65535"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "oblitzerator",
+   "wanted": "oblitzerator",
+   "mismatch": false
+  }
+ }
+]
