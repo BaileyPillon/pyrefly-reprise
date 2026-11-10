@@ -97,7 +97,7 @@ describe('the pause objectives, evaluated over the real engine\'s logs', () => {
     }
   });
 
-  it('the swing is reached in a fast fight (the bench pace and the Active clock), the case the old Thunder row missed: she falls before her fourth action', () => {
+  it('the swing is reached in a fast fight (the bench pace and the Active clock): Leblanc strikes once and the girls stand (the first draft\'s Thunder row was dropped on the unfixed stat table, when she fell before her fourth action; under the fixed table she casts it in 92 to 100 percent of the shipped runs: handoff section 6)', () => {
     for (const [name, opts] of [['bench', {}], ['Active 1.5 s', { decisionMs: 1500, engine: { atbMode: 'active' as const } }]] as const) {
       for (const seed of [11, 12, 13]) {
         const run = driveLuca('advisor', seed, { ...opts, triggers: S.mid });

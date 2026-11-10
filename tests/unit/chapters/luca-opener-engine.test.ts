@@ -44,7 +44,7 @@ describe('act 1, Logos and Ormi, with the girls idle (three seeds)', () => {
     });
   }
 
-  it('the girls survive an idle minute and a half: the enemies hit lightly (the chapter is "very easy": Jegged), and nobody is knocked out', () => {
+  it('act 1 on seed 4 with the girls idle through 60 enemy actions: nobody is knocked out (this seed only, not a rule: one idle seed of 20 loses a girl late in act 1 and an idle act 2 is lost in 12 of 20; handoff section 4)', () => {
     const run = driveLuca('idle', 4, { maxEnemyActions: 60 });
     expect(run.kos).toBe(0);
     const party = Object.values(run.states[0] ? run.states[0].combatants : {}) as FFX2Combatant[];

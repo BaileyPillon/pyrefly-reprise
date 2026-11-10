@@ -122,14 +122,14 @@ describe(`the Luca Opener: ${SEEDS} chapter runs a cell at bench speed and ${HUM
     expect(t.runs).toBe(t.seeds);
   });
 
-  it('the advisor line steals from every enemy it meets (about two and a half steals a run: Logos, Ormi and Leblanc, one try each), and the naive line steals nothing', () => {
+  it('the advisor line steals from every enemy it meets (nearly three steals a run, 2.99 at bench speed on the fixed stat table: Logos, Ormi and Leblanc, one try each, so three is the ceiling), and the naive line steals nothing', () => {
     const a = results.get('advisor / shipped / bench (0 ms)')!;
     expect(a.steals / a.seeds).toBeGreaterThan(2);
     expect(a.steals / a.seeds).toBeLessThanOrEqual(3);
     expect(results.get('naive / shipped / bench (0 ms)')!.steals).toBe(0);
   });
 
-  it('no fight comes near a stall: the longest run, in the enemies\' own actions, is under thirty', () => {
+  it('no fight comes near a stall: the longest run, in the enemies\' own actions, is under thirty (the longest measured on the fixed stat table is 21, on the Active clock)', () => {
     for (const [key, t] of results) expect(t.maxActions, key).toBeLessThan(30);
   });
 

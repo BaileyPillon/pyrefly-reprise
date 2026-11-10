@@ -7,8 +7,8 @@
  *
  *   PYREFLY_BROWSER=gpu node tools/luca-opener-smoke.mjs [--base http://127.0.0.1:5391/] [--out docs/screenshots/ch-luca-opener] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 7] [--first] [--short]
  *
- * `--first` stops once act 1 has fallen and act 2's first menu is up; `--short` stops at the first menu and its pause screen (the phone arm). There is NO state edit: the girls' HP is far above anything the enemies deal, and
- * the fights are short. It takes the browser lock (`tools/rig-record-lock.mjs`, the machine-wide lock) before it opens a browser and gives it back at the end. Headless only (`PYREFLY_BROWSER=gpu` for the real GPU);
+ * `--first` stops once act 1 has fallen and act 2's first menu is up; `--short` stops at the first menu and its pause screen (the phone arm). There is NO state edit: the shipped Lv 2 / 2 / 3 party wins unaided and the fights are short (on the fixed stat table of 2026-11-09,
+ * 200 of 200 bench runs win with nobody knocked out, and Yuna's lowest HP is 63 of 138; the enemies do hurt, a Leblanc swing is 10 to 11 percent of Yuna's HP). It takes the browser lock (`tools/rig-record-lock.mjs`, the machine-wide lock) before it opens a browser and gives it back at the end. Headless only (`PYREFLY_BROWSER=gpu` for the real GPU);
  * never the Chrome extension or the built-in pane. Exit code 1 on a failed check.
  */
 import { mkdirSync } from 'node:fs';
@@ -323,7 +323,7 @@ try {
     check('Logos and Ormi used only their own moves', acts1.length >= 1 && acts1.every((a) => MOVES.has(a.id)), acts1.map((a) => a.id));
 
     // --- the seam and act 2 --------------------------------------------------------------------------------------------------------------------
-    // The link-entry reading is taken at the first poll that sees Leblanc, not seconds later: by the first menu she may already have struck (the review's run: Paine at 479 of 488), which is the product working.
+    // The link-entry reading is taken at the first poll that sees Leblanc, not seconds later: by the first menu she may already have struck (the review's run, on the stat table before the 2026-11-09 fix: Paine at 479 of 488; the plates now read 263 for her), which is the product working.
     let entry = null;
     await waitFor('act 2 (Leblanc on the field)', async () => {
       const f = await field();
