@@ -118,7 +118,7 @@ The review found no critical defect, two major ones in the form's end and a proc
 
 **Game case: FFX-2 only in what is seen** (the three Special dresspheres exist only in FFX-2); the shared plumbing (`HudPort`, `FFX2BattleHud`, `CoachLayer`, `BattleMomentsHeld`, the twirl and held-shot early-outs, `PresenterDeps`, the Vite define) is **both games, additive, optional and inert while `specialDressUp` is OFF**. The switch is OFF in every shipped chapter; nothing was built for ON beyond the test word; no file under `src/battle/` is edited. Reading G is the plan (one connected figure, three HUD plates: main, right part, left part); reading T (section 11 of the plan) is kept and marked not built.
 
-### 9.1 What landed (four commits, in this order)
+### 9.1 What landed (the code in four commits, in this order, then the records and one test)
 
 | Commit | What | Tests |
 |---|---|---|
@@ -126,6 +126,8 @@ The review found no critical defect, two major ones in the form's end and a proc
 | `2b6fe7a3a` | The pure core: `SpecialArtIds`, `SpecialFormTracker`, `SpecialBeatPlans`, `SpecialReactions`, `SpecialPartyHold`; `helpers/specialFormState.ts`; the ten recorded logs | `special-form-tracker`, `special-beat-plans`, `special-reactions`, `special-party-hold` (holder half), `special-first-time`, `special-first-time-port` |
 | `a0cbbced6` | `HudPort.holdRows?` and `showAtbChip?` with their `FFX2BattleHud` lines, the `CoachedHud` forwards, `BattleMomentsHeld.portraitWait()`, the three early-outs, `PresenterDeps.specialSeen?` | `special-party-hold` (HUD half), `special-no-twirl` |
 | `cadcfc607` | The test word `?specials=on` (`src/app/specialsWord.ts`), its Vite define, `window.__pyrefly.specials` | `specials-word`, `specials-word-api`, `special-switch-off` |
+| `ca4d9822d` | The records: this section, the `CONTRACT-CHANGES.md` entry, the plan copy, the two research notes | none |
+| `9c786b70e` | `special-party-hold` proves the held rows in the smooth ATB bar look too (the default) | `special-party-hold` |
 
 ### 9.2 The pins, and how to regenerate them
 
