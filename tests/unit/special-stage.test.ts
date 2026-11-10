@@ -295,7 +295,7 @@ const { BEVELLE_UNDERGROUND_RIGS, BEVELLE_UNDERGROUND_SLOTS } = await import('..
 const { FARPLANE_SLOTS } = await import('../../src/scenes/farplane.ts');
 
 describe.each([
-  { name: 'Chapter IV (the Bevelle underground)', slots: BEVELLE_UNDERGROUND_SLOTS, rig: BEVELLE_UNDERGROUND_RIGS.idle },
+  { name: 'Chapter IV (the Bevelle underground)', slots: BEVELLE_UNDERGROUND_SLOTS, rig: BEVELLE_UNDERGROUND_RIGS.idle as unknown as { position: number[]; lookAt: number[]; fov: number } },
   { name: 'Chapter V (the Farplane)', slots: FARPLANE_SLOTS as unknown as SceneSlots, rig: { position: [0, 3, 9.6], lookAt: [0.5, 1.45, -1.4], fov: 32 } },
 ])('the framing on the idle camera of ', ({ slots, rig }) => {
   it.each(GIRLS)(' at her own slot: the head and the whole width inside the frame, the width under the desktop cap (35 percent of the window), the camera untouched', async (g) => {
