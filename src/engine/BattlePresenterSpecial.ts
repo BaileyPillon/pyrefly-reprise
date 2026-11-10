@@ -96,7 +96,7 @@ function girlsOf(girl: CombatantId, parked: readonly CombatantId[], state: Battl
 export function noteSpecial(ctx: EventCtx, event: BattleEvent, state: BattleState | null, host: SpecialHost): void {
   let rt = runtimes.get(ctx);
   if (!rt) {
-    if (event.type !== 'spherechange' || event.special === undefined || state?.flags['specialDressUp'] !== true) return;
+    if (event.type !== 'spherechange' || event.special === undefined || state?.flags?.['specialDressUp'] !== true) return; // `flags?.`: a state double without the field is OFF, as it was before this look
     rt = create(ctx, host);
   }
   rt.beat = rt.tracker.see(event, state);
@@ -112,7 +112,7 @@ export function noteSpecial(ctx: EventCtx, event: BattleEvent, state: BattleStat
  * is already up, the runtime is made and the HUD keeps today's list while the engine, which mutates `activeIds` inside `submit`, runs ("as early as the presenter knows", PRE 590 R-15).
  */
 export function preSubmit(ctx: EventCtx, state: BattleState | null, command: Command, host: SpecialHost): void {
-  if (command.kind !== 'spherechange' || state?.flags['specialDressUp'] !== true) return;
+  if (command.kind !== 'spherechange' || state?.flags?.['specialDressUp'] !== true) return;
   const inForm = state.activeIds.some((id) => (state.combatants[id] as FFX2Combatant | undefined)?.dresspheres?.special !== undefined);
   if (command.extra.specialDressUp !== true && !inForm) return; // an ordinary Change
   const rt = runtimes.get(ctx) ?? create(ctx, host);

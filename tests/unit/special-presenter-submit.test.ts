@@ -21,7 +21,7 @@ import { setAtbBarsSmooth } from '../../src/ui/ffx2/AtbLive.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
 import { heldOffAll } from '../../src/engine/SummonStaging.ts';
 import { FakeHud, FakeStage } from './helpers/FakeStage.ts';
-import { loadLog, ScriptedFfx2Engine, stateOf } from './helpers/specialPlayback.ts';
+import { loadLog, rig, ScriptedFfx2Engine, stateOf } from './helpers/specialPlayback.ts';
 import { bahamutGroup, chapterIV } from './helpers/specialFormState.ts';
 import { openSpecial, specialRow, unit, walkTo } from './helpers/specialDrive.ts';
 
@@ -94,6 +94,20 @@ describe('preSubmit: the submit side holds the three girls before the burst', ()
     await o.submit({ kind: 'spherechange', targets: [], extra: { toDressphere: 'thief', toNode: 0, gatesCrossed: [] } } as unknown as Command);
     expect(hud.hudLog.some((l) => l.startsWith('hold:')), 'no list held for a Change that is not the Special').toBe(false);
     expect(hud.chipLog).toEqual([]);
+  });
+
+  it('a state double with no flags field at all is OFF: neither call-in throws and nothing is held (the real presenter\'s tests hand it such states)', async () => {
+    const log = loadLog('entry-yuna');
+    const r = rig(log, { specialSeen: unseen() });
+    delete (r.engine.state() as { flags?: unknown }).flags;
+    r.presenter.syncHud(r.engine as never);
+    r.hud.hudLog.length = 0;
+    await expect(r.play(log.events.filter((e) => e.type === 'spherechange'))).resolves.toBeDefined(); // noteSpecial: a change that names a Special
+    r.engine.onSubmit = () => [];
+    const asked = { kind: 'spherechange', targets: [], extra: { toDressphere: 'floral-fallal', toNode: 0, gatesCrossed: [], specialDressUp: true } } as unknown as Command;
+    await expect((r.presenter as unknown as Submitter).submit(r.engine, asked)).resolves.toBeNull(); // preSubmit
+    expect(r.hud.hudLog.some((l) => l.startsWith('hold:'))).toBe(false);
+    expect(r.stage.form).toBeNull();
   });
 
   it('with the switch OFF the Special row is not offered, and a Special command sent anyway holds nothing', async () => {
