@@ -447,6 +447,66 @@ Game case: **FFX-2 only in what is seen** (the three Special dresspheres exist o
 | R3-5 | A part's turn cut-in (only under `?portraits=turns`) keeps the part's own name and ATB label and borrows its MAIN's portrait file: `portraitId?` on `TurnCutInRequest` and on `MomentsPort.turnCutIn`, set by `TurnCutIn.play` through `formMainOf`. This follows SPEC-D2's "no portrait file for a part; the main's stands in" (the pause already does). The tsc of the commit before the type follow-up was red for two lines of a test. |
 | R3-6 | 12.3 and 12.7 item 5 corrected (only Yuna's parts have no one-target pick). |
 
+**Game case of commit `a9049025b` (R2-6, pin 1b): FFX-2 only.** The commit is tests only and pins the hidden FF7 path of `artCandidatesFor` as UNCHANGED, so FF7 is touched by nothing. Its message says "tests only, FF7 untouched" and does not name the game case; commits are never amended, so this line is the record (fix pass 2, item O4).
+
 **Found by the reader run, not by a reviewer:** `noteSpecial` and `preSubmit` read `state?.flags['specialDressUp']` and threw on a state double with no `flags` field (`portraits-big-moves.test.ts` failed at the head); now `flags?.`, with a case.
 
-**Left for the driver (an existing test that step C2's spec'd behaviour breaks; no test was edited):** `exp-leblanc.test.ts` "resolves every figure to the ids it always did" and "resolves each girl in each dressphere ... inside the namespace" fail at the head and before this pass. `girlsInEveryDressphere()` builds a girl wearing each OWNED dressphere of Chapter VI's build, the three Specials included, and C2's `specialArtCandidates` answers a girl wearing a Special with her Special's painting only (SPEC-C2 rule 12). Such a girl cannot exist with the switch OFF. The smallest fix is in the test: leave the three Special ids out of `girlsInEveryDressphere()`.
+**Left for the driver (an existing test that step C2's spec'd behaviour breaks; no test was edited):** `exp-leblanc.test.ts` "resolves every figure to the ids it always did" and "resolves each girl in each dressphere ... inside the namespace" fail at the head and before this pass. `girlsInEveryDressphere()` builds a girl wearing each OWNED dressphere of Chapter VI's build, the three Specials included, and C2's `specialArtCandidates` answers a girl wearing a Special with her Special's painting only (SPEC-C2 rule 12). Such a girl cannot exist with the switch OFF. The smallest fix is in the test: leave the three Special ids out of `girlsInEveryDressphere()`. **Fix pass 2 ran that claim on the real engine and it does not hold for a forged command: see 15.2; the test is still not edited.**
+
+## 15. The review fix pass 2 (2026-11-10; branch `ffx2-specials`; the verifier's FAIL of `bd53ec595`)
+
+Game case: **FFX-2 only in what is seen** (the three Special dresspheres exist only in FFX-2). This pass changes tests, test helpers and these records. No file under `src/` changed, none under `src/battle/**`; the switch `specialDressUp` stays OFF in every shipped chapter. One commit per item.
+
+| Item | Result |
+|---|---|
+| O1 (R3-2 finished: the rows e2e 24 opens) | **Done** (`8b18ebc23`). The rows are candidate lists in one shared table, proved on the real engine with each chapter's own party build. Two more walk problems found and one fixed (15.3). |
+| O2 (the two `exp-leblanc.test.ts` cases) | **Stopped, as the pass's own rule says, because the proof failed** (15.2). `exp-leblanc.test.ts` is not edited. |
+| O3 (`special-surfaces-fight.test.ts` over 400 lines) | **Done** (`7ea4b9a1c`): 36 cases before, 26 + 10 after, the same 36 titles (15.4). |
+| O4 (`a9049025b` does not name the game case) | **Done**: one line in section 14, after its table (commits are never amended). |
+
+### 15.1 O1: what the part menus really offer, and the shared table
+
+`tests/e2e/support/special-rows.ts` (no playwright import) holds `CHAPTER_OF`, `PARTS`, `AIMED_GIRLS`, `ENEMY_ROWS`, `ALLY_ROWS`, `PASS_ROWS`, the walk's row names and the two small rules (`firstPresent`, `nextChangeRow`); the specs and `tests/unit/special-e2e-rows.test.ts` import the same objects. The unit test plays the walk of each girl on `setupForChapter(chapter)` with the chapter's own `buildRef` (switch ON, Wait, seed 1; `helpers/specialPartMenus.ts`), reads the menus of the three plates and asserts every table entry against them. Run it: `node node_modules/vitest/vitest.mjs run tests/unit/special-e2e-rows.test.ts`.
+
+What the real engine offers (rows by what the menu prints; Chapter IV's build for Yuna and Rikku, Chapter V's for all three; the rows are the same in both chapters):
+
+| Plate | Rows |
+|---|---|
+| Yuna | Attack; Skill: Heat Whirl, Ice Whirl, Electric Whirl, Aqua Whirl; Change: Leave Floral Fallal |
+| Right Pistil | Skill: White Pollen, Hard Leaves, Tough Nuts, Mirror Petals (all allies), Floral Bomb (all enemies) |
+| Left Pistil | Skill: Dream Pollen, Mad Seeds, Sticky Honey, Halfdeath Petals, Silent White (all enemies) |
+| Rikku | Attack; Skill: Death Missile, Bio Missile, Break Missile; Change: Leave Machina Maw |
+| Smasher-R, Crusher-L | Skill: Howitzer, HP Repair, MP Repair, Homing Ray (Howitzer and Homing Ray one foe; the repairs one ally, aimed at all three plates) |
+| Paine (Chapter V) | Attack; Skill: Aestus, Winterkill, Whelmen, Levin; Change: Leave Full Throttle |
+| Dextral Wing (right) | Skill: Venom Wing, Blind Wing, Mute Wing, Lazy Wing (one foe), Stamina, Mettle (one ally, three plates) |
+| Sinistral Wing (left) | Skill: Steel Feather, Diamond Feather (all allies), White Feather, Buckle Feather (all enemies), Stamina, Mettle (one ally, three plates) |
+
+A part has no Attack row and no Change row; its whole top level is one Skill submenu. **Paine's left wing has no one-foe skill in Chapter V's own build** (Ma'at's Feather, which e2e 24 named after review fix R3-2, is a row only a mastered rig offers: the unit test shows it on `formUp('paine', { mastered: true })` and not on the chapter). Its pick is therefore a group aim (White Feather, Buckle Feather); the spec asserts the aim mode the table names (`single` or `all`), and a tap on a plate while a foe or the foe group is aimed must still do nothing (`PlateTaps` acts only on a plate that is a candidate). Rikku's parts and Paine's right wing keep a one-foe pick first.
+
+### 15.2 O2: the proof that no girl can wear a Special with the switch OFF failed
+
+The pass had to prove by running the real engine that, with the switch OFF, no girl can wear a Special, and only then move the Special dresses out of `exp-leblanc.test.ts`'s `girlsInEveryDressphere()`. Run on Chapter VI's build (`chateauBuild`, through `ffx2-leblanc` and through the experiment `exp-leblanc`), on Chapter IV's and Chapter V's:
+
+- **Held:** her own walk along the whole grid (every dress worn, 4 or 5 Changes) never offers the Special row with the switch OFF, and no girl wears a Special; the Special row's own command forged at the node she stands on is refused (nothing changes); no chapter's build starts a girl in a Special (23 FFX-2 builds scanned). With the switch ON the same walk offers the row and picking it puts the Special on her (the control).
+- **Failed, route 3:** `engine.submit({ kind: 'spherechange', targets: [], extra: { toDressphere: <her Special>, toNode: <any node linked to the one she stands on>, gatesCrossed: [] } })` on her own turn, with `specialDressUp` true, false or absent, leaves `state.combatants[girl].dresspheres.current` equal to the Special's id. 27 of 27 combinations (chapter, girl, flag) with the switch OFF: nodes 1, 3 and 4 on Yuna's and Rikku's grids, 1, 4 and 5 on Paine's; on all four builds. A made-up id (`no-such-dress`) and another girl's Special are worn the same way.
+- **Why:** `FFX2Engine.submit` performs any command it is given; `performCommand` asks `performSpecialChange` (false with the switch OFF) and then `performSpherechange`, which takes `extra.toDressphere` as given and checks only that `toNode` is linked to her node. It never checks that the dress on that node is the one named. With the switch ON the same forged command without the flag (`false` or absent) is accepted too; with the flag `true` it is refused. The existing case `ffx2-special-dress-up.test.ts` "with the switch off there is no row and the wheel's own command is refused" forges at her CURRENT node, which is why it did not see this.
+- **How it is reached in a shipped build:** no menu builds such a command (a Change row carries the dress that sits on its node), as far as the callers of `submit` read, the strategies and the move advisor take rows the engine offered; `window.__pyrefly.forceCommand(command)` (`src/debug/api.ts`) submits any command, so a console user can. Nothing in play does.
+
+So the premise of the proposed helper edit ("such a girl cannot exist with the switch OFF") is true of every menu and false of the command API. Not done, because of that: the edit of `girlsInEveryDressphere()`, the cases that pin the Special rule in the art namespace, and the art-gap case (all three wait for the driver's decision). The decision: (a) accept the weaker statement (no menu, AI or advisor route; the console only) and move the helper, or (b) close the hole first in `src/battle/ffx2` (a Change must name the dress that sits on the node), an engine edit with its own pins and A/B. For the open point the pass would have recorded: the manifest holds 24 `exp-leblanc-*` subjects and no Special painting under any namespace, plain ids included (no subject is named `floral-fallal`, `machina-maw` or `full-throttle`), so before the switch may go on for the experimental Leblanc chapter either namespaced Special paintings are installed or `SpecialArt` gets a namespace fallback (a Stage 2 decision for Bailey).
+
+### 15.3 O1 also found two problems in the walk of `special-walk.ts`
+
+The unit test plays `walkToForm`'s rules on the real engine (`greedyWalk` in the helper: the same `nextChangeRow` and `PASS_ROWS`, the girls' HP topped up as `specialDrive.walkTo` does).
+
+- **W1, fixed: Yuna starts both chapters as a White Mage, whose menu is White Magic, Change and Item, with no Attack row.** The walk took Attack for every plate that is not the girl being walked and threw on Yuna's turn in Rikku's and Paine's walks. `PASS_ROWS` (Attack, then Cure: a White Mage spell on her menu in both chapters, one ally) is the fix; `openRowAnywhere` moved from the touch-aim spec to `special-walk.ts` so the walk can open Cure inside White Magic.
+- **W2, found and not fixed: the foe's Curse greys the whole Change list.** In Chapter IV at seed 1 Yuna is Cursed in Gunner after her first Change, and every Change row reads "Cursed" (the walk throws at once now, with the rows it saw, instead of wandering through its 60 menus). `specialDrive.walkTo` lifts the status as a rig; the page has no such rig, and the in-game answer is Holy Water on the girl (an Item row, aimed at her). With the engine's rig off the walk reached the Special for Rikku (Chapter IV) and for Rikku, Paine and Yuna (Chapter V) at seed 1; only Yuna in Chapter IV was Cursed. The page's timing is not the engine's, so this is a risk for Stage 2, not a certainty. Options: play Yuna's e2e 23 in Chapter V (her Special is there too), or add a Holy Water step to the walk.
+
+### 15.4 O3
+
+`special-surfaces-fight.test.ts` (444 lines) keeps the cut-in, the Guide, the intent slab, the advisor and the phone framing (241 lines, 26 cases); `special-surfaces-fight-hud.test.ts` (new, 180 lines, 10 cases) holds the results page, the party column, the held-list case and the pro KO marks. `helpers/specialFightSurfaces.ts` holds what both read (`guideLine`, `cardOf`, `mountHud`, `off`, the shared jsdom hooks as `useFightHooks`). Whole `describe` blocks moved; every other line is byte for byte the old one.
+
+### 15.5 `[ours]` rows and deviations
+
+- `[ours]`: Cure as the pass row of a White Mage (any harmless spell of her own menu would do); the pick order within each part's candidate list (the first present wins); the group aim for Paine's left wing. None is a game number.
+- Deviation: O1 grew past the verifier's finding (PASS_ROWS, `openRowAnywhere` moved, the Change-list guard) because the pass said to check every row name in both specs and the support file; `pause-with-form.spec.ts` is not edited (it reads the same tables through `special-walk.ts`).
+- Deviation: O2 stopped (15.2).
