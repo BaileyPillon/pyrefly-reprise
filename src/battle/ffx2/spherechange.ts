@@ -36,11 +36,29 @@ import { autoAbilityRows, poolHolds } from './adapt/auto-layer.ts';
 import { autoWordsOf } from './adapt/menu.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { removeStatus } from './statuses.ts';
+import { isSpecialDress } from './special/forms.ts';
 
 export interface SpherechangeDeps {
   grids: GarmentGridRegistry;
   dresspheres: DressphereRegistry;
   gridNodes: Record<string, Array<string | null>>;
+}
+
+/**
+ * **The gate on an ordinary Change** (2026-11-10, the Special Dress Up review, fix pass 3; FFX-2 only, in force with the `specialDressUp` switch on or off).
+ *
+ * G1: an ordinary Change puts a girl in the dressphere that sits on the node she moves to, on HER OWN grid in this battle (`deps.gridNodes[her id]`, the array the menu reads its rows from, `menu.ts`).
+ * Every menu row is that pair by construction; a command that names any other dress for the node (another girl's Special, a dress she does not own, an id that does not exist, an empty node) is a command no
+ * menu builds, only the debug console can, and it is refused. The sources say a girl changes into the dressphere on the node the cursor is on (`research/ffx2-combat-core.md` 2161, 3253 to 3256) and the
+ * game's pending-change record carries the dress with the node (`research/re-ffx2-dressphere.md` 3.3); they do not say the game re-checks the pair, so this is plumbing, not a game rule.
+ * G2: a Special is worn through the Special path only (`special/change.ts`, behind the switch and the rule the menu offers the row by), never through this one, and a command that asks for the Special path
+ * (`specialDressUp`) but did not take it is not an ordinary Change. With the switch off the Special path answers false at once, so this is what refuses it there.
+ */
+export function ordinaryChangeAllowed(unit: Ffx2Unit, command: SpherechangeCommand, deps: SpherechangeDeps): boolean {
+  const { toDressphere, toNode, specialDressUp } = command.extra;
+  if (specialDressUp === true || isSpecialDress(toDressphere)) return false; // G2
+  const onNode = Number.isInteger(toNode) ? deps.gridNodes[unit.id]?.[toNode] : undefined; // G1 (a node is a whole index)
+  return typeof onNode === 'string' && onNode.length > 0 && onNode === toDressphere;
 }
 
 /**
@@ -112,6 +130,11 @@ export function performSpherechange(
     }
     gates = real;
   }
+  // The gate (`ordinaryChangeAllowed`): refused exactly as an unlinked node is, before anything changes.
+  if (!ordinaryChangeAllowed(unit, command, deps)) {
+    emit({ type: 'message', text: 'Not linked', kind: 'system' });
+    return false;
+  }
 
   sphere.current = to;
   sphere.garmentGrid.nodePosition = toNode;
@@ -137,7 +160,6 @@ export function performSpherechange(
     from,
     to,
     gatesCrossed: [...gates],
-    ...(command.extra.specialDressUp ? { special: to as 'floral-fallal' } : {}),
   });
   return true;
 }

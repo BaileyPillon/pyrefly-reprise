@@ -24,6 +24,7 @@ import { isSilenceable, isSpecialWearer, menuCategoryOf, offeredAbilityIds } fro
 import { validTargetIds } from './targeting.ts';
 import { inForm } from './special/enter.ts';
 import { specialRows } from './special/availability.ts';
+import { isSpecialDress } from './special/forms.ts';
 
 /** The reason an Itchy girl's row is greyed (the game blocks every command but Escape; spherechange clears it). */
 export const ITCHY_REASON = 'Itchy — spherechange first';
@@ -191,7 +192,7 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
     const node = actor.dresspheres.garmentGrid.nodePosition;
     for (const step of adjacentNodes(ctx.grid, node)) {
       const to = ctx.gridNodes?.[step.node] ?? null;
-      if (!to) continue;
+      if (!to || isSpecialDress(to)) continue; // a Special is never a node's dress to walk to: the Special path offers it (`special/availability.ts`); `spherechange.ts#ordinaryChangeAllowed` refuses it here
       out.push({
         command: {
           kind: 'spherechange',
