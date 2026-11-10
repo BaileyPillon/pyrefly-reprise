@@ -67,6 +67,7 @@ import { OMEGA_RUINS_BOSS_IDS, omegaRuins } from './omega-ruins.ts';
 import { WENDIGO_BOSS_IDS, wendigoLine } from './wendigo.ts';
 import { BELGEMINE_CHAPTER_BOSS_IDS, belgemineLine } from './belgemine.ts';
 import { SHINRYU_BOSS_IDS, shinryu } from './shinryu.ts';
+import { FIEND_SUPERBOSSES_BOSS_IDS, ffx2FiendSuperbosses } from './ffx2-fiend-superbosses.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -122,6 +123,7 @@ export { omegaRuins, OMEGA_RUINS_BOSS_IDS } from './omega-ruins.ts'; // the hidd
 export { wendigoLine, WENDIGO_BOSS_IDS } from './wendigo.ts'; // the hidden Wendigo chapter (FFX only)
 export { belgemineLine, BELGEMINE_CHAPTER_BOSS_IDS } from './belgemine.ts'; // the hidden Belgemine's Challenge chapter (FFX only)
 export { shinryu, SHINRYU_BOSS_IDS } from './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07)
+export { ffx2FiendSuperbosses, FIEND_SUPERBOSSES_BOSS_IDS } from './ffx2-fiend-superbosses.ts'; // the hidden Fiend Arena Superbosses chapter (FFX-2 only, 2026-11-09)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -224,6 +226,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...BELGEMINE_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'belgemine', bossId, tactic: belgemineLine })),
   // The hidden Shinryu chapter (FFX only): the Monster Arena's deep-water dragon; the line is a Phoenix Down or a potion first, then Tidus's Quick Hit and the plain Celestial blow (the shipped party wins every battle; the line is the fastest).
   ...SHINRYU_BOSS_IDS.map((bossId) => ({ chapterId: 'shinryu', bossId, tactic: shinryu })),
+  // The hidden Fiend Arena Superbosses chapter (FFX-2 only, 2026-11-09): Almighty Shinra and the four heads of the Major Numerus; the line is the Cup's curtains line (Darkness from both Dark Knights, Rikku raises, cures stone, lays Protect and Shell, mends), and it has no answer to a Command.
+  ...FIEND_SUPERBOSSES_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-fiend-superbosses', bossId, tactic: ffx2FiendSuperbosses })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

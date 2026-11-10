@@ -4,10 +4,11 @@
  *
  * 1. **The scripts on their own clocks** [RE 3]: the girls are Invincible and only defend, so the foes act for as long as the test wants. Shinra's first twelve actions are the loop (the Haste at the sixth, the Final Impact
  *    at the twelfth because he is hasted); Quattour's first eighteen are the loop twice; Unum's Shell reaches the four heads and no part; every pair move of Duo and Tria is one of its two.
- * 2. **The acts played to an end** by the Darkness line (an input to a measurement, `fiendSuperbossDrive.ts`), the real HP: **no error, an end reached** (the cap of 20 minutes of battle time is named in the helper and
- *    never reached here), the event log's hash pinned. The base party LOSES every one of the six runs within 9 seconds of battle time (Clione, or the first Fireworks and Commands): a RESULT for the stage 4 bench and the
+ * 2. **The acts played to an end** by the Darkness line (an input to a measurement, `fiendSuperbossDrive.ts`), the real HP: **no error, an end reached** (the cap of 72,000 logic steps, 40 minutes of battle time, is named in the helper and
+ *    never reached here), the event log's hash pinned. The base party LOSES every one of the six runs within 530 logic steps, 18 seconds of battle time (Clione, or the first Fireworks and Commands; stage 2 wrote
+ *    9 seconds, at 60 steps a second instead of the engine's 29.97): a RESULT for the stage 4 bench and the
  *    options sheet, not a defect, and no boss number is touched.
- * 3. **The same line with Invincible girls topped up at every decision**: act 1 is won (171 to 364 seconds of battle time), act 2 is lost on all three seeds, to Petrify: Duo's Break (chance 80) lands on the whole line
+ * 3. **The same line with Invincible girls topped up at every decision**: act 1 is won (10,246 to 21,823 logic steps, 342 to 728 seconds of battle time; stage 2 wrote 171 to 364 at 60 a second), act 2 is lost on all three seeds, to Petrify: Duo's Break (chance 80) lands on the whole line
  *    through Invincible, a status the rig does not stop. `[measured]`, one number per run.
  * 4. **The death rule on the real engine** [RE 2]: the heads at 1 HP and killed one at a time in the game's order; the body and the pod hold 1 HP until the fourth head falls, then read 0 HP, alive, with no knock-out
  *    event; the tail is untouched; the fight ends in victory.

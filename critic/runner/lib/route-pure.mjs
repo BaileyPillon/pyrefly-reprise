@@ -298,6 +298,7 @@ export const DOOR_WORDS = Object.freeze({
   'ffx2-garik-ronso': 'braveheart', // the hidden Garik Ronso chapter (FFX-2, number 47, 2026-11-08)
   shinryu: 'shinryu', // the hidden Shinryu chapter (FFX, number 48, 2026-11-07)
   wendigo: 'wendigo', // the hidden Wendigo chapter (FFX, number 49, 2026-11-06; desktop only)
+  'ffx2-fiend-superbosses': 'legion', // the hidden Fiend Arena Superbosses chapter (FFX-2, number 53, 2026-11-09)
 });
 
 /** The word that opens a chapter the board has no card for, or null for a chapter with a card (the arrow-key walk finds it). */

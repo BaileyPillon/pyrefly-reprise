@@ -121,7 +121,7 @@ describe('(a) the seven-actor formation [T0 a]', () => {
     for (const id of PARTS) expect(Object.keys(unit(engine, id).statuses), id).toEqual([]);
   });
 
-  it('the hidden parts cost nothing: 150 seconds of a quiet Numerus take about 1,200 steps and each part has about eight idle turns (Agility 1); act 1 takes about 760 steps in the same time', () => {
+  it('the hidden parts cost nothing: 9,000 logic steps (five minutes of battle time at the engine\'s 29.97 a second; stage 1 read them as 150 s) of a quiet Numerus take about 1,200 decisions and each part has about eight idle turns (Agility 1); act 1 takes about 760 decisions in the same time', () => {
     for (const [act, bound] of [[2, 2_500], [1, 1_500]] as const) {
       const { group } = forcedAct(act);
       const engine = openAct(act, 1, { group, immortal: true });
@@ -367,7 +367,7 @@ describe('(e) Miracle Drink [T0 e]', () => {
     }
   });
 
-  it('with Dark Matter and a Potion in the bag, Rikku\'s Mix (Dark Matter first) makes the Miracle Drink: all three girls become Invincible for about 3.9 seconds (236 ticks at 60 a second), the same for each; two items are spent', () => {
+  it('with Dark Matter and a Potion in the bag, Rikku\'s Mix (Dark Matter first) makes the Miracle Drink: all three girls become Invincible for about 7.9 seconds (236 logic steps at the engine\'s 29.97 a second; stage 1 read them at 60 a second and wrote 3.9, a unit slip fixed in stage 3), the same for each; two items are spent', () => {
     const build = lv99Build();
     build.inventory = [...(build.inventory ?? []), { itemId: 'x2-dark-matter', count: 3 }, { itemId: 'x2-potion', count: 3 }];
     const { group } = forcedAct(2);
@@ -409,7 +409,7 @@ describe('(e) Miracle Drink [T0 e]', () => {
 describe('Almighty Shinra [T0 sizes and Regen]', () => {
   const S = X2_ALMIGHTY_SHINRA_ID;
 
-  it('he stands with Regen and Spellspring from the first moment; his Regen heals 1/32 of his maximum HP (8,593) every 2.8 seconds (about 3,000 HP a second) at his Agility of 255', () => {
+  it('he stands with Regen and Spellspring from the first moment; his Regen heals 1/32 of his maximum HP (8,593) every 169 logic steps (5.6 seconds at 29.97 a second, about 1,500 HP a second; stage 1 wrote 2.8 s and 3,000 at 60 a second) at his Agility of 255', () => {
     const { group } = forcedAct(1);
     const engine = openAct(1, 1, { group, immortal: true });
     expect(Object.keys(unit(engine, S).statuses).sort()).toEqual(['regen', 'spellspring']);
@@ -459,7 +459,7 @@ describe('Almighty Shinra [T0 sizes and Regen]', () => {
     expect(fireworksHits, 'Fireworks on Yuna in 12 seeds').toBeLessThanOrEqual(8);
   });
 
-  it('the Regen race: the base line (Yuna and Paine on Darkness, Rikku on Attack, immortal) deals about 600,000 in two minutes against his idle self and his Regen heals back about 350,000 of it, so he ends the two minutes under 60,000 HP: the line out-damages the Regen, by about 2,000 HP a second net', () => {
+  it('the Regen race: the base line (Yuna and Paine on Darkness, Rikku on Attack, immortal) deals about 600,000 in 7,200 logic steps (four minutes of battle time at 29.97 a second; stage 1 read them as two minutes) against his idle self and his Regen heals back about 350,000 of it, so he ends the window under 60,000 HP: the line out-damages the Regen, by about 1,000 HP a second net', () => {
     for (const seed of [1, 2, 3]) {
       const { group } = forcedAct(1);
       const engine = openAct(1, seed, { group, immortal: true });

@@ -6,6 +6,16 @@
 /** The chapter's id: its key in the experiments' store. */
 export const FIEND_SUPERBOSSES_ID = 'ffx2-fiend-superbosses' as const;
 
+/**
+ * The scene key: the Den of Woe's own stage (`src/scenes/den-of-woe.ts`), the Farplane Cup's stand-in too (pick LG5, flagged; the driver's call, Bailey's to overturn). The Fiend Arena has no plate and no map in the files
+ * (`research/re-ffx2-fiend-arena-superbosses.md` section 7), the Den's stage is a plain arena with a clear boss spot and no scene edit, and the key is the plate's own id, so the cutscene screen and the party prep (which
+ * draw `backdrops/<sceneKey>.png`) find the same painting. Alternative: one painted Fiend Arena plate (about 3 h of art, Bailey looks first).
+ */
+export const FIEND_SUPERBOSSES_SCENE = 'den-of-woe';
+
+/** The `script-trigger` name that plays between the acts: the fall of Almighty Shinra (the fall of the last head is the chapter's close). */
+export const FS_SEAM_1 = 'act-1-fallen';
+
 /** The two formations (the act, then the fight), in play order. Act 1 chains to act 2 by `nextGroupId`. */
 export const ACT_1_GROUP_ID = 'ffx2-fiend-superbosses-1-shinra';
 export const ACT_2_GROUP_ID = 'ffx2-fiend-superbosses-2-numerus';

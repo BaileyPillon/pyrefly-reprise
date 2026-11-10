@@ -48,6 +48,7 @@ import { FF7_JENOVA_LIFE_DOC } from './ff7-jenova-life.ts';
 import { FFX2_IFRIT_KILIKA_DOC } from './ffx2-ifrit-kilika.ts';
 import { FFX2_GARIK_RONSO_DOC } from './ffx2-garik-ronso.ts';
 import { SHINRYU_DOC } from './shinryu.ts';
+import { FFX2_FIEND_SUPERBOSSES_DOC } from './ffx2-fiend-superbosses.ts';
 
 export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_FLUX_DOC,
@@ -90,6 +91,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   FFX2_GARIK_RONSO_DOC, // the hidden Garik Ronso (FFX-2 only)
   SHINRYU_DOC, // the hidden Shinryu (FFX only)
   WENDIGO_DOC, // the hidden Wendigo (FFX only)
+  FFX2_FIEND_SUPERBOSSES_DOC, // the hidden Fiend Arena Superbosses (FFX-2 only)
 ];
 
 /** The document for one chapter id, if it has one. */

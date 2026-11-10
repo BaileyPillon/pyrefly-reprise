@@ -53,8 +53,9 @@
  * **`sidequest`** (FFX, the hidden Belgemine's Challenge, `./sidequestDoor.ts`: S is `down`, D `right`, E `start`, Q `triangle`; I, U and T are unbound) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
  *
  * **`braveheart`** (FFX-2, the hidden Garik Ronso, `./braveheartDoor.ts`: R is `r1`, A is `left`, V is `select`, E is `start`; B, H and T are unbound, so the first letter moves nothing; the plan's `lionheart` failed the table's `limit` rule, see that file) is a plain `WordDoor` too.
+ * **`legion`** (FFX-2, the hidden Fiend Arena Superbosses, `./legionDoor.ts`: only E is a bound key, `start`, which the board ignores and the word claims as a later letter; L, G, I, O and N are unbound, so the first letter moves nothing; it shares the prefix `le` with `leblanc` and is told apart at the third letter) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit`, `braveheart` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast`, `wendigo`, `sidequest` and `shinryu`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit`, `braveheart`, `legion` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast`, `wendigo`, `sidequest` and `shinryu`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -93,6 +94,7 @@ import { WENDIGO_DOOR_CHAPTER, WENDIGO_DOOR_WORD } from './wendigoDoor.ts';
 import { SIDEQUEST_DOOR_CHAPTER, SIDEQUEST_DOOR_WORD } from './sidequestDoor.ts';
 import { BRAVEHEART_DOOR_CHAPTER, BRAVEHEART_DOOR_WORD } from './braveheartDoor.ts';
 import { SHINRYU_DOOR_CHAPTER, SHINRYU_DOOR_WORD } from './shinryuDoor.ts';
+import { LEGION_DOOR_CHAPTER, LEGION_DOOR_WORD } from './legionDoor.ts';
 
 /**
  * **The two hidden 3D chapters are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only: `yrp`, the 3D Bahamut, and `waker`, the Wind Waker Valefor). They are not staged for a phone: the Wind Waker is expected to miss the phone budgets
@@ -151,6 +153,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: BRAVEHEART_DOOR_WORD, chapter: BRAVEHEART_DOOR_CHAPTER },
   { word: SHINRYU_DOOR_WORD, chapter: SHINRYU_DOOR_CHAPTER },
   { word: WENDIGO_DOOR_WORD, chapter: WENDIGO_DOOR_CHAPTER, gate: desktopOnly },
+  { word: LEGION_DOOR_WORD, chapter: LEGION_DOOR_CHAPTER },
 ];
 
 /**

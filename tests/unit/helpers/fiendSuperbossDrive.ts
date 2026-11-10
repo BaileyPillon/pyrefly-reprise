@@ -6,14 +6,14 @@
  *   so the checks are of the engine and the data, not of the scripts (the scripts have their own files).
  * Nothing here tunes a boss (rule 6): the helper only opens fights and plays them; the bench lines (named policies standing in for a player) are a later stage of the lane.
  *
- * The party is `viaInfinitoBuild` (the Cup's build, a deep copy per call) until the chapter's own build lands (stage 3 of the lane).
+ * The party is the chapter's own build `fiendSuperbossBuild` (stage 3 of the lane: a deep copy of the Cup's `viaInfinitoBuild`, equal to it, a deep copy per call), so the lane's hashes and measurements are of the shipped preset.
  */
 
 import type { BattleSetup, Command, Decision, EnemyGroupDef, FFX2Combatant, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { createHash } from 'node:crypto';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import { aiScriptFor, registerAiScript } from '../../../src/battle/ffx2/ai/index.ts';
-import { viaInfinitoBuild } from '../../../src/data/ffx2/builds/via-infinito.ts';
+import { fiendSuperbossBuild } from '../../../src/data/ffx2/builds/fiend-superbosses.ts';
 import { act1ShinraGroup, act2NumerusGroup } from '../../../src/data/ffx2/enemies/fiend-superbosses.ts';
 import { NUMERUS_HEAD_IDS, X2_ALMIGHTY_SHINRA_ID } from '../../../src/data/fiend-superbosses-ids.ts';
 import { ffx2Options } from './ffx2ChapterDrive.ts';
@@ -28,7 +28,7 @@ export type Act = 1 | 2;
 export const GIRLS = ['yuna', 'rikku', 'paine'] as const;
 
 /** The party of the lane's measurements: Chapter XIII's Lv 99 three as it is, a deep copy per call so no preset can mutate another's. */
-export const lv99Build = (): FFX2PartyBuild => structuredClone(viaInfinitoBuild);
+export const lv99Build = (): FFX2PartyBuild => structuredClone(fiendSuperbossBuild);
 
 /** The group of an act as the data defines it. */
 export const groupOf = (act: Act): EnemyGroupDef => (act === 1 ? act1ShinraGroup : act2NumerusGroup);
@@ -168,7 +168,7 @@ export function attackOf(d: Input, target: string): Command {
 // Stage 2: playing an act to its end (or to a named cap), and the event log's hash
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-/** The turn cap of a run: 20 minutes of battle time (the engine counts 60 ticks a second). A run that reaches it is a RESULT named `cap`, never a failure. */
+/** The turn cap of a run: 40 minutes of battle time (the FFX-2 engine counts 29.97 logic steps a second, `battle/ffx2/clock.ts`; stage 2 of the lane read the cap as 20 minutes at 60 a second). A run that reaches it is a RESULT named `cap`, never a failure. */
 export const CAP_TICKS = 60 * 60 * 20;
 
 /** The foes of an act that the girls aim at, in order: Shinra, or the four heads. */

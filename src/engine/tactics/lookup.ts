@@ -67,6 +67,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'ff7-jenova-life': 'ff7', // the hidden Jenova LIFE chapter (FF7 only, 2026-11-07); a guide and a page, no tactic
   'ffx2-ifrit-kilika': 'ffx2', // the hidden Ifrit at Kilika Temple chapter (FFX-2 only, 2026-11-07)
   'ffx2-garik-ronso': 'ffx2', // the hidden Garik Ronso chapter (FFX-2 only, 2026-11-08)
+  'ffx2-fiend-superbosses': 'ffx2', // the hidden Fiend Arena Superbosses chapter (FFX-2 only, 2026-11-09)
 };
 
 /** `state.flags` key prefix of an aeon lock's reason (`battle/ffx/aeon-duel.ts#AEON_LOCK_REASON_PREFIX`, restated so this module stays out of the battle layer's import graph; the Last Summoning's guide test pins the copy). */

@@ -26,6 +26,7 @@ import { WENDIGO_META } from './chapter-meta-wendigo.ts';
 import { BELGEMINE_META } from './chapter-meta-belgemine.ts';
 import { GARIK_RONSO_META } from './chapter-meta-ffx2-garik-ronso.ts';
 import { SHINRYU_META } from './chapter-meta-shinryu.ts';
+import { FIEND_SUPERBOSSES_META } from './chapter-meta-ffx2-fiend-superbosses.ts';
 
-/** The hidden chapters' metadata, by chapter number: 34 the Dark Aeons, 35 Penance, 36 the Flooded Ways, 37 the Bevelle Guardians (FFX-2), 38 the Farplane Cup (FFX-2), 39 the Sanctuary Keeper, 40 Yuna's Ballad (FFX-2), 41 Spherimorph (FFX), 42 the Youth League Tournament (FFX-2), 43 the Omega Ruins (FFX), 45 Belgemine's Challenge (FFX), 46 Ifrit at Kilika Temple (FFX-2), 47 Garik Ronso (FFX-2), 48 Shinryu (FFX), 49 Wendigo (FFX). */
-export const HIDDEN_R76_META: readonly ChapterMeta[] = [DARK_AEONS_META, PENANCE_META, FLOODED_WAYS_META, BEVELLE_GUARDIANS_META, FARPLANE_CUP_META, SANCTUARY_KEEPER_META, YUNAS_BALLAD_META, SPHERIMORPH_META, YOUTH_LEAGUE_META, OMEGA_RUINS_META, BELGEMINE_META, IFRIT_KILIKA_META, GARIK_RONSO_META, SHINRYU_META, WENDIGO_META];
+/** The hidden chapters' metadata, by chapter number: 34 the Dark Aeons, 35 Penance, 36 the Flooded Ways, 37 the Bevelle Guardians (FFX-2), 38 the Farplane Cup (FFX-2), 39 the Sanctuary Keeper, 40 Yuna's Ballad (FFX-2), 41 Spherimorph (FFX), 42 the Youth League Tournament (FFX-2), 43 the Omega Ruins (FFX), 45 Belgemine's Challenge (FFX), 46 Ifrit at Kilika Temple (FFX-2), 47 Garik Ronso (FFX-2), 48 Shinryu (FFX), 49 Wendigo (FFX), 53 the Fiend Arena Superbosses (FFX-2). */
+export const HIDDEN_R76_META: readonly ChapterMeta[] = [DARK_AEONS_META, PENANCE_META, FLOODED_WAYS_META, BEVELLE_GUARDIANS_META, FARPLANE_CUP_META, SANCTUARY_KEEPER_META, YUNAS_BALLAD_META, SPHERIMORPH_META, YOUTH_LEAGUE_META, OMEGA_RUINS_META, BELGEMINE_META, IFRIT_KILIKA_META, GARIK_RONSO_META, SHINRYU_META, WENDIGO_META, FIEND_SUPERBOSSES_META];

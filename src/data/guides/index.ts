@@ -47,6 +47,7 @@ import { FF7_JENOVA_LIFE_GUIDE } from './ff7-jenova-life.ts';
 import { FFX2_IFRIT_KILIKA_GUIDE } from './ffx2-ifrit-kilika.ts';
 import { FFX2_GARIK_RONSO_GUIDE } from './ffx2-garik-ronso.ts';
 import { SHINRYU_GUIDE } from './shinryu.ts';
+import { FFX2_FIEND_SUPERBOSSES_GUIDE } from './ffx2-fiend-superbosses.ts';
 
 export type {
   ChapterGuide,
@@ -158,6 +159,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   SHINRYU_GUIDE,
   // The hidden Wendigo chapter (FFX only, Wendigo and its two Guado Guardians on frozen Lake Macalania; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   WENDIGO_GUIDE,
+  // The hidden Fiend Arena Superbosses chapter (FFX-2 only, Almighty Shinra and the Major Numerus; EXPERIMENT_CHAPTERS, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  FFX2_FIEND_SUPERBOSSES_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */
