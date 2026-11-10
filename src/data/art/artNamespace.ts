@@ -25,6 +25,7 @@ import { DARK_AEONS_SCENE, DARK_SIX_PLATES } from '../ffx/dark-aeons-six-ids.ts'
 import { PENANCE_SCENE } from '../ffx/penance-ids.ts';
 import { FLOODED_PLATE, FLOODED_WAYS_SCENE } from '../ffx/flooded-ways-ids.ts';
 import { SHINRYU_PLATE, SHINRYU_SCENE } from '../ffx/shinryu-ids.ts';
+import { GAUNTLET_PLATE, GAUNTLET_SCENE } from '../ffx/gauntlet-ids.ts';
 import { SANCTUARY_KEEPER_SCENE } from '../ffx/sanctuary-keeper-ids.ts';
 import { SPHERIMORPH_SCENE } from '../ffx/spherimorph-ids.ts';
 import { OMEGA_RUINS_PLATE, OMEGA_RUINS_SCENE } from '../ffx/omega-ruins-ids.ts';
@@ -62,6 +63,7 @@ export const SCENE_BACKDROP_FILE: Readonly<Record<string, string>> = {
   [DARK_AEONS_SCENE]: DARK_SIX_PLATES.valefor, // the hidden Dark Aeons' stage is one scene with seven plates (2026-11-06, FFX only): no file is named `dark-aeons`, so the board, party prep and the start card paint the first link's plate
   [FLOODED_WAYS_SCENE]: FLOODED_PLATE, // the hidden Flooded Ways' stage is Chapter XIV's Via Purifico stage with four plates of its own (2026-11-06, FFX only): no file is named `flooded-ways`, so the board, party prep, the start card and the pause tab paint the first area's plate
   [SHINRYU_SCENE]: SHINRYU_PLATE, // the hidden Shinryu chapter's stage is the Via Purifico's stage on the Flooded Ways' submerged plate (2026-11-07, FFX only): no file is named `shinryu`, so the board, party prep, the start card and the pause tab paint that plate
+  [GAUNTLET_SCENE]: GAUNTLET_PLATE, // the hidden Gauntlet's stage is Chapter II's Dome plate standing in for the Monster Arena (2026-11-10, FFX only; the new arena plate is held for Bailey's pick, GA11): no file is named `gauntlet`, so the board, party prep, the start card and the pause tab paint that plate
   [SPECTRAL_KEEPER_SCENE]: 'zanarkand-dome', // the hidden Spectral Keeper's stage is Chapter II's Dome plate (2026-11-02, FFX only): no file of its own, and the art mirror is not written into
   [PENANCE_SCENE]: 'evrae-airship-deck', // the hidden Penance chapter's stage is Chapter VIII's deck plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into
   // The hidden Wendigo chapter (FFX only) has a plate of its own, `art/backdrops/wendigo-lake.png`, rendered from its 3D lake (ch-wendigo phase 4, 2026-11-07; `tools/lake-plate.mjs`): its scene key is its file name, so it needs no row here (until then it drew Chapter VII's `macalania-temple`).

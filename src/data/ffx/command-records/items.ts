@@ -108,4 +108,10 @@ export const COMMAND_RECORDS_ITEMS: Readonly<Record<string, FFXCommandRecord>> =
   'warp-sphere': { id: 0x2063, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Warp Sphere
   'pendulum': { id: 0x2069, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Pendulum
   'door-to-tomorrow': { id: 0x206b, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Door to Tomorrow
+  // The hidden Gauntlet chapter's reward items (FFX only; the nine monster loot records, `research/re-ffx-monster-arena-creations.md` section 1): Designer Wallet 0x2034, Fortune Sphere 0x204a, Luck Sphere 0x205e, Underdog's Secret 0x206e and Winning Formula 0x206f, each the blank item row the game's table holds for it (`tests/fixtures/parity/ffx/command_records.json`: type 0, no flags, damage class 0; the install's `item.bin` target word reads 0 for all five).
+  'designer-wallet': { id: 0x2034, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 0 }, // Designer Wallet
+  'fortune-sphere': { id: 0x204a, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Fortune Sphere
+  'luck-sphere': { id: 0x205e, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Luck Sphere
+  'underdogs-secret': { id: 0x206e, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Underdog's Secret
+  'winning-formula': { id: 0x206f, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Winning Formula
 };

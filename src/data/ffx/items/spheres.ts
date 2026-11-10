@@ -133,6 +133,12 @@ export const ITEMS: Record<string, ItemDef> = {
   'gamblers-spirit': rewardItem('gamblers-spirit', "Gambler's Spirit"),
   // The hidden Omega Ruins chapter's steal, bribe and drop (research/re-ffx-omega-ultima-nemesis.md section 3, the reward table; FFX only): Door to Tomorrow (Ultima Weapon's steal), Pendulum (its bribe) and Warp Sphere (Nemesis's drop and rare steal). The release 79 integration found them: the reward-resolve test now walks the hidden FFX chapters (Shinryu lane), and these three printed their raw ids. The name only, like the two rows above (no class, help text or price is in our sources, rule 6).
   'door-to-tomorrow': rewardItem('door-to-tomorrow', 'Door to Tomorrow'),
+  // The hidden Gauntlet chapter's drops and steal (research/re-ffx-monster-arena-creations.md section 1, the nine loot records; FFX only): Designer Wallet (the Cactuar King's and Don Tonberry's rare steal, Catastrophe's drop), Fortune Sphere (Earth Eater), Luck Sphere (the Greater Sphere), Underdog's Secret (Th'uban) and Winning Formula (the Ultima Buster). The name only, like the rows above (see `rewardItem`).
+  'designer-wallet': rewardItem('designer-wallet', 'Designer Wallet'),
+  'fortune-sphere': rewardItem('fortune-sphere', 'Fortune Sphere'),
+  'luck-sphere': rewardItem('luck-sphere', 'Luck Sphere'),
+  'underdogs-secret': rewardItem('underdogs-secret', "Underdog's Secret"),
+  'winning-formula': rewardItem('winning-formula', 'Winning Formula'),
   'pendulum': rewardItem('pendulum', 'Pendulum'),
   'warp-sphere': rewardItem('warp-sphere', 'Warp Sphere'),
   'ability-sphere': {

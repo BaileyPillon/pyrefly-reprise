@@ -46,6 +46,8 @@ export const ABLATIONS: Readonly<Record<string, Partial<LineOptions>>> = {
   'sphere-od': { odBarredAt: [] },
   'no-eater-focus': { eaterAuronOnly: false },
   'eater-wait': { eaterPound: false },
+  // Stage 5: the careless line's other half. `bare` is the shipped line with every rule taken away (plain Attacks at the first foe, no aeon, no spell, no heal other than a Phoenix Down for the fallen); `bare+zanmato-all` adds Yojimbo at every act.
+  bare: { fodder: false, fodderAt: [], eaterAuronOnly: false, tonberryWait: false, healUnder: 0, itemHealUnder: 0, useOverdrives: false, odBarredAt: [], magicShell: false, magicAt: [], armsFirst: false, quickHit: false },
   'no-fodder': { fodder: false },
   'no-wait': { tonberryWait: false },
   'no-overdrives': { useOverdrives: false },

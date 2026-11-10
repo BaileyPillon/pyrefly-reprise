@@ -39,7 +39,7 @@ const FFX_CHAPTERS = [
 ] as const;
 
 /** The hidden FFX experiments: FFX chapters by their own `game`, so the rule reaches them, but not on the board (the first test counts the listed twelve). Sinspawn Gui and Fayth (Evrae with FFX's camera; 2026-10-10; `mushroom-door.test.ts`, `fayth-door.test.ts`), Biran and Yenke (Kimahri alone at the Mountain Gate; 2026-10-14; `gagazet-door.test.ts`) and (until its listing on 2026-10-15) Mirror Aeons (Yuna's party against the Dark Aeons; 2026-10-15; `yojimbo-door.test.ts`), and The Last Summoning (Dream's End's party and Yu Yevon's aeons; 2026-10-15; `summon-door.test.ts`). */
-const HIDDEN_FFX_CHAPTERS = ['sinspawn-gui', 'exp-fayth', 'biran-yenke', 'last-summoning', 'spectral-keeper', 'dark-aeons', 'penance', 'flooded-ways', 'sanctuary-keeper', 'spherimorph', 'omega-ruins', 'wendigo', 'belgemine', 'shinryu'] as const;
+const HIDDEN_FFX_CHAPTERS = ['sinspawn-gui', 'exp-fayth', 'biran-yenke', 'last-summoning', 'spectral-keeper', 'dark-aeons', 'penance', 'flooded-ways', 'sanctuary-keeper', 'spherimorph', 'omega-ruins', 'wendigo', 'belgemine', 'shinryu', 'gauntlet'] as const;
 const FFX_REACHED = [...FFX_CHAPTERS, ...HIDDEN_FFX_CHAPTERS];
 
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS];

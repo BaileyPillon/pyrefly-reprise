@@ -167,6 +167,7 @@ describe("the attached records are the game's table", () => {
       ['wendigo', 8, 8], // the hidden Wendigo chapter (FFX only, 2026-11-06): its eight rows, 0x407f, 0x4080, 0x4062, 0x403b, 0x4063, 0x400f, 0x4010 and the item row 0x200c
       ['shinryu', 5, 5],
       ['gauntlet', 31, 31], // the hidden Gauntlet chapter (FFX only, 2026-11-09): the Monster Arena creations' thirty-one rows (0x4033 to 0x40FF, 0x6000 to 0x6036); the player's rows they reuse add none
+      ['gauntlet-items', 5, 5], // the hidden Gauntlet chapter's reward items (FFX only; stage 5): Designer Wallet 0x2034, Fortune Sphere 0x204a, Luck Sphere 0x205e, Underdog's Secret 0x206e and Winning Formula 0x206f, name-only item rows with the blank item record the fixture holds for each (the install's item.bin target word reads 0); the reward-resolve test, walking the hidden FFX chapters, found their raw ids
       ['omega-ruins-items', 3, 3], // the hidden Omega Ruins chapter's reward items (FFX only; release 79 integration): Warp Sphere 0x2063, Pendulum 0x2069 and Door to Tomorrow 0x206b, name-only item rows with the blank item record, the rows the game's table holds for them (both in the fixture); the reward-resolve test, now walking the hidden FFX chapters, found their raw ids
     ];
     expect(ALL_ABILITIES).toHaveLength(519 + ROWS_SINCE_KEEPER.reduce((n, [, a]) => n + a, 0));
@@ -499,13 +500,14 @@ describe("the status bytes of the attached records are the game's table (re-pari
    * aeon Attack rows and `fury` (the menu marker) are never charged: the generic Attack serves every aeon, and the marker resolves to
    * one of the spells.
    */
-  it('the abilities whose rank the record replaced are these 17, with ours and the exe\'s', () => {
+  it('the abilities whose rank the record replaced are these 18, with ours and the exe\'s', () => {
     expect(RANK_CHANGES.map((c) => `${c.abilityId}: ${c.ours} -> ${c.game}`).sort()).toEqual(
       [
         'element-reels: 3 -> 4', 'attack-reels: 3 -> 4', 'status-reels: 3 -> 4', 'aurochs-reels: 3 -> 4', 'fury: 5 -> 3',
         'valefor-attack: 1 -> 3', 'ifrit-attack: 1 -> 3', 'ixion-attack: 1 -> 3', 'shiva-attack: 1 -> 3', 'bahamut-attack: 1 -> 3',
         'anima-attack: 1 -> 3', 'cindy-attack: 5 -> 3', 'sandy-attack: 5 -> 3', 'mindy-attack: 5 -> 3',
         'passado: 3 -> 5', 'mix: 6 -> 5', 'natus-flare: 5 -> 3',
+        'designer-wallet: 2 -> 3', // the hidden Gauntlet chapter's reward item (FFX only, 2026-11-10): a name-only row whose table rank byte is 0, which the engine reads as the default 3, where the other reward items read 2
       ].sort(),
     );
   });

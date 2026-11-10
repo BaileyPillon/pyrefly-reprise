@@ -30,6 +30,15 @@ describe('the harness', () => {
     expect(typeof ablatedLine('no-zanmato', 'no-fodder')).toBe('function');
     expect(() => ablatedLine('nonsense')).toThrow(/no ablation/);
   });
+
+  it('stage 5: `bare` is the careless line\'s other half (every rule taken away, a Phoenix Down for the fallen), and `bare+zanmato-all` is its "with Zanmato": both win the Cactuar King, and neither is the plain careless line (the Greater Sphere tells them apart: 135 and 174 of 200 measured)', () => {
+    expect(ABLATIONS['bare']).toMatchObject({ fodder: false, tonberryWait: false, useOverdrives: false, magicShell: false, magicAt: [], armsFirst: false, healUnder: 0, itemHealUnder: 0 });
+    for (const name of ['bare', 'bare+zanmato-all']) {
+      const r = actRate(4, 'cactuar-king', ablatedLine(...name.split('+')));
+      expect([name, r.wins, r.unfinished], name).toEqual([name, 4, 0]);
+    }
+    expect(ablatedLine('bare', 'zanmato-all')).not.toBe(carelessLine);
+  });
 });
 
 describe('tier 1 at the shipped preset: every act is won, by every line', () => {

@@ -97,14 +97,17 @@ describe('the five pooled FFX chains: the Sphere Level bar, old against new (rel
   const chains = replayPooledChains();
   const by = (id: string): Chain => chains.find((c) => c.chapterId === id)!;
 
-  it('there are exactly five: the Mirror Aeons (listed), the Sinspawn Gui, the Dark Aeons, the Flooded Ways and the Omega Ruins', () => {
-    expect(chains.map((c) => c.chapterId).sort()).toEqual(['dark-aeons', 'flooded-ways', 'mirror-aeons', 'omega-ruins', 'sinspawn-gui']);
+  it('there are exactly six: the Mirror Aeons (listed), the Sinspawn Gui, the Dark Aeons, the Flooded Ways, the Omega Ruins and (hidden chapter 54, FFX only, 2026-11-10) the Gauntlet', () => {
+    expect(chains.map((c) => c.chapterId).sort()).toEqual(['dark-aeons', 'flooded-ways', 'gauntlet', 'mirror-aeons', 'omega-ruins', 'sinspawn-gui']);
+    // The Gauntlet pools nine links: 8,000 AP each for the three area creations, 50,000 for the six Originals (the loot records, `research/re-ffx-monster-arena-creations.md` section 1).
+    expect(by('gauntlet').pooledAp).toBe(3 * 8_000 + 6 * 50_000);
+    expect(by('gauntlet').listed).toBe(false);
     expect(by('mirror-aeons').listed).toBe(true);
     expect(by('dark-aeons').listed).toBe(false);
     expect(by('omega-ruins').listed).toBe(false);
   });
 
-  it('no new row is past its cap, on any of the five', () => {
+  it('no new row is past its cap, on any of the six', () => {
     for (const c of chains) {
       for (const r of c.rows) {
         const { rest, cap } = barOf(r.newText);
