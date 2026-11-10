@@ -86,7 +86,7 @@ export const ROW_CHANGE = 'Change';
 
 /**
  * What a plate that is not being walked does to pass its turn: the first of these the menu shows enabled, anywhere in it. Attack is on the Warrior, Dark Knight and Gunner menus, but NOT on
- * the White Mage's, which is what Yuna starts both chapters in (her menu is White Magic, Change and Item); Cure is the White Mage's first spell and aims one ally, harmlessly. Read off the
+ * the White Mage's, which is what Yuna starts both chapters in (her menu is White Magic, Change and Item); Cure is a spell on that White Mage menu in both chapters and aims one ally, harmlessly. Read off the
  * real engine on each chapter's own build (`special-e2e-rows.test.ts`).
  */
 export const PASS_ROWS: readonly RowPick[] = [
