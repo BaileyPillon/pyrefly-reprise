@@ -69,6 +69,8 @@ export interface ActorHandle {
   ramp?(prop: 'brightness' | 'stone' | 'scale', to: number, ms: number): Promise<void>;
   setFacing(dir: 1 | -1): void;
   setBrightness(mult: number): void;
+  /** Optional (additive, 2026-11-09): a status landed (`on`) or ended on this figure, as the presenter's `status-add` and `status-remove` say; a figure that shows a status of its own (the hidden Wendigo chapter's sleeper) keeps it. */
+  noteStatus?(status: string, on: boolean): void;
   /** Optional: fall onto its back and stay down (`PaintedActor.lieDown`; the `'body'` departure). */
   lieDown?(ms?: number, tilt?: number): Promise<void>;
   /** Optional: petrified, 0..1 — the painting drained to stone grey (`PaintedActor.setStone`). */

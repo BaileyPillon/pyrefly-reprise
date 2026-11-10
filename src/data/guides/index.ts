@@ -38,6 +38,7 @@ import { FFX2_ANGRA_MAINYU_GUIDE } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_GUIDE } from './sanctuary-keeper.ts';
 import { WENDIGO_GUIDE } from './wendigo.ts';
 import { BELGEMINE_GUIDE } from './belgemine.ts';
+import { OBLITZERATOR_GUIDE } from './oblitzerator.ts';
 import { PENANCE_GUIDE } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_GUIDE } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_GUIDE } from './spherimorph.ts';
@@ -47,6 +48,8 @@ import { FF7_JENOVA_LIFE_GUIDE } from './ff7-jenova-life.ts';
 import { FFX2_IFRIT_KILIKA_GUIDE } from './ffx2-ifrit-kilika.ts';
 import { FFX2_GARIK_RONSO_GUIDE } from './ffx2-garik-ronso.ts';
 import { SHINRYU_GUIDE } from './shinryu.ts';
+import { FFX2_GULLWINGS_CH1_GUIDE } from './ffx2-gullwings-ch1.ts';
+import { FFX2_LUCA_OPENER_GUIDE } from './ffx2-luca-opener.ts';
 
 export type {
   ChapterGuide,
@@ -156,8 +159,14 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_GARIK_RONSO_GUIDE,
   // The hidden Shinryu chapter (FFX only, the Monster Arena's deep-water dragon; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   SHINRYU_GUIDE,
+  // The hidden Luca Opener chapter (FFX-2 only, Logos and Ormi then Leblanc; EXPERIMENT_CHAPTERS, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  FFX2_LUCA_OPENER_GUIDE,
   // The hidden Wendigo chapter (FFX only, Wendigo and its two Guado Guardians on frozen Lake Macalania; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   WENDIGO_GUIDE,
+  // The hidden Oblitzerator chapter (FFX only, the blitzball machine and the dock crane at Luca; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  OBLITZERATOR_GUIDE,
+  // The hidden Gullwings, Chapter 1 chapter (FFX-2 only, four fights: Boris, the Flame Dragon, the Guardian Beast and YSLS-Zero; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  FFX2_GULLWINGS_CH1_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

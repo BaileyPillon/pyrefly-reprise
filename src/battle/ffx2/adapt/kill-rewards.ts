@@ -38,8 +38,10 @@ export const KILL_ITEM_ID: Readonly<Record<number, string>> = {
   0x7029: 'reassembled-sphere',
   0x7046: 'magical-dances-vol-1',
   0x9002: 'mythril-bangle',
+  0x9007: 'wristband',
   0x900b: 'kaiser-knuckles',
   0x900e: 'crystal-gloves',
+  0x900f: 'amulet',
   0x9012: 'pixie-dust',
   0x9013: 'crystal-ball',
   0x9014: 'defense-veil',
@@ -47,10 +49,12 @@ export const KILL_ITEM_ID: Readonly<Record<number, string>> = {
   0x901a: 'champion-belt',
   0x901c: 'circlet',
   0x901e: 'regal-crown',
+  0x9021: 'red-ring',
   0x902e: 'nultide-ring',
   0x9039: 'tetra-band',
   0x9045: 'angel-earrings',
   0x9047: 'twist-headband',
+  0x904a: 'star-pendant',
   0x904b: 'black-choker',
   0x904d: 'gris-gris-bag',
   0x904e: 'pearl-necklace',
@@ -106,8 +110,9 @@ export function ownerUnits(units: readonly Ffx2Unit[]): Array<Ffx2Unit | undefin
 /** The nine owner slots as the roll reads them: a girl is present unless her slot is empty, ejected when she was removed by Eject. */
 export function rewardOwnersOf(owners: ReadonlyArray<Ffx2Unit | undefined>): RewardOwner[] {
   return owners.map((unit, slot) => ({
-    present: unit !== undefined,
-    ejected: unit?.removed === true,
+    // a Special pod standing down is not in the party this battle, and a girl parked while her sister wears a Special is out of the field but not Ejected (`special/enter.ts`)
+    present: unit !== undefined && unit.aiMemory?.['sdspDormant'] !== true,
+    ejected: unit?.removed === true && unit.aiMemory?.['sdspParked'] !== true,
     word1: unit?.autoWords?.[1] ?? 0,
     pointless: unit?.statuses['pointless'] !== undefined,
     saveIndex: slot,

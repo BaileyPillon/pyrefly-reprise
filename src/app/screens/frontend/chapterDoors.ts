@@ -49,12 +49,17 @@
  *
  * **`bluelight`** (FF7, the hidden Jenova LIFE, `./bluelightDoor.ts`: B, L, U, I, G, H and T; E is `start`; see `tests/unit/bluelight-door.test.ts` for what the real key map binds) is a plain `WordDoor` behind the same FF7 switch as `limit` (`gate: ff7ExperimentReady`), and is **not** desktop-only.
  * **`wendigo`** (FFX, the hidden Wendigo, `./wendigoDoor.ts`: W is `up`, E is `start`, D is `right`; N, I, G and O are unbound) is a plain `WordDoor` too, and is **desktop-only** like `yrp`, `waker` and `gear` (the Meshy 3D tech demo): its row carries the `desktopOnly` gate.
+ * **`blitz`** (FFX, the hidden Oblitzerator, `./blitzDoor.ts`: B, L, I and T are unbound, **Z is `confirm`, the last letter**, which the word claims) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
  *
  * **`sidequest`** (FFX, the hidden Belgemine's Challenge, `./sidequestDoor.ts`: S is `down`, D `right`, E `start`, Q `triangle`; I, U and T are unbound) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
  *
  * **`braveheart`** (FFX-2, the hidden Garik Ronso, `./braveheartDoor.ts`: R is `r1`, A is `left`, V is `select`, E is `start`; B, H and T are unbound, so the first letter moves nothing; the plan's `lionheart` failed the table's `limit` rule, see that file) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit`, `braveheart` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast`, `wendigo`, `sidequest` and `shinryu`.
+ * **`dragon`** (FFX-2, the hidden Gullwings, Chapter 1, `./dragonDoor.ts`: D is `right`, A is `left`, R is `r1`; G, O and N are unbound; the first D moves the cursor one step, as `daigoro`'s does, and the later A is claimed by the word) is a plain `WordDoor` too.
+ *
+ * **`debut`** (FFX-2, the hidden Luca Opener, `./debutDoor.ts`: D is `right`, E is `start`; B, U and T are unbound, so the last letter leaves no latched press; the first D moves the cursor one step, as `daigoro`'s does) is a plain `WordDoor` too.
+ *
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit`, `braveheart`, `dragon`, `debut` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast`, `wendigo`, `sidequest`, `shinryu` and `blitz`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -93,6 +98,9 @@ import { WENDIGO_DOOR_CHAPTER, WENDIGO_DOOR_WORD } from './wendigoDoor.ts';
 import { SIDEQUEST_DOOR_CHAPTER, SIDEQUEST_DOOR_WORD } from './sidequestDoor.ts';
 import { BRAVEHEART_DOOR_CHAPTER, BRAVEHEART_DOOR_WORD } from './braveheartDoor.ts';
 import { SHINRYU_DOOR_CHAPTER, SHINRYU_DOOR_WORD } from './shinryuDoor.ts';
+import { BLITZ_DOOR_CHAPTER, BLITZ_DOOR_WORD } from './blitzDoor.ts';
+import { DRAGON_DOOR_CHAPTER, DRAGON_DOOR_WORD } from './dragonDoor.ts';
+import { DEBUT_DOOR_CHAPTER, DEBUT_DOOR_WORD } from './debutDoor.ts';
 
 /**
  * **The two hidden 3D chapters are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only: `yrp`, the 3D Bahamut, and `waker`, the Wind Waker Valefor). They are not staged for a phone: the Wind Waker is expected to miss the phone budgets
@@ -151,6 +159,9 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: BRAVEHEART_DOOR_WORD, chapter: BRAVEHEART_DOOR_CHAPTER },
   { word: SHINRYU_DOOR_WORD, chapter: SHINRYU_DOOR_CHAPTER },
   { word: WENDIGO_DOOR_WORD, chapter: WENDIGO_DOOR_CHAPTER, gate: desktopOnly },
+  { word: BLITZ_DOOR_WORD, chapter: BLITZ_DOOR_CHAPTER },
+  { word: DRAGON_DOOR_WORD, chapter: DRAGON_DOOR_CHAPTER },
+  { word: DEBUT_DOOR_WORD, chapter: DEBUT_DOOR_CHAPTER },
 ];
 
 /**

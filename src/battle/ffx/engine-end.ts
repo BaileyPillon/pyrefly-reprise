@@ -18,6 +18,7 @@ import { sweepAutoStatuses } from './adapt/auto-status.ts';
 import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
 import { drainScriptReactions } from './ai/reaction-drain.ts';
+import { hasAfterTickReactions } from './ai/hooks.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { counterInputs } from './counter-inputs.ts';
 import { ATTACK_ABILITY_ID } from './registry.ts';
@@ -149,7 +150,7 @@ export function afterAction(
       }
     }
     // The reactions the boss scripts' hooks queued while the action resolved (re-parity, `ai/hooks.ts`), oldest first.
-    drainScriptReactions(h);
+    drainScriptReactions(h, true); // the ones that wait for the end-of-turn tick (the Oblitzerator's balls) stay queued until after it
     settleMaxHp(ctx); // Geosgaeno's Regurgitate (its own turn, or a Struggle's answer) has resolved: its maximum HP comes back (a no-op in every other battle)
     sweepAutoStatuses(ctx);
   }
@@ -168,13 +169,15 @@ export function afterAction(
 
   // The item reactions the action's hits and deaths queued: Auto-Med, Auto-Potion, Auto-Phoenix (`adapt/reactions.ts`).
   runItemReactions(h, true);
-  drainScriptReactions(h); // what the equipment reactions set off
+  drainScriptReactions(h, true); // what the equipment reactions set off
   runItemReactions(h, true); // and what those set off
   ctx.rt.inReaction = false;
   // Poison only follows an action whose results were applied: a passed turn (a sleeper's) passes `command` undefined.
   onTurnEnd(ctx, actor, command !== undefined);
   runItemReactions(h); // a death by the poison tick queues its Auto-Phoenix; the action is over, so the death marks go
-  drainScriptReactions(h); // what the turn's poison tick set off (a postPoison hook)
+  const afterTick = hasAfterTickReactions(ctx);
+  drainScriptReactions(h); // what the turn's poison tick set off (a postPoison hook), and the reactions that waited for the tick (the Oblitzerator's balls: the game's `pp_BtlActionDone` runs first)
+  if (afterTick) runItemReactions(h); // a ball can KO a member: the Auto-Phoenix it queued runs, and the death marks go
   sweepAutoStatuses(ctx); // the Poison tick toggles its victim's SOS statuses (VA 0x007afab0)
   rtOf(ctx, actor.id).turnsTaken += 1;
   if (actor.side === 'enemy') ctx.rt.lastEnemyActorId = actor.id;

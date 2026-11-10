@@ -32,6 +32,7 @@ import { OMEGA_RUINS_SCENE } from '../data/ffx/omega-ruins-ids.ts';
 import { WENDIGO_SCENE } from '../data/ffx/wendigo-ids.ts';
 import { BELGEMINE_SCENE } from '../data/ffx/belgemine-ids.ts';
 import { GARIK_RONSO_SCENE } from '../data/garik-ronso-ids.ts';
+import { OBLITZERATOR_SCENE } from '../data/ffx/oblitzerator-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
@@ -182,6 +183,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [BELGEMINE_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-yojimbo.md §6.2 beat 3 (the Cavern, whose plate the Remiem court stands on): nothing on the room; research/re-ffx-belgemine-aeon-duels.md: the formations name no particles', treatment: 'As the Cavern: cold light and mist, nothing added' },
   // Shinryu (the hidden chapter, FFX only; `scenes/shinryu.ts`): the Via Purifico's stage on the submerged plate, standing in for the Monster Arena's sea stage; the guides name an underwater arena and no ambient particles.
   [SHINRYU_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/re-ffx-shinryu.md sections 1 and 5: the guides name an underwater arena and no ambient particles; the Flooded Ways plate stands in for the game\'s sea stage' },
+  // The Oblitzerator (the hidden chapter, FFX only; `scenes/luca-dock.ts`): the fight is on the Luca dock; no source read names pyreflies on the dock, and the stage is the Mushroom Rock Road's plate standing in.
+  [OBLITZERATOR_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/re-ffx-oblitzerator-crane.md section 2: the formation names no particles; the stage is the Mushroom Rock Road (a stand-in) and no dock plate exists', treatment: 'As the coast road: nothing added' },
   // The 3D Bahamut (the hidden chapter, FFX-2 only; `scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber, so the Bevelle underground's row.
   [EXP_YRP_SCENE]: { game: 'ffx2', verdict: 'absent', cite: `${PRES}, Bevelle Underground [single source]: "Machina, not spirits"; the chamber is Chapter IV's` },
   // Valefor at Besaid in Wind Waker style (the hidden chapter, FFX-2 only; `scenes/exp-windwaker-stage.ts`): hidden chapter 24's fight, so its row (the Djose chamber's stand-in for Besaid's); the temple is a stand-in.

@@ -2,11 +2,11 @@
 /**
  * Proof that a build (or the source tree) carries the hidden Wendigo chapter's models, whole (ch-wendigo, 2026-11-07; Chapter 49, FFX only).
  *
- * The 24 models (ten Meshy bodies, nine weapons, five props: `LAKE_SHIPPED_FILES`, `src/data/ffx/lake-models.ts`) are local files, gitignored like the paintings (`public/models-exp/lake/`), so a release cut from a tree that
+ * The 28 models (fourteen Meshy bodies, nine weapons, five props: `LAKE_SHIPPED_FILES`, `src/data/ffx/lake-models.ts`) are local files, gitignored like the paintings (`public/models-exp/lake/`), so a release cut from a tree that
  * lacks them ships a chapter whose figures are neutral capsules and nothing else in the deploy notices. This is the check that notices (the deploy runs it next to the 3D Bahamut's, before the build is hashed):
  *
- *   node tools/lake-models-verify.mjs --dir <build>        a BUILD (`dist/`, `dist-release/`): exactly the 24 files in `models-exp/lake`, no other file of that folder, each whole, under the host's per-file limit, its size and sha256 the recorded ones
- *   node tools/lake-models-verify.mjs --source [<public>]  the SOURCE `public/`: the 24 files are there and whole (extras are expected there)
+ *   node tools/lake-models-verify.mjs --dir <build>        a BUILD (`dist/`, `dist-release/`): exactly the 28 files in `models-exp/lake`, no other file of that folder, each whole, under the host's per-file limit, its size and sha256 the recorded ones
+ *   node tools/lake-models-verify.mjs --source [<public>]  the SOURCE `public/`: the 28 files are there and whole (extras are expected there)
  *
  * "Whole" means a binary glTF whose header says version 2 and its own length (a copy cut short fails), and, in a build, whose JSON chunk names no place on the PC that built it (a drive path, a user-profile path, the
  * scratch folder). The recorded list is `tools/lake/lake-models.json` (`tools/lake-models.mjs record`); it must name exactly the files the code asks for, so a model added to the chapter and not recorded fails here.

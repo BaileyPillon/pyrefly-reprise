@@ -80,7 +80,8 @@ export const POOL: AbilityDef[] = Object.values(data.ABILITIES).filter((a) => {
 });
 
 /** A physical, single-target, status-free command that never misses (accuracy formula 0): the plain blow of these tests. */
-export const PLAIN_BLOW = POOL.find((a) => (a.ffx2Record!.flagsDamage & 3) === 1 && (a.ffx2Record!.flagsTarget & 0xc) === 0 && ((a.ffx2Record!.flagsMisc >> 3) & 7) === 0) as AbilityDef;
+// The Special dresspheres' commands (2026-11-09: Left Stigma and the others use the user's own properties, `flagsMisc` 0x10000, which a dummy does not have) are not the plain blow these tests mean: the pick is the first of the older families, as it was.
+export const PLAIN_BLOW = POOL.find((a) => !/^x2-(floral-fallal|machina-maw|full-throttle)-/.test(a.id) && (a.ffx2Record!.flagsDamage & 3) === 1 && (a.ffx2Record!.flagsTarget & 0xc) === 0 && ((a.ffx2Record!.flagsMisc >> 3) & 7) === 0) as AbilityDef;
 
 /** A status instance as a command would have put it on (a clock-less one: the tests never advance the clock). */
 export function instanceOf(id: StatusId): StatusInstance {

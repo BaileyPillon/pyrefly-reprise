@@ -70,6 +70,8 @@ import { buildGagazetSummitScene, GARIK_SUMMIT_SLOTS } from './gagazet-summit.ts
 import { GARIK_RONSO_SCENE } from '../data/garik-ronso-ids.ts';
 import { buildShinryuScene, SHINRYU_SLOTS } from './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07): the Via Purifico's stage on the submerged plate with Shinryu staged
 import { SHINRYU_SCENE } from '../data/ffx/shinryu-ids.ts';
+import { buildLucaDockScene, LUCA_DOCK_SLOTS } from './luca-dock.ts'; // the Luca dock (FFX only, hidden chapter): the Mushroom Rock Road's plate and scene with the Oblitzerator and the crane staged
+import { OBLITZERATOR_SCENE } from '../data/ffx/oblitzerator-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -121,6 +123,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: GARIK_RONSO_SCENE, title: 'Mt. Gagazet — the summit (Garik Ronso)', build: buildDemoScene, slots: GARIK_SUMMIT_SLOTS, placeholder: false },
   // Shinryu (FFX only, hidden chapter): the Via Purifico's stage on the Flooded Ways' submerged plate, the dragon alone on the boss spot.
   { key: SHINRYU_SCENE, title: 'The Monster Arena — Shinryu', build: buildDemoScene, slots: SHINRYU_SLOTS, placeholder: false },
+  // The Oblitzerator (FFX only, hidden chapter): the Mushroom Rock Road's plate and scene standing in for the Luca dock, the machine in front and the crane at the right.
+  { key: OBLITZERATOR_SCENE, title: 'Luca — the Number 4 Dock (the Oblitzerator)', build: buildDemoScene, slots: LUCA_DOCK_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -149,4 +153,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [BELGEMINE_SCENE]: buildBelgemineScene, // the hidden Belgemine's Challenge chapter (FFX only)
   [GARIK_RONSO_SCENE]: buildGagazetSummitScene, // the hidden Garik Ronso chapter (FFX-2 only)
   [SHINRYU_SCENE]: buildShinryuScene, // the hidden Shinryu chapter (FFX only)
+  [OBLITZERATOR_SCENE]: buildLucaDockScene, // the hidden Oblitzerator chapter (FFX only)
 };

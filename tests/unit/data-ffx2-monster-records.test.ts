@@ -112,6 +112,10 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
       if (key.startsWith('ffx2-kilika-ifrit/')) continue;
       // The hidden Garik Ronso's rows 181 and 182 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/garik_ronso_rows.json, tests/unit/chapters/garik-ronso-data.test.ts).
       if (key.startsWith('ffx2-gagazet-garik-')) continue;
+      // The hidden Gullwings, Chapter 1's rows 132, 122, 162 and 47 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/gullwings_ch1_rows.json, tests/unit/chapters/gullwings-ch1-data.test.ts).
+      if (/^ffx2-(gagazet-floating-ruins|besaid-cave|zanarkand-ruins|kilika-approach)-/.test(key)) continue;
+      // The hidden Luca Opener's rows 129 to 131 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/luca_opener_rows.json, tests/unit/chapters/luca-opener-data.test.ts).
+      if (key.startsWith('ffx2-luca-dock-')) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;

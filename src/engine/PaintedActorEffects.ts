@@ -305,6 +305,20 @@ export abstract class PaintedActorEffects extends PaintedActorSizing {
     this.u.brightness.value = this.baseBrightness * mult;
   }
 
+  /** The statuses the presenter has told this actor of (additive, 2026-11-09; the hidden Wendigo chapter's 3D skin reads Sleep from it so a sleeper's arms come down on the stage). */
+  private readonly told = new Set<string>();
+
+  /** A status landed (`on`) or ended on this figure: the presenter's `status-add` and `status-remove`. */
+  noteStatus(status: string, on: boolean): void {
+    if (on) this.told.add(status);
+    else this.told.delete(status);
+  }
+
+  /** Whether the presenter has told this actor the status landed and not ended. */
+  hasStatus(status: string): boolean {
+    return this.told.has(status);
+  }
+
   setTint(colour: number | string): void {
     this.baseTint.set(colour as never);
     this.syncTint();

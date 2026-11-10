@@ -3,17 +3,24 @@
  * the loader (`../../engine/lake3d/load.ts`), the dist filter and the tests can all read it without pulling each other's graphs in.
  *
  * The files are Meshy image-to-3D bodies rigged with a 24-joint Meshy rig, the party moved by the real FFX battle clips retargeted onto them (the clip names are the game's own kit: `idle1`, `attack1_00`, `magic2_00`,
- * `win_00`, `dead_00` ...), the weapons separate static models hung from the `Hook_R` and `Hook_L` nodes the retarget added under the hands (their rotation is the game's own `r_weapon` / `l_weapon` node in every clip). The
- * Wendigo and the two Guado Guardians have Meshy library motion only (idle, attack, combo, cast, hurt, ko ...). The files are local, gitignored (`public/models-exp/`), and loaded on use.
+ * `win_00`, `dead_00` ...), the weapons separate static models hung from the `Hook_R` and `Hook_L` nodes the retarget added under the hands (their rotation is the game's own `r_weapon` / `l_weapon` node in every clip).
+ * **The Wendigo and the two Guado Guardians move by their own motion** (the finishing lane, 2026-11-09): the real `m212` and `m213` banks retargeted onto their Meshy rigs, joined into the clips the rig plays (`idle`,
+ * `hurt`, `ko`, `attack`, `combo`, `cast`, `item`, `arms_up`, `stance_block1`, `stance_block2`, `sleep_in`, `sleep`, `wake`; each name's source motions are in the handoff note). **The four aeons of the chapter's roster
+ * are Meshy models too** (`valefor`, `ifrit`, `ixion`, `shiva`): each made from renders of the real model in its bind pose and skinned to the REAL skeleton (weights carried over from the game's mesh), so the game's own
+ * `s00N` motion drives it with no retarget (`idle`, `hurt`, `ko`, `attack`, `cast`). The files are local, gitignored (`public/models-exp/`), and loaded on use.
  *
  * **Heights are in metres on the stage's scale** (Tidus 1.75): the Wendigo 2.71 (1.55 times Tidus, the size table's drawn height) and the Guardian 1.89 (1.08 times); the party's are the art sizes of the paintings.
  * Game case: FFX only.
  */
 
-/** The party and the enemies that carry a model. The aeons keep their paintings. */
+/**
+ * The party, the enemies and the aeons that carry a model. The aeons are the four of the chapter's roster (the Macalania preset's Valefor, Ifrit, Ixion and Shiva: `research/re-ffx-wendigo-lake-macalania.md` 12). **Bahamut is
+ * not in it:** he is not owned at this point of the story (he comes at Zanarkand), so the fight can never summon him and a model of him would never be drawn.
+ */
 export const LAKE_PARTY = ['tidus', 'yuna', 'rikku', 'wakka', 'auron', 'lulu', 'kimahri'] as const;
 export const LAKE_ENEMIES = ['wendigo', 'lake-guardian-a', 'lake-guardian-b'] as const;
-export const LAKE_CAST = [...LAKE_PARTY, ...LAKE_ENEMIES] as const;
+export const LAKE_AEONS = ['valefor', 'ifrit', 'ixion', 'shiva'] as const;
+export const LAKE_CAST = [...LAKE_PARTY, ...LAKE_ENEMIES, ...LAKE_AEONS] as const;
 export type LakeId = (typeof LAKE_CAST)[number];
 
 /** Where the page reads them (under `import.meta.env.BASE_URL`). */
@@ -32,6 +39,10 @@ export const LAKE_FILES: Readonly<Record<LakeId, string>> = {
   wendigo: 'wendigo.glb',
   'lake-guardian-a': 'guardian.glb',
   'lake-guardian-b': 'guardianb.glb',
+  valefor: 'valefor.glb',
+  ifrit: 'ifrit.glb',
+  ixion: 'ixion.glb',
+  shiva: 'shiva.glb',
 };
 
 /** The files of the weapons (the weapon folder). */
@@ -50,6 +61,28 @@ export const LAKE_NATIVE_HEIGHT: Readonly<Record<LakeId, number>> = {
   wendigo: 2.71,
   'lake-guardian-a': 1.89,
   'lake-guardian-b': 1.89,
+  // The aeons stand at the game's scale law (`data/ffx/fiend-stature.ts`: a model's drawn size is its bind-pose mesh height times the engine scale 4, on Tidus's 18.15 = 1.75 m): 7.799, 7.905 and 8.596 model units, so
+  // 3.01, 3.05 and 3.32 m (the Isaaru chapter keeps its aeons at 3.2). **Valefor is the driver's pick, 3.4 m, not the law's 4.94 m:** the law's figure is the silhouette with the wings spread (the bind pose), which crops the frame at
+  // the party's slot (the first GPU run) and which the paintings do not stand in (`research/ffx-isaaru-bevelle.md` 14.3); alternative: the law's 4.94 with a wider camera.
+  valefor: 3.4,
+  ifrit: 3.01,
+  ixion: 3.05,
+  shiva: 3.32,
+};
+
+/** The scale law's metres per model unit for an aeon (4 times `1.75 / 18.15`): what the aeon files' scene root carries. */
+export const LAKE_AEON_METRES_PER_UNIT = 0.3857;
+
+/**
+ * **Where a clip's blow or effect lands, seconds from the clip's start: the game's own marks.** Each is the first `type 5, argument 0` event of the clip's motions (the signal the game's scripts read as the effect trigger; the
+ * Evrae lane's reading, `runtime/evrae/clipmap.json`), joined with the offsets of the motions that make the clip: the Wendigo's `attack` is `attack1_00` (the trigger at frame 18 of 19) then `attack1_01`; its `combo` is
+ * `sp3_00` (17 frames), `sp3_01` (8), `sp3_02` (the trigger at frame 24 of 25: the slam's landing) and `sp3_04`; the Guardians' `cast` is `magic2_00`, `magic2_01` and `magic2_02` (the trigger at frame 18) and their `item` is
+ * `item_00`, `item_01` and `item_02_1` (frame 27); at 30 frames a second. A clip with no mark here has its strike read from its own motion (`engine/lake3d/monsterRig.ts`).
+ */
+export const LAKE_STRIKES: Readonly<Partial<Record<LakeId, Readonly<Record<string, number>>>>> = {
+  wendigo: { attack: 0.6, combo: 1.6333 },
+  'lake-guardian-a': { cast: 1.6, item: 1.9 },
+  'lake-guardian-b': { cast: 1.6, item: 1.9 },
 };
 
 /** A stage height within this share of the native one refits the model to it (so the HUD's anchors land on the figure); anything further keeps the native size. */
@@ -94,5 +127,5 @@ export const LAKE_PROP_DIR = 'models-exp/lake/props/';
 export const LAKE_PROP_FILES = ['crystals', 'temple', 'slabs', 'reeds', 'drift'] as const;
 export type LakeProp = (typeof LAKE_PROP_FILES)[number];
 
-/** The files that make the chapter's whole model set (the dist filter and the verifier read this): 10 bodies, 9 weapons and 5 props. */
+/** The files that make the chapter's whole model set (the dist filter and the verifier read this): 14 bodies (ten figures and the four aeons), 9 weapons and 5 props (28 files). */
 export const LAKE_SHIPPED_FILES: readonly string[] = [...Object.values(LAKE_FILES).filter((f, i, a) => a.indexOf(f) === i), ...LAKE_WEAPON_FILES.map((w) => `weapons/${w}.glb`), ...LAKE_PROP_FILES.map((p) => `props/${p}.glb`)];

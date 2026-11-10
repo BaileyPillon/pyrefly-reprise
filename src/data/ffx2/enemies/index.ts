@@ -74,6 +74,12 @@ import { x2IfritAbilities } from './ifrit-abilities.ts';
 // Garik Ronso and the Ronso Youths at the top of Mt. Gagazet (the hidden chapter "Garik Ronso", FFX-2 only): `./garik-ronso.ts`.
 import { garikRonsoGroups } from './garik-ronso.ts';
 import { x2GarikRonsoAbilities } from './garik-ronso-abilities.ts';
+// Boris, the Flame Dragon, the Guardian Beast and YSLS-Zero (FFX-2 Chapter 1's hotspot missions; the hidden chapter "Gullwings, Chapter 1", FFX-2 only): `./gullwings-ch1.ts`.
+import { gullwingsCh1Groups } from './gullwings-ch1.ts';
+import { x2GullwingsCh1Abilities } from './gullwings-ch1-abilities.ts';
+// Logos and Ormi, then Leblanc, on the docks of Luca (FFX-2 Chapter 1, the first fights of the game; the hidden chapter "The Luca Opener", FFX-2 only): `./luca-opener.ts`.
+import { lucaOpenerGroups } from './luca-opener.ts';
+import { lucaOpenerAbilities } from './luca-opener-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -100,6 +106,8 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...youthLeagueGroups,
   ...ifritGroups,
   ...garikRonsoGroups,
+  ...gullwingsCh1Groups,
+  ...lucaOpenerGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -136,6 +144,8 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2YouthLeagueAbilities,
   ...x2IfritAbilities,
   ...x2GarikRonsoAbilities,
+  ...x2GullwingsCh1Abilities,
+  ...lucaOpenerAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

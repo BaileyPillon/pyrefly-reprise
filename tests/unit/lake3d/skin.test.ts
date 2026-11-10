@@ -5,14 +5,15 @@
  *
  * 1. **The private parts are still there**: `PaintedActor` keeps its figure switch, its plane meshes, its motion group and its uniform cells private and the skin reaches them, so a rename in `PaintedActor.ts` fails here
  *    instead of drawing nothing; an actor that lacks them is left painted.
- * 2. **Attaching**: the painted planes go off for good, the interim yaw is zeroed, the model stands in the actor's motion group at the figure's yaw and height; the aeons (no model) stay painted.
+ * 2. **Attaching**: the painted planes go off for good, the interim yaw is zeroed, the model stands in the actor's motion group at the figure's yaw and height; an actor whose model has not come in yet stays painted; the
+ *    four aeons of the roster carry models once they are in (the finishing lane, 2026-11-09), turned to the party's side.
  * 3. **Following**: a flash rides the emissive accent, the fade and the dissolve fade the model, a downed capsule is tipped and a model with a fall clip is not, the epilogue's sink drops the party and not the enemies, the
- *    Wendigo's arms go up and down on their moves' beats, a re-sized figure is refitted.
+ *    Wendigo's arms go up and down on their moves' beats, a re-sized figure is refitted, **Sleep** (told to the actor by the presenter's status events) brings the arms down on the spot and plays the sleep clips.
  */
 import { AnimationClip, Color, Group, Mesh, MeshStandardMaterial, Object3D, Scene, VectorKeyframeTrack, BoxGeometry } from 'three';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { LAKE_NATIVE_HEIGHT, type LakeId } from '../../../src/data/ffx/lake-models.ts';
+import { LAKE_AEONS, LAKE_FILES, LAKE_NATIVE_HEIGHT, type LakeId } from '../../../src/data/ffx/lake-models.ts';
 import { PaintedActor } from '../../../src/engine/PaintedActor.ts';
 import { loadLakeModels, type LoaderIO, type LakeModels } from '../../../src/engine/lake3d/load.ts';
 import { ACCENT } from '../../../src/engine/lake3d/model.ts';
@@ -60,7 +61,7 @@ const WITH_CLIPS: LoaderIO = {
       scene.add(new Mesh(new BoxGeometry(0.5, 1.75, 0.3).translate(0, 0.875, 0), new MeshStandardMaterial()));
     } else scene.add(new Mesh(new BoxGeometry(0.05, 1, 0.05), new MeshStandardMaterial()));
     const clip = (name: string): AnimationClip => new AnimationClip(name, 1, [new VectorKeyframeTrack('Hips.position', [0, 1], [0, 0, 0, 0, 0.1, 0])]);
-    return { scene, animations: ['idle1', 'dmg1', 'dead_00', 'dead_01', 'dead_02', 'win_00', 'win_01', 'idle','hurt', 'ko', 'attack', 'arms_up', 'stance_block1', 'stance_block2'].map(clip) };
+    return { scene, animations: ['idle1', 'dmg1', 'dead_00', 'dead_01', 'dead_02', 'win_00', 'win_01', 'idle','hurt', 'ko', 'attack', 'combo', 'cast', 'item', 'arms_up', 'stance_block1', 'stance_block2', 'sleep_in', 'sleep', 'wake'].map(clip) };
   },
   clone: async (s) => s.clone(true),
 };
@@ -82,8 +83,9 @@ afterEach(() => {
 
 const FRONT: readonly LakeId[] = ['tidus', 'yuna', 'rikku', 'wendigo', 'lake-guardian-a', 'lake-guardian-b'];
 
-async function rig(ids: readonly string[] = FRONT, io: LoaderIO = NO_FILES): Promise<Rig> {
-  const models = await loadLakeModels({ base: '/', heights: {}, io, skip: ['wakka', 'auron', 'lulu', 'kimahri'] });
+async function rig(ids: readonly string[] = FRONT, io: LoaderIO = NO_FILES, aeons = false): Promise<Rig> {
+  const models = await loadLakeModels({ base: '/', heights: {}, io, skip: ['wakka', 'auron', 'lulu', 'kimahri', ...(aeons ? [] : LAKE_AEONS)] });
+  if (aeons) await models.background; // the aeons come in after the front line, in the background
   const scene = new Scene();
   const host = new Group();
   scene.add(host);
@@ -146,7 +148,7 @@ describe('attaching', () => {
     expect(parts.showFigure).toBe(false);
     for (const s of parts.slots) expect(s.mesh.visible).toBe(false);
     expect(modelOf(r, 'tidus').root.parent).toBe(parts.inner);
-    expect(internalsOf(r.actors['ixion']!)!.showFigure).toBe(true); // an aeon keeps its painting
+    expect(internalsOf(r.actors['ixion']!)!.showFigure).toBe(true); // an actor whose model is not in keeps its painting (an aeon's file arrives in the background)
     expect(r.skin.carrying['tidus']).toBe('capsule');
   });
 
@@ -248,6 +250,72 @@ describe('the win', () => {
     expect(modelOf(r, 'tidus').playingClip).toMatch(/^win_0[01]$/);
     expect(modelOf(r, 'wendigo').playing).not.toBe('victory');
     expect(modelOf(r, 'yuna').playing).toBe('ko'); // she stays down
+  });
+});
+
+describe('the aeons', () => {
+  it('stand on the party\'s side, a little toward the lens', () => {
+    for (const id of LAKE_AEONS) {
+      expect(facingYaw(id), id).toBeCloseTo(Math.PI / 2 - TURN_TO_LENS['aeon']!, 6);
+      expect(facingYaw(id), id).toBeGreaterThan(0);
+    }
+  });
+
+  it('carry their models once the files are in, with the painted planes off and the real clips', async () => {
+    const r = await rig(['ifrit', 'wendigo'], WITH_CLIPS, true);
+    run(r, 0.1);
+    expect(r.skin.carrying['ifrit']).toBe('own');
+    expect(internalsOf(r.actors['ifrit']!)!.showFigure).toBe(false);
+    expect(modelOf(r, 'ifrit').playingClip).toBe('idle');
+    r.skin.listener.open?.('ifrit', 'attack', 0.5, 'ifrit-attack');
+    expect(modelOf(r, 'ifrit').playingClip).toBe('attack');
+    r.skin.listener.open?.('ifrit', 'item', 0.5, 'potion'); // a file with an item clip plays it; this stand-in has one
+    expect(modelOf(r, 'ifrit').playingClip).toBe('item');
+  });
+
+  it('keep their painting when their file is missing, rather than standing on a grey capsule', async () => {
+    const aeonFiles = new Set<string>(LAKE_AEONS.map((id) => LAKE_FILES[id]));
+    const io: LoaderIO = { ...WITH_CLIPS, fetchBytes: async (url) => (aeonFiles.has(url.split('/').pop() ?? '') ? null : WITH_CLIPS.fetchBytes(url)) };
+    const r = await rig(['ifrit', 'wendigo'], io, true);
+    run(r, 0.1);
+    expect(r.models.capsules).toContain('ifrit'); // the failure is listed
+    expect(r.skin.carrying['ifrit']).toBeUndefined(); // but no model is attached
+    expect(internalsOf(r.actors['ifrit']!)!.showFigure).toBe(true); // the painted billboard stays up
+    expect(r.skin.carrying['wendigo']).toBe('own');
+  });
+
+  it('come in after the front line, in the background, once the bench is in', async () => {
+    const models = await loadLakeModels({ base: '/', heights: {}, io: WITH_CLIPS, skip: ['wakka', 'auron', 'lulu', 'kimahri'] });
+    for (const id of LAKE_AEONS) expect(models.models.has(id), id).toBe(false);
+    await models.background;
+    for (const id of LAKE_AEONS) expect(models.models.has(id), id).toBe(true);
+    models.dispose();
+  });
+});
+
+describe('sleep', () => {
+  it('brings the Wendigo\'s arms down on the spot and plays the sleep clips, then wakes it into the idle', async () => {
+    const r = await rig(['wendigo', 'lake-guardian-a'], WITH_CLIPS);
+    run(r, 0.1);
+    const w = modelOf(r, 'wendigo');
+    r.skin.listener.open?.('wendigo', 'cast', 0.26, 'wendigo-raise-arms');
+    run(r, 2);
+    expect(w.monsterRig!.armsUp).toBe(true);
+    expect(w.playingClip).toBe('stance_block1');
+    (r.actors['wendigo'] as unknown as { noteStatus(s: string, on: boolean): void }).noteStatus('sleep', true);
+    run(r, 0.05);
+    expect(w.sleeping).toBe(true);
+    expect(w.monsterRig!.armsUp).toBe(false); // the stance breaks the moment it sleeps
+    expect(w.playingClip).toBe('sleep_in');
+    run(r, 2);
+    expect(w.playingClip).toBe('sleep');
+    expect(modelOf(r, 'lake-guardian-a').sleeping).toBe(false); // only the one that was told
+    (r.actors['wendigo'] as unknown as { noteStatus(s: string, on: boolean): void }).noteStatus('sleep', false);
+    run(r, 0.05);
+    expect(w.playingClip).toBe('wake');
+    run(r, 2);
+    expect(w.playingClip).toBe('idle');
+    expect(w.sleeping).toBe(false);
   });
 });
 

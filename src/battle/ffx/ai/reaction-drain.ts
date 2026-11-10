@@ -16,7 +16,7 @@ import type { EventInput } from '../state.ts';
 import { type Ctx, abilityOf, isAlive, tryActor } from '../state.ts';
 import { executeCommand } from '../execute.ts';
 import { mortibsorption } from '../scripted.ts';
-import { canQueueCommand, runOnHit, takeReaction } from './hooks.ts';
+import { canQueueCommand, isAfterTick, runOnHit, takeReaction } from './hooks.ts';
 
 /** More than any real chain; a runaway script cannot loop the engine. */
 const MAX_REACTIONS_PER_DRAIN = 64;
@@ -27,11 +27,14 @@ export interface ReactionHost {
   push(event: EventInput): void;
 }
 
-/** Run every queued reaction, oldest first, including the ones running them queues. */
-export function drainScriptReactions(h: ReactionHost): void {
+/**
+ * Run every queued reaction, oldest first, including the ones running them queues. `beforeTick`: the drain is one that runs before the action's
+ * end-of-turn tick, so a reaction that waits for the tick (`Reaction.afterTick`) stays queued for the drain after it; absent, everything runs.
+ */
+export function drainScriptReactions(h: ReactionHost, beforeTick = false): void {
   const { ctx } = h;
   for (let n = 0; n < MAX_REACTIONS_PER_DRAIN; n++) {
-    const reaction = takeReaction(ctx);
+    const reaction = takeReaction(ctx, beforeTick);
     if (!reaction) return;
     if (reaction.kind === 'drain') {
       runDrain(h, reaction.mountId, reaction.hostId);
@@ -56,9 +59,14 @@ export function drainScriptReactions(h: ReactionHost): void {
       abilityId: reaction.command.kind === 'ability' ? reaction.command.id : 'attack',
       cause: 'script',
     });
+    // A reaction that waited for the tick is still a reaction: it asks for no counter of its own (`ctx.rt.inReaction`, which `afterAction` has cleared by now).
+    const late = isAfterTick(reaction);
+    const was = ctx.rt.inReaction;
+    if (late) ctx.rt.inReaction = true;
     executeCommand(ctx, owner, reaction.command, true);
+    if (late) ctx.rt.inReaction = was;
   }
-  while (takeReaction(ctx)) {
+  while (takeReaction(ctx, beforeTick)) {
     // Dropped: nothing may leak into the next action.
   }
 }

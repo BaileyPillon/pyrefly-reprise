@@ -22,6 +22,8 @@ import { MIX_PICKER } from './constants.ts';
 import { MIX_COMMAND_ID } from './adapt/mix.ts';
 import { isSilenceable, isSpecialWearer, menuCategoryOf, offeredAbilityIds } from './adapt/menu.ts';
 import { validTargetIds } from './targeting.ts';
+import { inForm } from './special/enter.ts';
+import { specialRows } from './special/availability.ts';
 
 /** The reason an Itchy girl's row is greyed (the game blocks every command but Escape; spherechange clears it). */
 export const ITCHY_REASON = 'Itchy — spherechange first';
@@ -88,6 +90,8 @@ export interface MenuContext {
   items?: ItemRegistry;
   /** Live counts keyed by item id (`setup.ts` `inventoryCounts`). */
   inventory?: Readonly<Record<string, number>>;
+  /** Special Dress Up is on (`special/`, the `specialDressUp` switch): the menu offers the Special and the way out of it. */
+  specialDressUp?: boolean;
 }
 
 /**
@@ -182,7 +186,7 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
   }
 
   // L1 spherechange. One link only; gates on that link are passed through. §4.2
-  if (!berserked && ctx.grid && actor.dresspheres) {
+  if (!berserked && ctx.grid && actor.dresspheres && !inForm(actor)) {
     const cursed = Boolean(actor.statuses.curse);
     const node = actor.dresspheres.garmentGrid.nodePosition;
     for (const step of adjacentNodes(ctx.grid, node)) {
@@ -204,6 +208,9 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
       });
     }
   }
+
+  // Special Dress Up (switch on only): the offer when she has walked the grid and owns her Special, the one way out of a form. `special/availability.ts`
+  if (!berserked && ctx.specialDressUp === true) out.push(...specialRows(actor, ctx));
 
   // --- Item --------------------------------------------------------------
   //

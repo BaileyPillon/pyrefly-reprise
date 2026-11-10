@@ -60,6 +60,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   wendigo: 'ffx', // the hidden Wendigo chapter (FFX only, 2026-11-06)
   belgemine: 'ffx', // the hidden Belgemine's Challenge chapter (FFX only, 2026-11-09)
   shinryu: 'ffx', // the hidden Shinryu chapter (FFX only, 2026-11-07)
+  oblitzerator: 'ffx', // the hidden Oblitzerator chapter (FFX only, 2026-11-09)
   'ffx2-yunas-ballad': 'ffx2', // the hidden Yuna's Ballad chapter (FFX-2 only, 2026-11-06)
   spherimorph: 'ffx', // the hidden Spherimorph chapter (FFX only, 2026-11-06)
   'ffx2-youth-league': 'ffx2', // the hidden Youth League Tournament chapter (FFX-2 only, 2026-11-07)
@@ -67,6 +68,8 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'ff7-jenova-life': 'ff7', // the hidden Jenova LIFE chapter (FF7 only, 2026-11-07); a guide and a page, no tactic
   'ffx2-ifrit-kilika': 'ffx2', // the hidden Ifrit at Kilika Temple chapter (FFX-2 only, 2026-11-07)
   'ffx2-garik-ronso': 'ffx2', // the hidden Garik Ronso chapter (FFX-2 only, 2026-11-08)
+  'ffx2-gullwings-ch1': 'ffx2', // the hidden Gullwings, Chapter 1 chapter (FFX-2 only, 2026-11-09)
+  'ffx2-luca-opener': 'ffx2', // the hidden Luca Opener chapter (FFX-2 only, 2026-11-09)
 };
 
 /** `state.flags` key prefix of an aeon lock's reason (`battle/ffx/aeon-duel.ts#AEON_LOCK_REASON_PREFIX`, restated so this module stays out of the battle layer's import graph; the Last Summoning's guide test pins the copy). */

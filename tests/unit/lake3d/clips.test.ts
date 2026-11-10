@@ -64,8 +64,9 @@ describe('the monsters\' rows', () => {
   });
 
   it('plays a Guardian\'s blow as the swing and every spell, potion and eye drop as the cast', () => {
-    expect(monsterRowFor('lake-guardian-a', undefined, 'attack')).toEqual({ clip: 'attack', kind: 'blow' });
-    for (const id of ['lake-berserk', 'blizzara', 'thundara', 'lake-auto-potion', 'lake-eye-drops', 'protect', 'shell']) expect(monsterRowFor('lake-guardian-b', id, 'cast'), id).toEqual({ clip: 'cast', kind: 'cast' });
+    expect(monsterRowFor('lake-guardian-a', undefined, 'attack')).toEqual({ clip: 'attack', kind: 'blow', alt: 'cast' }); // its bank has no attack: the cast stands in (the game's forced action for a Provoked Guardian is its Thundara)
+    for (const id of ['lake-berserk', 'blizzara', 'thundara', 'protect', 'shell']) expect(monsterRowFor('lake-guardian-b', id, 'cast'), id).toEqual({ clip: 'cast', kind: 'cast' });
+    for (const id of ['lake-auto-potion', 'lake-eye-drops']) expect(monsterRowFor('lake-guardian-b', id, 'cast'), id).toEqual({ clip: 'item', kind: 'cast', alt: 'cast' }); // the game's item motion (the command row's caster animation 2)
     expect(monsterRowFor('lake-guardian-a', undefined, 'defend')).toBeNull();
   });
 });
@@ -184,5 +185,148 @@ describe('MonsterRig', () => {
     rig.notePose('idle', true);
     rig.open(undefined, 'attack', 0.2);
     expect(rig.clip).toBe('ko');
+  });
+});
+
+
+describe('the game\'s own strikes (the finishing lane, 2026-11-09)', () => {
+  const clips = (): AnimationClip[] => ['idle', 'hurt', 'ko', 'cast', 'item'].map((n) => burstClip(n, 1.5, 0.8)).concat([burstClip('attack', 3.5, 2.2), burstClip('combo', 2.5, 1.5)]);
+
+  it('takes the data table\'s mark over the reading of the motion, and reads the motion for a clip with no mark', () => {
+    const rig = new MonsterRig(rigRoot(), clips(), 'wendigo', { attack: 0.6, combo: 1.6333 });
+    expect(rig.strikeAt('attack')).toBe(0.6);
+    expect(rig.strikeAt('combo')).toBe(1.6333);
+    expect(rig.strikeAt('cast')).toBeCloseTo(strikeOf(burstClip('cast', 1.5, 0.8)), 6); // no mark: read from the motion
+    expect(new MonsterRig(rigRoot(), clips(), 'wendigo').strikeAt('attack')).toBeGreaterThan(1.9); // no table: the old reading
+  });
+
+  it('ignores a mark that is not a positive number', () => {
+    const rig = new MonsterRig(rigRoot(), clips(), 'wendigo', { attack: 0, combo: Number.NaN });
+    expect(rig.strikeAt('attack')).toBeGreaterThan(1.9);
+    expect(rig.strikeAt('combo')).toBeGreaterThan(1.2);
+  });
+
+  it('starts a clip so that its marked strike lands on the lead', () => {
+    const rig = new MonsterRig(rigRoot(), clips(), 'wendigo', { attack: 0.6 });
+    expect(rig.windup('wendigo-punch', 'attack', 0.26)).toBe(0); // the mark is early: the lunge leaves enough
+    rig.open('wendigo-punch', 'attack', 0.5);
+    expect(rig.clip).toBe('attack');
+  });
+});
+
+describe('a Guardian\'s forced Attack (the review of 2026-11-09, minor 4)', () => {
+  const body = (names: string[]): AnimationClip[] => names.map((n) => burstClip(n, 2.2, 1.6));
+
+  it('plays the cast when the file has no attack clip, so the model moves while the actor lunges', () => {
+    const guardian = new MonsterRig(rigRoot(), body(['idle', 'cast']), 'lake-guardian-a');
+    guardian.open(undefined, 'attack', 0.5);
+    expect(guardian.clip).toBe('cast');
+    expect(guardian.acting).toBe(true);
+    const provoked = new MonsterRig(rigRoot(), body(['idle', 'cast']), 'lake-guardian-b');
+    provoked.open('attack', 'attack', 0.5);
+    expect(provoked.clip).toBe('cast');
+  });
+
+  it('still plays an attack clip if a file ever has one, and leaves the Wendigo\'s and the aeons\' rows as they were', () => {
+    const withAttack = new MonsterRig(rigRoot(), body(['idle', 'cast', 'attack']), 'lake-guardian-a');
+    withAttack.open(undefined, 'attack', 0.5);
+    expect(withAttack.clip).toBe('attack');
+    expect(monsterRowFor('wendigo', 'attack', 'attack')).toEqual({ clip: 'attack', kind: 'blow' });
+    expect(monsterRowFor('shiva', undefined, 'attack')).toEqual({ clip: 'attack', kind: 'blow' });
+  });
+
+  it('holds the lunge for the cast the way it holds it for a blow, and a sleeping Guardian stays asleep', () => {
+    const rig = new MonsterRig(rigRoot(), body(['idle', 'cast', 'sleep_in', 'sleep']), 'lake-guardian-a');
+    expect(rig.windup(undefined, 'attack', 0.26)).toBeCloseTo(rig.strikeAt('cast') / SPEED_MAX - 0.3, 6);
+    rig.noteSleep(true);
+    rig.open(undefined, 'attack', 0.5);
+    expect(rig.clip).toBe('sleep_in');
+  });
+});
+
+describe('a potion\'s clip', () => {
+  const body = (names: string[]): AnimationClip[] => names.map((n) => burstClip(n, 1.5, 0.8));
+
+  it('is the item row with the cast as its alternative', () => {
+    expect(monsterRowFor('lake-guardian-a', 'lake-auto-potion', 'item')).toEqual({ clip: 'item', kind: 'cast', alt: 'cast' });
+    expect(monsterRowFor('ifrit', 'ifrit-attack', 'attack')).toEqual({ clip: 'attack', kind: 'blow' });
+    expect(monsterRowFor('valefor', 'energy-ray', undefined)).toEqual({ clip: 'cast', kind: 'cast' }); // an Overdrive plays the cast
+  });
+
+  it('plays the item clip when the file has one, the cast when it has not, and nothing when it has neither', () => {
+    const withItem = new MonsterRig(rigRoot(), body(['idle', 'cast', 'item']), 'lake-guardian-a');
+    withItem.open('lake-auto-potion', 'item', 0.5);
+    expect(withItem.clip).toBe('item');
+    const castOnly = new MonsterRig(rigRoot(), body(['idle', 'cast']), 'lake-guardian-a');
+    castOnly.open('lake-auto-potion', 'item', 0.5);
+    expect(castOnly.clip).toBe('cast');
+    const neither = new MonsterRig(rigRoot(), body(['idle']), 'lake-guardian-a');
+    neither.open('lake-auto-potion', 'item', 0.5);
+    expect(neither.clip).toBe('idle');
+  });
+});
+
+describe('Sleep (the game\'s sleep_00 to sleep_02)', () => {
+  const names = ['idle', 'hurt', 'ko', 'attack', 'arms_up', 'stance_block1', 'stance_block2', 'sleep_in', 'sleep', 'wake'];
+  const rigOf = (clipNames = names): MonsterRig => new MonsterRig(rigRoot(), clipNames.map((n) => burstClip(n, 1.5, 0.8)), 'wendigo');
+
+  it('ends the stance on the spot: the arms are down the moment it sleeps, before any hit', () => {
+    const rig = rigOf();
+    rig.setStance(true);
+    for (let i = 0; i < 60; i++) rig.update(0.05);
+    expect(rig.armsUp).toBe(true);
+    expect(rig.clip).toBe('stance_block1');
+    rig.noteSleep(true);
+    expect(rig.armsUp).toBe(false);
+    expect(rig.sleeping).toBe(true);
+    expect(rig.clip).toBe('sleep_in');
+  });
+
+  it('plays sleep_in once and holds the sleep, wakes through wake and settles in the idle', () => {
+    const rig = rigOf();
+    rig.noteSleep(true);
+    for (let i = 0; i < 80; i++) rig.update(0.05);
+    expect(rig.clip).toBe('sleep');
+    rig.noteSleep(false);
+    expect(rig.clip).toBe('wake');
+    for (let i = 0; i < 80; i++) rig.update(0.05);
+    expect(rig.clip).toBe('idle');
+    expect(rig.sleeping).toBe(false);
+  });
+
+  it('does not act, raise its arms or flinch while it sleeps', () => {
+    const rig = rigOf();
+    rig.noteSleep(true);
+    for (let i = 0; i < 80; i++) rig.update(0.05);
+    rig.open('wendigo-punch', 'attack', 0.5);
+    expect(rig.clip).toBe('sleep');
+    expect(rig.windup('wendigo-punch', 'attack', 0.26)).toBe(0);
+    rig.setStance(true);
+    expect(rig.armsUp).toBe(false);
+    rig.notePose('hurt', false);
+    expect(rig.clip).toBe('sleep');
+  });
+
+  it('is a no-op when told twice, and a fallen body sleeps no more', () => {
+    const rig = rigOf();
+    rig.noteSleep(true);
+    rig.noteSleep(true);
+    expect(rig.clip).toBe('sleep_in');
+    rig.notePose('ko', true);
+    expect(rig.sleeping).toBe(false);
+    expect(rig.clip).toBe('ko');
+    rig.noteSleep(true);
+    expect(rig.sleeping).toBe(false);
+  });
+
+  it('rests in the idle with the arms down in a file that has no sleep clips', () => {
+    const rig = rigOf(['idle', 'arms_up', 'stance_block1']);
+    rig.setStance(true);
+    rig.noteSleep(true);
+    expect(rig.armsUp).toBe(false);
+    expect(rig.sleeping).toBe(true);
+    expect(rig.clip).toBe('idle');
+    rig.noteSleep(false);
+    expect(rig.clip).toBe('idle');
   });
 });

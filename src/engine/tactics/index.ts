@@ -51,6 +51,8 @@ import { YUNAS_BALLAD_BOSS_IDS, ffx2YunasBallad } from './ffx2-yunas-ballad.ts';
 import { YOUTH_LEAGUE_BOSS_IDS, ffx2YouthLeague } from './ffx2-youth-league.ts';
 import { IFRIT_KILIKA_BOSS_IDS, ffx2IfritKilika } from './ffx2-ifrit-kilika.ts';
 import { GARIK_RONSO_BOSS_IDS, ffx2GarikRonso } from './ffx2-garik-ronso.ts';
+import { GULLWINGS_CH1_BOSS_IDS, ffx2GullwingsCh1 } from './ffx2-gullwings-ch1.ts';
+import { LUCA_OPENER_BOSS_IDS, ffx2LucaOpener } from './ffx2-luca-opener.ts';
 import { FALLEN_AEONS_BOSS_IDS, ffx2FallenAeons } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_BOSS_ID, seymourOmnis } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_BOSS_IDS, seymourNatus } from './seymour-natus.ts';
@@ -67,6 +69,7 @@ import { OMEGA_RUINS_BOSS_IDS, omegaRuins } from './omega-ruins.ts';
 import { WENDIGO_BOSS_IDS, wendigoLine } from './wendigo.ts';
 import { BELGEMINE_CHAPTER_BOSS_IDS, belgemineLine } from './belgemine.ts';
 import { SHINRYU_BOSS_IDS, shinryu } from './shinryu.ts';
+import { OBLITZERATOR_BOSS_IDS, oblitzeratorLine } from './oblitzerator.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -106,6 +109,8 @@ export { ffx2YunasBallad, YUNAS_BALLAD_BOSS_IDS } from './ffx2-yunas-ballad.ts';
 export { ffx2YouthLeague, YOUTH_LEAGUE_BOSS_IDS } from './ffx2-youth-league.ts';
 export { ffx2IfritKilika, IFRIT_KILIKA_BOSS_IDS } from './ffx2-ifrit-kilika.ts';
 export { ffx2GarikRonso, GARIK_RONSO_BOSS_IDS } from './ffx2-garik-ronso.ts';
+export { ffx2GullwingsCh1, GULLWINGS_CH1_BOSS_IDS } from './ffx2-gullwings-ch1.ts';
+export { ffx2LucaOpener, LUCA_OPENER_BOSS_IDS } from './ffx2-luca-opener.ts';
 export { ffx2FallenAeons, FALLEN_AEONS_BOSS_IDS } from './ffx2-fallen-aeons.ts';
 export { seymourOmnis, SEYMOUR_OMNIS_BOSS_ID } from './seymour-omnis.ts';
 export { seymourNatus, SEYMOUR_NATUS_ID, SEYMOUR_NATUS_BOSS_IDS } from './seymour-natus.ts';
@@ -122,6 +127,7 @@ export { omegaRuins, OMEGA_RUINS_BOSS_IDS } from './omega-ruins.ts'; // the hidd
 export { wendigoLine, WENDIGO_BOSS_IDS } from './wendigo.ts'; // the hidden Wendigo chapter (FFX only)
 export { belgemineLine, BELGEMINE_CHAPTER_BOSS_IDS } from './belgemine.ts'; // the hidden Belgemine's Challenge chapter (FFX only)
 export { shinryu, SHINRYU_BOSS_IDS } from './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07)
+export { oblitzeratorLine, OBLITZERATOR_BOSS_IDS } from './oblitzerator.ts'; // the hidden Oblitzerator chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -199,6 +205,10 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...IFRIT_KILIKA_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-ifrit-kilika', bossId, tactic: ffx2IfritKilika })),
   // Garik Ronso and the Ronso Youths (FFX-2 only, hidden chapter, 2026-11-08): five bodies for the two fights; Protect, Darkness, never Black Mage.
   ...GARIK_RONSO_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-garik-ronso', bossId, tactic: ffx2GarikRonso })),
+  // Gullwings, Chapter 1 (FFX-2 only, hidden chapter, 2026-11-09): Boris, the Flame Dragon, the Guardian Beast and YSLS-Zero, one tactic under each id; each girl changes once to her role in the fight, then plays it.
+  ...GULLWINGS_CH1_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-gullwings-ch1', bossId, tactic: ffx2GullwingsCh1 })),
+  // The Luca Opener (FFX-2 only, hidden chapter, 2026-11-09): Logos and Ormi, then Leblanc; steal first, Logos first, Yuna the Songstress in the second fight.
+  ...LUCA_OPENER_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-luca-opener', bossId, tactic: ffx2LucaOpener })),
   // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.
   { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },
   // Chapter XIV (FFX only, listed 2026-09-25): his three aeons, one a link; Isaaru is an untargetable bystander.
@@ -224,6 +234,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...BELGEMINE_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'belgemine', bossId, tactic: belgemineLine })),
   // The hidden Shinryu chapter (FFX only): the Monster Arena's deep-water dragon; the line is a Phoenix Down or a potion first, then Tidus's Quick Hit and the plain Celestial blow (the shipped party wins every battle; the line is the fastest).
   ...SHINRYU_BOSS_IDS.map((bossId) => ({ chapterId: 'shinryu', bossId, tactic: shinryu })),
+  // The hidden Oblitzerator chapter (FFX only): the blitzball machine at the Luca dock; the line is Thunder at the crane three times, Use crane, then a swing (a blow or a spell at the machine draws a ball back).
+  ...OBLITZERATOR_BOSS_IDS.map((bossId) => ({ chapterId: 'oblitzerator', bossId, tactic: oblitzeratorLine })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

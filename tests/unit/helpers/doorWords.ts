@@ -38,6 +38,9 @@ export const DOORS_IN_ORDER: ReadonlyArray<readonly [word: string, game: 'ff7' |
   ['braveheart', 'ffx2'], // the hidden Garik Ronso's (chapter 47, 2026-11-08)
   ['shinryu', 'ffx'], // the hidden Shinryu's (chapter 48, 2026-11-07)
   ['wendigo', 'ffx'], // the hidden Wendigo's (chapter 49, 2026-11-06; desktop only)
+  ['blitz', 'ffx'], // the hidden Oblitzerator's (chapter 50, 2026-11-09)
+  ['dragon', 'ffx2'], // the hidden Gullwings, Chapter 1's (chapter 51, 2026-11-09)
+  ['debut', 'ffx2'], // the hidden Luca Opener's (chapter 52, 2026-11-09)
 ];
 
 /** The words alone, in the table's order. */

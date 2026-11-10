@@ -24,6 +24,9 @@
  * is gone (the record was the player-side Daigoro; his strikes are `possessed-yojimbo-kozuka` and `-wakizashi`), so its two scenarios (by a party actor and by a foe) were removed, and `possessed-yojimbo-zanmato` is a fixed
  * 9,999 now, not Death at chance 255, so its two scenarios lost the status-applied cue and moved to the group of the plain magic charge. The cause is the ability data, not the presenter; nothing else was re-recorded.
  *
+ * Thirty-two FFX-2 scenarios were moved by hand in the golden when the three Special dresspheres' commands came in with the game's own rows (FFX-2 only, 2026-11-09; `research/re-ffx2-special-dresspheres.md`): every ability
+ * of the families `x2-floral-fallal-*`, `x2-machina-maw-*` and `x2-full-throttle-*` that the old trimmed data defined without a row (a Vajra, a Howitzer, a Reboot) now resolves on its row, so its strikes, its heal or its statuses
+ * make their cues (a Vajra is two heavy hits on a party actor's target, not a charge and nothing). The cause is the ability data, not the presenter; no scenario outside those families moved, and the FFX half is untouched.
  * To re-record after a DELIBERATE change to the presenter's own timing or to a cue choice: check the old tree out
  * into a scratch worktree, copy `helpers/sfxFight.ts` and this file in, run
  * `SFX_PIN_WRITE=<path> node node_modules/vitest/vitest.mjs run tests/unit/audio-sfx-parity-pin.test.ts`, and review

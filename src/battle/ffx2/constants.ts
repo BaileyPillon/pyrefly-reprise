@@ -37,6 +37,12 @@ export type { AtbSpeed } from './clock.ts';
 export const LEBLANC_SCRIPT_SINIROTHX = true;
 
 /**
+ * Special Dress Up (`special/`, FFX-2 only): a girl who has walked every node of her Garment Grid this battle and owns her Special can put it on and fight as three parts; the form ends when she leaves it or
+ * her main body falls. **OFF**: no chapter as built reaches it (Bailey's look for the three-part moment is not picked, decision 92d); `Ffx2EngineOptions.specialDressUp` turns it on for a run.
+ */
+export const SPECIAL_DRESS_UP = false;
+
+/**
  * PR-0107's switch, **ON since Bailey's yes of 2026-10-17** ("yes turn on chapter VI opening, keep going full speed"; merged onto r52-rc for release 53)
  * (plan question Q19; it was `false` until then). A chained link flagged
  * `EnemyGroupDef.opensAsSeparateBattle` (Chapter VI's Acts II and III, separate battles in the source) opens as the game opens every

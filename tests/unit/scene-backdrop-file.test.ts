@@ -26,6 +26,7 @@ import { WENDIGO_SCENE } from '../../src/data/ffx/wendigo-ids.ts';
 import { BELGEMINE_SCENE, BELG_PLATE } from '../../src/data/ffx/belgemine-ids.ts';
 import { GARIK_RONSO_SCENE } from '../../src/data/garik-ronso-ids.ts';
 import { SHINRYU_SCENE } from '../../src/data/ffx/shinryu-ids.ts';
+import { OBLITZERATOR_SCENE } from '../../src/data/ffx/oblitzerator-ids.ts';
 import { EXP_YRP_SCENE } from '../../src/data/yrp-ids.ts';
 import { DJOSE_CHAMBER_PLATE } from '../../src/data/ixion-plates.ts';
 import { EXP_WINDWAKER_SCENE } from '../../src/data/windwaker-ids.ts';
@@ -57,7 +58,8 @@ describe('a scene key that is a code key names the backdrop file it draws', () =
     expect(backdropFileOf(BELGEMINE_SCENE)).toBe('cavern-stolen-fayth'); // the hidden Belgemine's Challenge's stage draws the Cavern of the Stolen Fayth's plate as the Remiem court's stand-in (ch-belgemine, 2026-11-09)
     expect(BELG_PLATE).toBe('cavern-stolen-fayth');
     expect(backdropFileOf(SANCTUARY_KEEPER_SCENE)).toBe('gagazet'); // the hidden Sanctuary Keeper's stage draws Chapter I's Mt. Gagazet plate (ch-sanctuary-keeper, 2026-11-06)
-    expect([...Object.keys(SCENE_BACKDROP_FILE)].sort()).toEqual([MIRROR_AEONS_SCENE, DARK_AEONS_SCENE, FLOODED_WAYS_SCENE, SPECTRAL_KEEPER_SCENE, PENANCE_SCENE, SANCTUARY_KEEPER_SCENE, SPHERIMORPH_SCENE, OMEGA_RUINS_SCENE, BELGEMINE_SCENE, GARIK_RONSO_SCENE, SHINRYU_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE].sort()); // the set of code-keyed scenes, whatever order a merge lists them in
+    expect([...Object.keys(SCENE_BACKDROP_FILE)].sort()).toEqual([MIRROR_AEONS_SCENE, DARK_AEONS_SCENE, FLOODED_WAYS_SCENE, SPECTRAL_KEEPER_SCENE, PENANCE_SCENE, SANCTUARY_KEEPER_SCENE, SPHERIMORPH_SCENE, OMEGA_RUINS_SCENE, BELGEMINE_SCENE, GARIK_RONSO_SCENE, SHINRYU_SCENE, OBLITZERATOR_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE].sort()); // the set of code-keyed scenes, whatever order a merge lists them in
+    expect(backdropFileOf(OBLITZERATOR_SCENE)).toBe('mushroom-rock-road'); // the hidden Oblitzerator's stage draws the Mushroom Rock Road's plate standing in for the Luca dock (ch-oblitzerator, 2026-11-09)
     expect(backdropFileOf(WENDIGO_SCENE)).toBe('wendigo-lake'); // the hidden Wendigo chapter has a plate of its own, rendered from its 3D lake (ch-wendigo phase 4, 2026-11-07): its scene key is its file name, no row
     expect(backdropFileOf(GARIK_RONSO_SCENE)).toBe('gagazet'); // the hidden Garik Ronso chapter's summit (FFX-2 only, 2026-11-08) borrows Chapter I's Mt. Gagazet plate under its own snow grade
     expect(backdropFileOf(SHINRYU_SCENE)).toBe('via-purifico-flooded-3'); // the hidden Shinryu's stage is the Via Purifico's stage on the Flooded Ways' submerged plate (ch-shinryu, 2026-11-07)

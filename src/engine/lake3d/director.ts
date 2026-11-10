@@ -21,7 +21,7 @@
 
 import type { BattleCamera } from '../BattleCamera.ts';
 import type { ActionShot, ActorShot, BattleStartShot, ShotAnswer, ShotCtx, ShotDirector } from '../ShotDirector.ts';
-import { FLY_RIG, OPENING, flightLength, haymakerFlight, overdriveFlight, raiseFlight, sampleFlight, winFlight, type Flight, type V3 } from './layout.ts';
+import { FLY_RIG, OPENING, flightLength, haymakerFlight, overdriveFlight, overdriveHeightOf, raiseFlight, sampleFlight, winFlight, type Flight, type V3 } from './layout.ts';
 import { WENDIGO_ROWS } from './clipMap.ts';
 
 export interface FlyOptions {
@@ -193,7 +193,7 @@ export class CameraDirector {
     overdriveStart: (ctx: ActionShot): ShotAnswer => {
       if (ctx.skipping || ctx.reducedMotion === true || !this.cam) return false;
       const at = this.where(ctx.actor.id) ?? [0, 0, 1];
-      return this.fly(overdriveFlight(this.eye(), at), { awaitAt: 0.9, rate: CameraDirector.rateOf(ctx) }).then(() => true);
+      return this.fly(overdriveFlight(this.eye(), at, overdriveHeightOf(ctx.actor.id)), { awaitAt: 0.9, rate: CameraDirector.rateOf(ctx) }).then(() => true);
     },
     overdriveEnd: (_ctx: ActorShot): ShotAnswer => false,
     actionClose: (ctx: ActorShot): ShotAnswer => {

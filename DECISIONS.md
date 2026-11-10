@@ -16,20 +16,20 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-2082 decisions in all: 1512 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1392 of the written decisions record a blanket yes.
+2089 decisions in all: 1519 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1392 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1953 |
+| adopted | 1960 |
 | proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 97 |
-| **All** | **2082** |
+| **All** | **2089** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 158 |
+| combat | 165 |
 | art | 407 |
 | visuals | 183 |
 | camera | 76 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 17 |
 | tech | 45 |
 | site | 21 |
-| **All** | **2082** |
+| **All** | **2089** |
 
 | Game case | Decisions |
 | --- | ---: |
 | both games | 1105 |
 | FFX only | 530 |
-| FFX-2 only | 429 |
+| FFX-2 only | 436 |
 | FF7 hidden experiment | 18 |
-| **All** | **2082** |
+| **All** | **2089** |
 
 ## Standing rules in force
 
@@ -9807,7 +9807,7 @@ Sunday · 2 decisions
 
 ### 2026-11-09
 
-Monday · 9 decisions
+Monday · 16 decisions
 
 - <a id="d-1503"></a>**D-1503** — DRIVER CALL under the standing deploy words, his to overturn: release 78 (r78-fix, 44 Jenova LIFE, 46 Ifrit at Kilika, 49 Wendigo) deploys on its focused review's SHIP (cc0fea14a / BAH_qvc7; changed area FAIL on a carried class, no regression); wave 4 waits for release 79
   - Bailey: “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.”
@@ -9854,3 +9854,38 @@ Monday · 9 decisions
   - What changed: Made by the second account's copy of the driver on 2026-11-09 at 20:30 EST, after the focused review of the production candidate read SHIP at 20:15 EST: 0 critical; R79-1 (major, Jenova LIFE in FF7, not introduced by this build, no regression against release 78, the continuity checks fail equal to the live build) is disclosed and carried into release 80. Deployed at 02:13:47 UTC on 2026-11-10 (21:13 EST on 2026-11-09, A-1277); the live check read deployment PASS (A-1278). Release 79 owes live (settled), focused and deep; the ledger counts 1 deploy since the last passing deep review; deep round 37 covers release 79 and is planned after release 80, and release 81 refuses until it is settled. Usage before the deploy (20:20 EST): weekly all models 65 percent, weekly Fable 9 percent. The first focused attempt at about 16:44 EST had read HOLD only because the browser lock was held for the whole 20 minutes (no evidence, no defect); the re-run started at 19:44 EST when the first driver read the other copy's handover.
   - area release · both games · adopted · delivery implemented · see [D-931](#d-931), [D-1503](#d-1503), [D-1500](#d-1500), [D-1423](#d-1423), A-1276, A-1277, A-1278 · refines [D-931](#d-931)
   - Source: The driver's state log of 2026-11-09 (the 19:45, 20:40 and 21:30 EST lines), under his standing words of 2026-10-17 (D-931), "you make the executive …
+- <a id="d-1513"></a>**D-1513** — DRIVER CALL under his delegation, his to overturn: a Special part whose build names no learned list has only the commands the game lists from the start and no HP passive (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. Floral Fallal: Attack, the four Whirls, each pistil's free commands. forms.ts#masteredLearned gives a part its whole ladder with Double and Triple HP for a build or a test that names it (the Farplane Cup measurement). Alternative: the whole ladder and x3 HP for every part, far stronger than any early chapter's party and unlike the game.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1514"></a>**D-1514** — DRIVER CALL under his delegation, his to overturn: a Special part's stats are the game's own growth rows times (nodes + 25) / 25, the main body on her grid's node count and a pod always on 6 nodes (x1.24) (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The exe's final stage, emulated; the community's published blocks equal the unscaled rows, so the live game is the open question (research note section 5). One constant (POD_SCALE_NODES and the node count passed to specialPartStats) moves it. Alternative: the unscaled growth rows.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1515"></a>**D-1515** — DRIVER CALL under his delegation, his to overturn: a fallen main body ends the form when a pod still stands (she returns knocked out in her old dress, the pods go, the others return); all three parts down is a defeat (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. Pick 8 of the research note: one fan thread says she reverts and the others return, another says "it's over"; the exe was not read (no Ghidra instance ran in the build pass or the fix pass). Alternative: the form persists while a pod stands.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1516"></a>**D-1516** — DRIVER CALL under his delegation, his to overturn: Auto-Life once on each part at entry; the main body's comes off with the form, and one she held before is swept at entry by the Special's own Ribbon ward and not given back (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The grant is the community's rule (two sources; the game's Ribbon row keeps no status). The adversarial review found the grant never came off, a free revive after the form; the fix marks it with the form as its source and removes it on the way out, on a fall and at the battle's end. Alternatives: keep it after the form; give the swept one back (neither sourced).
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1517"></a>**D-1517** — DRIVER CALL under his delegation, his to overturn: a girl who was Ejected before another girl's Special stays Ejected (not parked, not brought back, no rewards); a girl parked by the form is out of the field but not Ejected (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The review found the form returned every other girl, an Ejected one too. Alternative: the form returns everyone, or a parked girl earns nothing that battle.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1518"></a>**D-1518** — DRIVER CALL under his delegation, his to overturn: the pods start at full HP and MP with their gauge one standard bar behind, a second Special Dress Up makes them new in place, and they stand in the reward roll's owner slots 3 to 8 (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The pods' start is unsourced (the game was not observed); the gauge wait is the girl's own after a Change. The second entry swapped the pod objects, which the engine's slot order (kept by object, checked by length) never stepped again: fixed by making them new in place. Alternatives: an empty gauge with no wait; pools from before; the three girls only in the reward map.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1519"></a>**D-1519** — DRIVER CALL under his delegation, his to overturn: every Special form still on ends, silently, when the battle's result is built, so a chain's seam carries a girl in her dress with her pools by the ratio rule (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The game puts a girl back in her dress at the next battle's start (verified in the exe); doing it at the end of this one means the carry never sees a Special's absolute HP. The rewards were built before it. Alternative: leave the form on and let the next link's setup put her back.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
