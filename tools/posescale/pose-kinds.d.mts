@@ -1,10 +1,11 @@
-export type SubjectKind = 'party-ffx' | 'dressphere-ffx2' | 'aeon' | 'dark-aeon' | 'part' | 'boss-foe' | 'exp-leblanc' | 'ff7';
+export type SubjectKind = 'party-ffx' | 'dressphere-ffx2' | 'special-ffx2' | 'aeon' | 'dark-aeon' | 'part' | 'boss-foe' | 'exp-leblanc' | 'ff7';
 export type ModelGame = 'FFX' | 'FFX-2' | 'FF7' | 'unknown';
 export type ModelPoseClass = 'idle' | 'standing' | 'low' | 'ko' | 'wide' | 'part' | 'staged';
 export const PARTY: Set<string>;
 export const AEONS: Set<string>;
 export const DARK_AEONS: Set<string>;
 export const PARTS: Set<string>;
+export const SPECIALS: Set<string>;
 export const GAME_FALLBACK: Readonly<Record<string, 'FFX' | 'FFX-2'>>;
 export const LOW_POSES: Set<string>;
 export const TWIRL_KEYS: RegExp;

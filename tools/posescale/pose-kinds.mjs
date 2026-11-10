@@ -21,6 +21,12 @@ export const PARTS = new Set([
   'mortibody', 'seymour-natus-ring', 'mortiphasm-facing',
 ]);
 const DRESS = /^(yuna|rikku|paine)-(black-mage|white-mage|gunner|thief|warrior|songstress|dark-knight|lady-luck|alchemist|berserker|samurai)$/;
+/**
+ * The three Special dresspheres' figures (FFX-2 only; the Special look, step C1): one connected figure each, a party subject that faces right. They are a kind of their own so the mirror
+ * reads `sideOf` +1 and so they are NOT sent to `boss-foe` (side -1: the mirror would flip a party painting). The class stays `standing` (judged in the stature band, never `part`: a class-wide
+ * waiver needs Bailey's quoted words, D-36).
+ */
+export const SPECIALS = new Set(['yuna-floral-fallal', 'rikku-machina-maw', 'paine-full-throttle']);
 
 /**
  * Subjects whose own sidecar and registration table do not name a game, by which data folder (`src/data/ffx` or `src/data/ffx2`) names their art id
@@ -35,10 +41,11 @@ export const GAME_FALLBACK = Object.freeze({
   ...Object.fromEntries('logos ormi shuyin vegnagun-body vegnagun-head vegnagun-leg vegnagun-tail lenne'.split(' ').map((s) => [s, 'FFX-2'])),
 });
 
-/** `party-ffx | dressphere-ffx2 | aeon | dark-aeon | part | boss-foe | exp-leblanc | ff7`. */
+/** `party-ffx | dressphere-ffx2 | special-ffx2 | aeon | dark-aeon | part | boss-foe | exp-leblanc | ff7`. */
 export function subjectKind(subject) {
   if (subject.startsWith('exp-leblanc-')) return 'exp-leblanc';
   if (subject.startsWith('ff7-')) return 'ff7';
+  if (SPECIALS.has(subject)) return 'special-ffx2';
   if (PARTY.has(subject)) return 'party-ffx';
   if (DRESS.test(subject)) return 'dressphere-ffx2';
   if (AEONS.has(subject)) return 'aeon';
@@ -56,7 +63,7 @@ export function gameOf(subject, sidecarGame, tableSource) {
   if (t.startsWith('ffx-2') || t === 'ffx2') return 'FFX-2';
   if (t.startsWith('ffx only') || t === 'ffx') return 'FFX';
   const kind = subjectKind(subject);
-  if (kind === 'dressphere-ffx2' || /^(x2-|ffx2-|exp-leblanc)/.test(subject)) return 'FFX-2';
+  if (kind === 'dressphere-ffx2' || kind === 'special-ffx2' || /^(x2-|ffx2-|exp-leblanc)/.test(subject)) return 'FFX-2';
   if (kind === 'party-ffx') return 'FFX';
   if (kind === 'ff7') return 'FF7';
   if (tableSource === 'ffx') return 'FFX';
@@ -67,7 +74,7 @@ export function gameOf(subject, sidecarGame, tableSource) {
 /** +1: the party side (the art must face right); -1: the enemy side (the art must face left). Only the mirror reads it. */
 export function sideOf(subject) {
   const kind = subjectKind(subject);
-  const party = kind === 'party-ffx' || kind === 'dressphere-ffx2' || kind === 'aeon' || kind === 'exp-leblanc';
+  const party = kind === 'party-ffx' || kind === 'dressphere-ffx2' || kind === 'special-ffx2' || kind === 'aeon' || kind === 'exp-leblanc';
   return party && !/^exp-leblanc-(ffx2-|leblanc|logos|ormi)/.test(subject) ? 1 : -1;
 }
 
