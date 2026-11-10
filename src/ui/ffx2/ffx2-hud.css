@@ -116,6 +116,14 @@
   top: auto;
   display: block;
 }
+/*
+ * A gauge whose STATUS tab hangs under its bar (`.ststab`, absolutely positioned at `top: 100% + 0.8px`, a 13.6px tab) and that another gauge follows: the tab was drawn straight over the next gauge's name, so
+ * "Duo", "Tria" and "Quattour" of the Major Numerus (hidden chapter 53; each head carries Spellspring, which draws a tab) read as clipped. Room is left for the tab, less the 4px gap. No other FFX-2 formation has a tab
+ * above another gauge (pinned in `tests/unit/chapters/fiend-superbosses-hud.test.ts`), so nothing else moves; the phone draws the tab inside the head, so it is left alone there. FFX-2 only (the FFX HUD has no such strip).
+ */
+html:not([data-phone-battle='ffx2']) .ffx2hud__enemies > .ig-bosshp:has(> .ststab):not(:last-child) {
+  margin-bottom: 11px;
+}
 
 /* The name/bar/numerals line, on an ink slab. The mock hangs the bar straight
    on the painting, which works over Bevelle's near-black deck and vanishes over
