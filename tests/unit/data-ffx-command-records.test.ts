@@ -166,6 +166,7 @@ describe("the attached records are the game's table", () => {
       ['belgemine', 21, 21], // the hidden Belgemine's Challenge chapter (FFX only, 2026-11-09): its twenty-one new rows (four summons, the aeons' own moves, the Sisters' spells); the reused rows add none
       ['wendigo', 8, 8], // the hidden Wendigo chapter (FFX only, 2026-11-06): its eight rows, 0x407f, 0x4080, 0x4062, 0x403b, 0x4063, 0x400f, 0x4010 and the item row 0x200c
       ['shinryu', 5, 5],
+      ['gauntlet', 31, 31], // the hidden Gauntlet chapter (FFX only, 2026-11-09): the Monster Arena creations' thirty-one rows (0x4033 to 0x40FF, 0x6000 to 0x6036); the player's rows they reuse add none
       ['omega-ruins-items', 3, 3], // the hidden Omega Ruins chapter's reward items (FFX only; release 79 integration): Warp Sphere 0x2063, Pendulum 0x2069 and Door to Tomorrow 0x206b, name-only item rows with the blank item record, the rows the game's table holds for them (both in the fixture); the reward-resolve test, now walking the hidden FFX chapters, found their raw ids
     ];
     expect(ALL_ABILITIES).toHaveLength(519 + ROWS_SINCE_KEEPER.reduce((n, [, a]) => n + a, 0));
@@ -386,6 +387,18 @@ const KNOWN_STATUS_DIFFERENCES: readonly string[] = [
   'dark6-aerospark: extra bits 0x0, record 0x200',
   'dark6-shiva-attack: extra bits 0x0, record 0x200',
   'dark6-anima-attack: extra bits 0x0, record 0x400',
+  // The hidden Gauntlet chapter (FFX only, 2026-11-09): the same shapes as the Dark Aeons' rows. Condemn (Th'uban) and Gets up. (Earth Eater) are cleanse rows that list none of the statuses they strip; Condemn also takes
+  // Auto-Life (0x200); Rainbow, Slime and Toxic Cloud carry the Curse bit (0x400, an extra-status word with no engine status id) in the record alone; Slime's Silence and Slow carry no duration byte in the record (254 is ours).
+  'gauntlet-condemn: cleanse in the record, ours none',
+  'gauntlet-condemn: extra bits 0x0, record 0x200',
+  ...['haste', 'nulblaze', 'nulfrost', 'nulshock', 'nultide', 'protect', 'reflect', 'regen', 'shell'].map((s) => `gauntlet-condemn: the record has a byte 255 for ${s} (a cleanse), ours none`),
+  'gauntlet-gets-up: cleanse in the record, ours none',
+  ...['darkness', 'power-break'].map((s) => `gauntlet-gets-up: the record has a byte 255 for ${s} (a cleanse), ours none`),
+  'gauntlet-rainbow: extra bits 0x0, record 0x400',
+  'gauntlet-slime: extra bits 0x0, record 0x400',
+  'gauntlet-slime: silence duration 254, record 0',
+  'gauntlet-slime: slow duration 254, record 0',
+  'gauntlet-toxic-cloud: extra bits 0x0, record 0x400',
 ];
 
 describe("the status bytes of the attached records are the game's table (re-parity W2)", () => {

@@ -75,6 +75,7 @@ export const FORMULA_BYTE_OVERRIDES: Readonly<Record<number, number>> = {
   0x40de: 3, // Mighty Guard (the hidden Belgemine's Challenge's Cindy, FFX only: a status row with no damage event, the game's formula byte 3)
   0x40f6: 3, // Eraser (Shinryu; a Petrify row of power 0 with no damage event, as Mighty Guard has none)
   0x412a: 3, // Mighty Guard (Penance's Right Arm; a status row with no damage event, as Shell is)
+  0x6018: 3, // Gets up. (the hidden Gauntlet chapter's Earth Eater, FFX only: a cleanse row of power 0 with no damage class, as Eraser has none)
   0x6040: 3, // Remedy
   0x6041: 3, // Shremedy
   0x604f: 3, // Break
