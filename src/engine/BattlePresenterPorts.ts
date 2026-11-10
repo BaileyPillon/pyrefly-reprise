@@ -196,6 +196,8 @@ export interface MomentsPort {
    */
   turnCutIn?(opts: {
     actorId: string;
+    /** FFX-2 Special look (review fix R3-5): the id whose portrait is drawn when it is not `actorId` (a form's part borrows its main's); absent for everyone else. */
+    portraitId?: string;
     name: string;
     game: 'ffx' | 'ffx2';
     label: string;
