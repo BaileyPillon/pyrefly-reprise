@@ -50,7 +50,8 @@ import {
 
 /**
  * The ailments Ormi and Logos are immune to [RE row 129, row 130]: Silence, Berserk, Curse and Eject (group 1 slots 3, 7, 8 and 10), Itchy and Auto-Life (17 and 18) and, in group 2, Stop and Doom. **Death is NOT listed: they can
- * be killed outright**, and Sleep, Darkness, Poison, Confusion and Petrify land. The special word (0x19b, bits 0, 1, 3, 4, 7 and 8) has the percent bit (0) and neither the no-ATB-damage bit (6) nor the Interrupt bit (9): they can
+ * be killed outright**, and Sleep, Darkness, Poison, Confusion and Petrify land. The special word (0x19b, bits 0, 1, 3, 4, 7 and 8) has the percent bit (0) and neither the no-ATB-damage bit (6) nor bit 9 (0x200, which `FFX2MonsterRecord.special` documents as
+ * immune to Bribe and `resolve-strike.ts` also reads as immune to the magic-cancel, the Interrupt: the repo says both of one bit, and it is clear on all three rows, so neither immunity applies): they can
  * be delayed and interrupted. The monster record replaces these bytes wherever the engine has a slot.
  */
 const HENCHMAN_IMMUNE: StatusImmunities = { silence: 255, berserk: 255, curse: 255, eject: 255, stop: 255, doom: 255 };

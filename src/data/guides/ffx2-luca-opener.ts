@@ -24,12 +24,12 @@ const RULES: GuideRule[] = [
   {
     text: 'Take Logos first. He has 86 life and a Defense of 2, he shoots twice a turn at a random girl, and he is the one with a Potion for Ormi. Ormi has a Defense of 60 and almost no Magic Defense, so blades glance off him and 97 life takes a while.',
     short: 'Logos first, then Ormi',
-    cite: 'ffx2-luca-opener §3',
+    cite: 'ffx2-luca-opener §0, §3',
   },
   {
     text: 'Ormi swings twice and then throws his shield at the girl standing farthest from him, Rikku at the start. Logos throws his Potion once, when Ormi is under a fifth of his life, and never again.',
     short: 'Ormi: two blows, then the shield at the farthest girl',
-    cite: 'ffx2-luca-opener §3',
+    cite: 'ffx2-luca-opener §0, §3',
   },
   {
     text: 'Rikku can steal from all three: an Iron Bangle from Ormi, Silver Glasses from Logos and a Silver Bracer from Leblanc. Steal before you strike while they are still standing.',
@@ -39,10 +39,10 @@ const RULES: GuideRule[] = [
   {
     text: 'Leblanc swings three times and then casts Thunder on whoever has the most life. She has 130 life, little Defense and a great deal of Magic Defense, so strike her; spells slide off.',
     short: 'Leblanc: three swings, then Thunder at the healthiest girl',
-    cite: 'ffx2-luca-opener §3',
+    cite: 'ffx2-luca-opener §0, §3',
   },
   {
-    text: 'Yuna is the Songstress for this fight and Darkness Dance is her one command. Leblanc can be blinded, so the Dance makes her swings miss; her Thunder never misses. Between the two fights the party is whole again, and what you spent stays spent.',
+    text: 'Yuna is held to the Songstress for this fight and Darkness Dance is her one command. Leblanc can be blinded, so the Dance makes her swings miss; her Thunder never misses. Between the two fights the party is whole again, and what you spent stays spent.',
     short: 'Yuna sings Darkness Dance; her swings miss, her Thunder does not',
     cite: 'ffx2-luca-opener §2',
   },

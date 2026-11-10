@@ -48,13 +48,13 @@ const CELLS = [
   ['Chapter 2 preset (23 / 24 / 25), no Songstress hold', { build: structuredClone(bevelleBuild), songstress: structuredClone(bevelleBuild) }],
 ];
 
-console.log('| party | line | pace | seeds | runs won | link 1 won | link 2 won | minutes | girl KOs | HP lost | Potions thrown | steals | longest (their actions) |');
-console.log('|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|');
+console.log('| party | line | pace | seeds | runs won | link 1 won | link 2 won | minutes | girl KOs | HP lost | Potions thrown | Potions that mended Ormi | runs with a Thunder | steals | longest (their actions) |');
+console.log('|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|');
 for (const [name, build] of CELLS) {
   for (const line of LINES) {
     for (const [pace, paceOpts] of PACES) {
       if (name !== CELLS[0][0] && pace !== PACES[0][0]) continue; // the presets and the other levels run at bench speed only
-      const t = { seeds: SEEDS, run: 0, l1: 0, l2: 0, minutes: 0, kos: 0, hp: 0, potions: 0, steals: 0, longest: 0, unfinished: 0 };
+      const t = { seeds: SEEDS, run: 0, l1: 0, l2: 0, minutes: 0, kos: 0, hp: 0, potions: 0, onOrmi: 0, thunderRuns: 0, steals: 0, longest: 0, unfinished: 0 };
       for (let seed = FROM; seed < FROM + SEEDS; seed++) {
         const r = driveLuca(line, seed, { ...paceOpts, ...build });
         if (r.outcome === undefined) t.unfinished++;
@@ -65,11 +65,13 @@ for (const [name, build] of CELLS) {
         t.kos += r.kos;
         t.hp += r.damageTaken;
         t.potions += r.moves['x2-luca-logos-potion'] ?? 0;
+        t.onOrmi += r.potionsOnOrmi;
+        if ((r.moves['x2-luca-leblanc-thunder'] ?? 0) > 0) t.thunderRuns++;
         t.steals += r.steals;
         t.longest = Math.max(t.longest, r.order.length);
       }
       const f = (n) => (n / SEEDS).toFixed(2);
-      console.log(`| ${name} | ${line} | ${pace} | ${SEEDS} | ${t.run} | ${t.l1} | ${t.l2} | ${f(t.minutes)} | ${f(t.kos)} | ${Math.round(t.hp / SEEDS)} | ${f(t.potions)} | ${f(t.steals)} | ${t.longest} |`);
+      console.log(`| ${name} | ${line} | ${pace} | ${SEEDS} | ${t.run} | ${t.l1} | ${t.l2} | ${f(t.minutes)} | ${f(t.kos)} | ${Math.round(t.hp / SEEDS)} | ${f(t.potions)} | ${f(t.onOrmi)} | ${f(t.thunderRuns)} | ${f(t.steals)} | ${t.longest} |`);
       console.log(JSON.stringify({ party: name, line, pace, ...t }));
     }
   }

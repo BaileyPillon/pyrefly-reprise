@@ -43,7 +43,7 @@ export const FFX2_LUCA_OPENER_DOC: GuideDoc = {
     { t: 'p', text: 'Be sure to Steal her Silver Bracer before the fight ends.' },
     {
       t: 'p',
-      text: 'After the first fight Yuna has her Songstress sphere back, and for this fight it is the only dress she can wear. Darkness Dance is her one command.',
+      text: 'After the first fight Yuna has her Songstress sphere back, and for this fight she is held to it. Darkness Dance is her one command.',
     },
     {
       t: 'p',

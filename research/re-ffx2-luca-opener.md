@@ -119,6 +119,18 @@ The look-alike (row 280, name masked in the table like row 317's, 82 HP, **MP 9,
 | U3 | How the game restricts Yuna to Darkness Dance in the Leblanc fight | scripted by the event package, not read; the chapter's prep can set the Songstress with only that command |
 | U4 | The meaning of Die's group-2 status 23 (126) | unmapped; it is the "speak and fall" row, not needed |
 
+## 8. Addendum (the fix pass after the adversarial review, 2026-11-09): the three steals' buy prices
+
+Section 0 named the three steal items and the note said "no price". The game's own accessory table gives one. **`accessory.bin` of the Steam HD build (the same file the item names come from): 128 records of 84 bytes starting at byte 32; the u32 at +32 of a record is the BUY price** [verified: the game's own table], the record index being the accessory id minus 0x9000.
+
+| Accessory | Id | Index | Buy price | Role |
+|---|---|---|---:|---|
+| Iron Bangle | 0x9000 | 0 | **500** | Ormi's steal (row 129) |
+| Silver Bracer | 0x9004 | 4 | **500** | Leblanc's steal (row 131) |
+| Silver Glasses | 0x9049 | 73 | **3,000** | Logos' steal (row 130) |
+
+That the field is the buy price (not a sell price or a stat): the same field reads **Power Wrist 6,000, White Cape 3,000 and White Lore 50,000**, exactly the buy prices the research already gives for those rows (`ffx2-combat-core.md` §5.4 "1500 / 6000 (sell / buy)", `ffx2-leblanc-syndicate.md` §7.5 "3,000 gil", §5.4 "50,000 gil each to buy"). The US and the Japanese tables read the same numbers for all six. The decoded values and their file offsets are in `tests/fixtures/parity/ffx2/luca_opener_rows.json` (`accessories`). (The same field reads 40 for story items such as Ribbon and Moon Bracer; those rows keep their price as unsourced, they are not this chapter's.)
+
 ## Where the numbers came from
 
 This note; the paper preflight `docs/plans/ch-debut-review.md`; the size arithmetic of section 4 (the repo's damage formulas on a girl of DEF and MDEF 10 to 30); the rows, the move tables and the AI sources it quotes were read from the Steam HD files by the research lane's tools. The chapter lane re-read the three monster rows and the seven move rows itself and committed them as `tests/fixtures/parity/ffx2/luca_opener_rows.json` (decoded fields with their file offsets, numbers only).

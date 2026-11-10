@@ -91,10 +91,11 @@ const POST: StoryScript = [
 const MID_SCRIPTS: Record<string, StoryScript> = {
   [LUCA_SEAM_1]: SEAM_1,
 
-  // Logos' one Potion: Ormi is nearly gone, and the thin one throws him the one mend he has.
+  // Logos' one Potion, thrown when Ormi is under a fifth of his life. The words stay true whether Ormi still stands to be mended (the Potion lands) or fell first (the engine turns a mend aimed at a fallen friend onto a living
+  // one, Logos himself, and the Potion is wasted: handoff section 3): they name the Potion, never the wall.
   [LUCA_POTION_TRIGGER]: [
-    say('rikku-x2', 'He is healing the wall!', { auto: 1200 }),
-    say('paine', 'He has one Potion. Make it not matter.', { auto: 1500 }),
+    say('rikku-x2', 'There goes his Potion!', { auto: 1200 }),
+    say('paine', 'His one Potion. Make it not matter.', { auto: 1500 }),
   ],
   // Ormi's first shield throw: it goes at whoever stands farthest back.
   [LUCA_SHIELD_TRIGGER]: [

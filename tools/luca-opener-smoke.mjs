@@ -116,6 +116,28 @@ const stealsSoFar = () =>
     return st ? st.log.filter((x) => x.type === 'action-start' && x.actorId === 'rikku' && x.abilityId === 'x2-thief-steal').length : 0;
   });
 
+/** The pause screen is up: its legend (`Esc` and Resume) and its rows carry the `pause__` classes (the visible text reads "EscResume", so no word boundary is tried). */
+const pauseUp = () => page.evaluate(() => [...document.querySelectorAll('.pause__key, .pause__row')].some((e) => e.getClientRects().length > 0 && getComputedStyle(e).visibility !== 'hidden'));
+/** Close the pause with Escape, and again if it is still up. */
+async function closePause() {
+  for (let i = 0; i < 3 && (await pauseUp()); i++) {
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(900);
+  }
+}
+
+/** The pause screen's chapter tab: three presses of E reach it from Yuna's page (the pause must already be open and on that page); reads the objective rows. */
+async function chapterObjectives() {
+  if (!(await pauseUp())) return []; // the pause is not up (an Escape that only backed out of a submenu): press nothing else into the battle
+  for (let i = 0; i < 3; i++) {
+    await page.keyboard.press('e');
+    await page.waitForTimeout(400);
+  }
+  await page.waitForTimeout(600);
+  // The pause's chapter tab prints each objective as a row: the key reads "1. Get past Logos and Ormi", the value "Done" or a dash, and a ticked row carries the class `pause__row--done`.
+  return page.evaluate(() => [...document.querySelectorAll('.pause__row--obj')].map((e) => ({ label: (e.querySelector('.pause__k')?.textContent ?? '').trim(), done: e.classList.contains('pause__row--done') })));
+}
+
 /** The rows of the command window now, with the selected one. */
 const menuRows = () =>
   page.evaluate(() =>
@@ -262,6 +284,18 @@ try {
   await page.waitForTimeout(1500);
   await shot('3c-pause');
   log('pause.text', (await page.evaluate(() => document.body.innerText)).replace(/\s+/g, ' ').slice(0, 500));
+  // The chapter tab (E, E, E from Yuna's page): the three objectives, none done in act 1 (the link is not reached, Leblanc is not on the field).
+  // (The phone arm leaves its pause screen alone, as it always did: the desktop arm reads the tab.)
+  if (!TOUCH) {
+    const obj1 = await chapterObjectives();
+    log('objectives.act1', obj1);
+    check(
+      'the pause lists the three objectives, the middle one Leblanc\'s first swing, none done in act 1',
+      obj1.length === 3 && /first swing/i.test(obj1[1]?.label ?? '') && obj1.every((o) => !o.done),
+      obj1,
+    );
+    await shot('3d-pause-chapter');
+  }
   await page.keyboard.press('Escape');
   await page.waitForTimeout(900);
   await waitBattleMenu(page, 60000);
@@ -289,10 +323,22 @@ try {
     check('Logos and Ormi used only their own moves', acts1.length >= 1 && acts1.every((a) => MOVES.has(a.id)), acts1.map((a) => a.id));
 
     // --- the seam and act 2 --------------------------------------------------------------------------------------------------------------------
+    // The link-entry reading is taken at the first poll that sees Leblanc, not seconds later: by the first menu she may already have struck (the review's run: Paine at 479 of 488), which is the product working.
+    let entry = null;
     await waitFor('act 2 (Leblanc on the field)', async () => {
       const f = await field();
-      return f !== null && f.foes.some((x) => x.id === LEBLANC);
+      if (f === null || !f.foes.some((x) => x.id === LEBLANC)) return false;
+      entry = { f, struck: (await actions()).filter((a) => a.who === LEBLANC).length };
+      return true;
     }, { ms: 120_000, pollMs: 500 });
+    log('entry.2', entry);
+    check('act 2 opens with Yuna in the Songstress', entry?.f.party[0]?.dress === 'songstress', entry?.f.party);
+    // Whole on entry: every girl at her full HP, unless Leblanc had already swung when the first poll came (then every girl must at least stand, and none may be above her maximum).
+    check(
+      'the girls are whole at link entry (or, if Leblanc had already struck, all standing)',
+      entry !== null && entry.f.party.length === 3 && (entry.struck > 0 ? entry.f.party.every((g) => g.alive && g.hp <= g.max) : entry.f.party.every((g) => g.alive && g.hp === g.max)),
+      entry,
+    );
     await shot('5-act-2-opens');
     await waitBattleMenu(page, 120000);
     await dismissCoach();
@@ -300,17 +346,33 @@ try {
     const f2 = await field();
     log('field.2', f2);
     check('act 2: Leblanc alone at 130', f2?.foes.length === 1 && f2.foes[0].id === LEBLANC && f2.foes[0].hp === 130, f2?.foes);
-    check('Yuna wears the Songstress, the girls are whole', f2?.party[0]?.dress === 'songstress' && f2.party.every((g) => g.hp === g.max), f2?.party);
+    check('at the first menu Yuna still wears the Songstress and Rikku, Paine and she are standing', f2?.party[0]?.dress === 'songstress' && f2.party.every((g) => g.alive), f2?.party);
     await shot('5a-act-2-first-menu');
     log('menu.rows.act2', (await menuRows()).map((r) => r.text));
 
     if (!FIRST) {
       const done2 = [];
+      let objAct2 = null;
       for (let i = 0; i < 60 && (await screenNow()) === 'battle'; i++) {
         const f = await field();
         if (f && f.foes.every((x) => !x.alive)) break;
         done2.push(await turn());
         await page.waitForTimeout(1000);
+        // Once Leblanc has begun a second action her first has ended: the pause's middle objective reads done, the link objective too, the win not yet.
+        if (!objAct2 && (await actions()).filter((a) => a.who === LEBLANC).length >= 2 && f && f.foes.some((x) => x.alive)) {
+          await page.keyboard.press('Escape');
+          await page.waitForTimeout(1500);
+          objAct2 = await chapterObjectives();
+          log('objectives.act2', objAct2);
+          if (objAct2.length === 0) {
+            objAct2 = null; // the pause did not open (the Escape went to a submenu): ask again after the next turn
+            log('objectives.act2', 'pause not up; will ask again');
+          } else {
+            check('in act 2 after Leblanc has swung: the second link and her first swing read done, the win does not', objAct2.length === 3 && objAct2[0].done && objAct2[1].done && !objAct2[2].done, objAct2);
+            await shot('7-pause-chapter-act-2');
+            await closePause();
+          }
+        }
       }
       log('turns.act2', done2);
       check('Yuna danced', done2.includes('dance'), done2);

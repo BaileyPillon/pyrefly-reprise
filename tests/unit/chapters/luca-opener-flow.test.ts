@@ -4,7 +4,8 @@
  * 1. **The setup**: `setupForChapter` hands the engine the chapter's party and the first formation, no escape, and the four story triggers; the chain has exactly two links, in order.
  * 2. **The triggers**: the seam fires once, when BOTH Logos and Ormi are down (never when only one is); the Potion callout once, the shield callout once (the first Pirouette Pitch), the Thunder callout once; as the real
  *    engine plays the fights.
- * 3. **The store**: an attempt and a clear go to the experiments' own store (`pyrefly-reprise:experiments:v1`), never the save (`pyrefly-reprise:save:v1`): no save change, no migration.
+ * 3. **The pause objectives** (`evaluateObjectives` over the real engine's logs): the second link, Leblanc's first swing and the win are each reached in a real run, and none reads true early.
+ * 4. **The store**: an attempt and a clear go to the experiments' own store (`pyrefly-reprise:experiments:v1`), never the save (`pyrefly-reprise:save:v1`): no save change, no migration.
  */
 import { describe, expect, it } from 'vitest';
 
@@ -17,6 +18,8 @@ import { FFX2_LUCA_OPENER, LUCA_OPENER_ID } from '../../../src/data/chapter-ffx2
 import { lucaLeblancGroup, lucaLogosOrmiGroup } from '../../../src/data/ffx2/enemies/luca-opener.ts';
 import * as ids from '../../../src/data/luca-opener-ids.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx2/enemies/index.ts';
+import { getChapterMeta } from '../../../src/data/chapter-meta.ts';
+import { evaluateObjectives } from '../../../src/ui/common/chapterObjectives.ts';
 import { ffx2LucaOpenerScripts as S, LUCA_THUNDER_TRIGGER } from '../../../src/story/scripts/ffx2-luca-opener.ts';
 import { driveLuca } from '../helpers/lucaOpenerDrive.ts';
 
@@ -76,6 +79,38 @@ describe('the story triggers fire once each in the real engine', () => {
     expect(fired(rigged.logs[0]!).filter((n) => n === ids.LUCA_POTION_TRIGGER)).toHaveLength(1);
     const plain = driveLuca('idle', 6, { triggers: S.mid, maxEnemyActions: 20 });
     expect(fired(plain.logs[0]!).filter((n) => n === ids.LUCA_POTION_TRIGGER)).toHaveLength(0);
+  });
+});
+
+describe('the pause objectives, evaluated over the real engine\'s logs', () => {
+  const objectives = getChapterMeta(LUCA_OPENER_ID)!.objectives;
+  type Ctx = Parameters<typeof evaluateObjectives>[1];
+  const done = (state: Ctx['state'], log: readonly BattleEvent[], links: number): boolean[] => evaluateObjectives(objectives, { state, log, links }).map((o) => o.done);
+
+  it('act 1 reads neither the second link nor Leblanc\'s swing; act 2 reads all three once Leblanc has struck and fallen, and Ormi\'s Attack never stands in for hers', () => {
+    for (const seed of [1, 2, 3, 4]) {
+      const run = driveLuca('advisor', seed, { triggers: S.mid });
+      expect(run.won, `seed ${seed}`).toBe(2);
+      // Act 1's last log (a link's victory is on it, so the win row reads true there; the pause is never open at that moment): the second link is not reached and Leblanc has not swung.
+      expect(done(run.states[0]!, run.logs[0]!, 1).slice(0, 2), `seed ${seed}: in act 1, Ormi has attacked and the second link is not reached`).toEqual([false, false]);
+      expect(done(run.states[1]!, run.logs[1]!, 2), `seed ${seed}: after act 2`).toEqual([true, true, true]);
+    }
+  });
+
+  it('the swing is reached in a fast fight (the bench pace and the Active clock), the case the old Thunder row missed: she falls before her fourth action', () => {
+    for (const [name, opts] of [['bench', {}], ['Active 1.5 s', { decisionMs: 1500, engine: { atbMode: 'active' as const } }]] as const) {
+      for (const seed of [11, 12, 13]) {
+        const run = driveLuca('advisor', seed, { ...opts, triggers: S.mid });
+        expect(run.won, `${name} ${seed}`).toBe(2);
+        expect(done(run.states[1]!, run.logs[1]!, 2)[1], `${name} ${seed}: Leblanc struck once and the girls stood`).toBe(true);
+      }
+    }
+  });
+
+  it('mid-fight in act 1 the row is false even after Ormi has attacked', () => {
+    const run = driveLuca('idle', 5, { triggers: S.mid, maxEnemyActions: 12 });
+    expect(run.moves['x2-luca-ormi-attack']! > 0).toBe(true);
+    expect(done(run.states[0]!, run.logs[0]!, 1)[1]).toBe(false);
   });
 });
 

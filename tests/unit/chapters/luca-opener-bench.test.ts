@@ -30,11 +30,11 @@ const PACES: ReadonlyArray<[string, LucaDriveOptions]> = [
 ];
 
 interface Tally {
-  seeds: number; runs: number; link1: number; link2: number; unfinished: number; minutes: number; kos: number; hpLost: number; potions: number; steals: number; maxActions: number;
+  seeds: number; runs: number; link1: number; link2: number; unfinished: number; minutes: number; kos: number; hpLost: number; potions: number; potionsOnOrmi: number; thunderRuns: number; steals: number; maxActions: number;
 }
 
 function measure(line: LucaLine, opts: LucaDriveOptions, seeds: number): Tally {
-  const t: Tally = { seeds, runs: 0, link1: 0, link2: 0, unfinished: 0, minutes: 0, kos: 0, hpLost: 0, potions: 0, steals: 0, maxActions: 0 };
+  const t: Tally = { seeds, runs: 0, link1: 0, link2: 0, unfinished: 0, minutes: 0, kos: 0, hpLost: 0, potions: 0, potionsOnOrmi: 0, thunderRuns: 0, steals: 0, maxActions: 0 };
   for (let seed = 1; seed <= seeds; seed++) {
     const r: LucaRun = driveLuca(line, seed, opts);
     if (r.outcome === undefined) t.unfinished += 1;
@@ -47,6 +47,8 @@ function measure(line: LucaLine, opts: LucaDriveOptions, seeds: number): Tally {
     t.kos += r.kos;
     t.hpLost += r.damageTaken;
     t.potions += r.moves['x2-luca-logos-potion'] ?? 0;
+    t.potionsOnOrmi += r.potionsOnOrmi;
+    if ((r.moves['x2-luca-leblanc-thunder'] ?? 0) > 0) t.thunderRuns += 1; // runs in which Leblanc lived to cast her Thunder at least once
     t.steals += r.steals;
     t.maxActions = Math.max(t.maxActions, r.order.length);
   }
@@ -56,7 +58,7 @@ function measure(line: LucaLine, opts: LucaDriveOptions, seeds: number): Tally {
 const avg = (n: number, t: Tally): string => (n / t.seeds).toFixed(2);
 const rows: string[] = [];
 const row = (party: string, line: string, mode: string, t: Tally): void => {
-  rows.push(`| ${party} | ${line} | ${mode} | ${t.seeds} | ${t.runs} | ${t.link1} | ${t.link2} | ${avg(t.minutes, t)} | ${avg(t.kos, t)} | ${Math.round(t.hpLost / t.seeds)} | ${avg(t.potions, t)} | ${avg(t.steals, t)} | ${t.maxActions} |`);
+  rows.push(`| ${party} | ${line} | ${mode} | ${t.seeds} | ${t.runs} | ${t.link1} | ${t.link2} | ${avg(t.minutes, t)} | ${avg(t.kos, t)} | ${Math.round(t.hpLost / t.seeds)} | ${avg(t.potions, t)} | ${avg(t.potionsOnOrmi, t)} | ${avg(t.thunderRuns, t)} | ${avg(t.steals, t)} | ${t.maxActions} |`);
 };
 
 describe(`the Luca Opener: ${SEEDS} chapter runs a cell at bench speed and ${HUMAN_SEEDS} at human speed, advisor and naive, three paces, and the presets as what-ifs`, () => {
@@ -94,7 +96,7 @@ describe(`the Luca Opener: ${SEEDS} chapter runs a cell at bench speed and ${HUM
       }
     }
     console.log(
-      `\n| party | line | pace | seeds | runs won | link 1 won | link 2 won | minutes | girl KOs | HP lost | Potions thrown | steals | longest (their actions) |\n|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n${rows.join('\n')}\n`,
+      `\n| party | line | pace | seeds | runs won | link 1 won | link 2 won | minutes | girl KOs | HP lost | Potions thrown | Potions that mended Ormi | runs with a Thunder | steals | longest (their actions) |\n|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n${rows.join('\n')}\n`,
     );
   }, 1_800_000);
 
@@ -115,6 +117,8 @@ describe(`the Luca Opener: ${SEEDS} chapter runs a cell at bench speed and ${HUM
     const t = results.get('ormiFirst / shipped / bench (0 ms)')!;
     expect(t.potions, 'Potions thrown over the runs').toBeGreaterThan(0);
     expect(t.potions, 'never more than one a run').toBeLessThanOrEqual(t.seeds);
+    // How many of them mend Ormi (a Potion thrown after he fell is turned onto a living friend by the engine: handoff section 3) is a measurement, not a rule: it is printed in the table and only bounded here.
+    expect(t.potionsOnOrmi, 'a Potion mends Ormi at most once a run, and never more often than it is thrown').toBeLessThanOrEqual(t.potions);
     expect(t.runs).toBe(t.seeds);
   });
 

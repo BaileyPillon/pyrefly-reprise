@@ -31,7 +31,7 @@ import { LUCA_DC, LUCA_LEBLANC_ATTACK_ID, LUCA_LEBLANC_THUNDER_ID, LUCA_LOGOS_PI
 import { MONSTER_RECORDS } from '../../../src/data/ffx2/monster-records/index.ts';
 import { KILL_REWARD_ROWS } from '../../../src/data/ffx2/monster-records/kill-rewards.ts';
 import { FFX2_COMMAND_RECORDS } from '../../../src/data/ffx2/command-records/index.ts';
-import { heldItems } from '../../../src/data/ffx2/items/held.ts';
+import { heldItems, UNSOURCED_PRICE_IDS } from '../../../src/data/ffx2/items/held.ts';
 import { FFX2_LUCA_OPENER } from '../../../src/data/chapter-ffx2-luca-opener.ts';
 import { getChapterMeta } from '../../../src/data/chapter-meta.ts';
 import { CHAPTERS, CHAPTER_IDS, EXPERIMENT_CHAPTERS, getChapter } from '../../../src/data/encounters.ts';
@@ -58,6 +58,8 @@ interface Fixture {
   moves: Record<string, MoveRow>;
   scenes: Record<string, { formation: number; girls: Array<[number, number]>; enemies: Record<string, [number, number]> }>;
   script: { ormi: { cycleLength: number; shieldThrowAtCount: number; aloneHp: number }; logos: { potionBelowFractionDenominator: number }; leblanc: { attacksBeforeThunder: number; thunderBelowMp: number; thunderMp: number } };
+  /** `accessory.bin`: the buy price (u32 at +32 of the 84-byte record) of each steal, by accessory id, and three corroborating rows. */
+  accessories: Record<string, { role: string; offset: number; buy: number }>;
 }
 const FIXTURE = JSON.parse(readFileSync(fileURLToPath(new URL('../../fixtures/parity/ffx2/luca_opener_rows.json', import.meta.url)), 'utf8')) as Fixture;
 const ORMI = FIXTURE.monsters[X2_LUCA_ORMI_ID]!;
@@ -127,16 +129,21 @@ describe('the enemy data is the row', () => {
     });
   }
 
-  it('the steals and the drops resolve to named items: Iron Bangle, Silver Glasses and Silver Bracer are held-only rows with no price (unsourced), the drops are the shipped Potion, Hi-Potion and Phoenix Down', () => {
+  it('the steals and the drops resolve to named items: Iron Bangle, Silver Glasses and Silver Bracer are held-only rows priced as accessory.bin prices them (500, 3,000, 500), the drops are the shipped Potion, Hi-Potion and Phoenix Down', () => {
     expect(x2LucaOrmi.rewards.steal?.common).toEqual({ itemId: 'iron-bangle', count: 1 });
     expect(x2LucaLogos.rewards.steal?.common).toEqual({ itemId: 'silver-glasses', count: 1 });
     expect(x2LucaLeblanc.rewards.steal?.common).toEqual({ itemId: 'silver-bracer', count: 1 });
-    for (const [id, name] of [['iron-bangle', 'Iron Bangle'], ['silver-glasses', 'Silver Glasses'], ['silver-bracer', 'Silver Bracer']] as const) {
+    for (const [id, name, accessory] of [['iron-bangle', 'Iron Bangle', '0x9000'], ['silver-glasses', 'Silver Glasses', '0x9049'], ['silver-bracer', 'Silver Bracer', '0x9004']] as const) {
       const item = heldItems.find((i) => i.id === id)!;
       expect(item, id).toBeDefined();
-      expect([item.usableInBattle, item.price], id).toEqual([false, 0]);
+      expect([item.usableInBattle, item.price], id).toEqual([false, FIXTURE.accessories[accessory]!.buy]);
+      expect(item.price, `${id} is priced, so it is not in the unsourced list`).toBeGreaterThan(0);
+      expect(UNSOURCED_PRICE_IDS.has(id), id).toBe(false);
       expect(data.ITEMS[id]?.name, id).toBe(name);
     }
+    expect([FIXTURE.accessories['0x9000']!.buy, FIXTURE.accessories['0x9049']!.buy, FIXTURE.accessories['0x9004']!.buy]).toEqual([500, 3000, 500]);
+    // The field is the buy price: it reads the figures the research already gives for three other held rows (Power Wrist, White Cape, White Lore).
+    expect([data.ITEMS['power-wrist']!.price, data.ITEMS['white-cape']!.price, data.ITEMS['white-lore']!.price]).toEqual([FIXTURE.accessories['0x9008']!.buy, FIXTURE.accessories['0x9048']!.buy, FIXTURE.accessories['0x9067']!.buy]);
     expect([KILL_ITEM_ID[0x2000], KILL_ITEM_ID[0x2001], KILL_ITEM_ID[0x2006]]).toEqual(['x2-potion', 'x2-hi-potion', 'x2-phoenix-down']);
   });
 });
@@ -350,11 +357,11 @@ describe('the groups, the parties and the chapter', () => {
     expect(FFX2_LUCA_OPENER.sensorTexts[X2_LUCA_LEBLANC_ID]).toBe(x2LucaLeblanc.sensorText);
   });
 
-  it('the pause metadata exists, says EXP, and its objectives are the second link, the Thunder and the win', () => {
+  it('the pause metadata exists, says EXP, and its objectives are the second link, the first swing of Leblanc and the win', () => {
     const meta = getChapterMeta(LUCA_OPENER_ID);
     expect(meta).toBeDefined();
     expect(meta).toMatchObject({ gameLabel: 'FFX-2', numeral: 'EXP', title: 'The Luca Opener', focalCharacterId: 'paine' });
-    expect(meta!.objectives.map((o) => o.rule)).toEqual([{ kind: 'link-reached', link: 2 }, { kind: 'survived-ability', ability: 'thunder' }, { kind: 'victory' }]);
+    expect(meta!.objectives.map((o) => o.rule)).toEqual([{ kind: 'link-reached', link: 2 }, { kind: 'survived-ability', ability: 'leblanc-attack' }, { kind: 'victory' }]);
     expect(meta!.musicKeys).toEqual(['scene-chateau-leblanc', 'boss-leblanc', 'victory-ffx2']);
     expect(meta!.tip!.length).toBeLessThan(260);
   });

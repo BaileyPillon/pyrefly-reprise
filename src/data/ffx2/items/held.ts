@@ -73,7 +73,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet', 'angel-earrings', 'fiery-gleam', 'iron-bangle', 'silver-glasses', 'silver-bracer',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet', 'angel-earrings', 'fiery-gleam',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -130,10 +130,12 @@ export const heldItems: ItemDef[] = [
   held('angel-earrings', 'Angel Earrings', 'unsourced', 'Accessory. Guards against Death; Def +5, MDef +5.'),
   held('fiery-gleam', 'Fiery Gleam', 'unsourced'),
   // The hidden Luca Opener's steals (FFX-2 only, 2026-11-09; `monster.bin` rows 129 to 131, accessories 0x9000, 0x9049 and 0x9004, `research/re-ffx2-luca-opener.md` §0, the names from the US accessory table [verified: the game's own table]).
-  // Iron Bangle's +20 percent max HP and Silver Bracer's +40 percent max MP are the accessory table's (`battle/ffx2/accessories.ts` already wears them for the shipped builds); Silver Glasses guards against Darkness (`research/ffx2-leblanc-syndicate.md` §7.5). No shop price in the research.
-  held('iron-bangle', 'Iron Bangle', 'unsourced', 'Accessory. Max HP +20 percent.'),
-  held('silver-glasses', 'Silver Glasses', 'unsourced', 'Accessory. Guards against Darkness.'),
-  held('silver-bracer', 'Silver Bracer', 'unsourced', 'Accessory. Max MP +40 percent.'),
+  // Iron Bangle's +20 percent max HP and Silver Bracer's +40 percent max MP are the accessory table's (`battle/ffx2/accessories.ts` already wears them for the shipped builds); Silver Glasses guards against Darkness (`research/ffx2-leblanc-syndicate.md` §7.5).
+  // The prices are the game's own: `accessory.bin` of the Steam HD build, the u32 at +32 of each 84-byte record (the buy price): Iron Bangle (0x9000) 500, Silver Glasses (0x9049) 3,000, Silver Bracer (0x9004) 500
+  // (`research/re-ffx2-luca-opener.md` §8, `[verified: the game's own table]`; the same field reads Power Wrist 6,000, White Cape 3,000 and the Lores 50,000, the figures the rows above take from the research).
+  held('iron-bangle', 'Iron Bangle', 500, 'Accessory. Max HP +20 percent.'),
+  held('silver-glasses', 'Silver Glasses', 3000, 'Accessory. Guards against Darkness.'),
+  held('silver-bracer', 'Silver Bracer', 500, 'Accessory. Max MP +40 percent.'),
 ];
 
 export default heldItems;

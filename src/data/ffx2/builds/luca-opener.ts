@@ -15,7 +15,7 @@
  * - **Act 2 (`lucaOpenerSongstressBuild`, LO3)**: the same girls, but **Yuna wears the Songstress and owns nothing else, with Darkness Dance (a free ability) as her only command**: the game holds her to it in this fight
  *   (Jegged: "a short tutorial on changing dresspheres in battle; Yuna is held to the Songstress with one command (Darkness Dance), Rikku has time to steal"). The group carries this template (`EnemyGroupDef.partyBuildRef`, an
  *   additive field: `docs/CONTRACT-CHANGES.md`), because a chain otherwise carries the party's build from link to link. How the game itself holds her (a scripted event) is unread (research U3).
- * - **The bag** `[estimate]`: ten Potions and three Phoenix Downs, no gil of note.
+ * - **The bag** `[estimate]`: ten Potions and three Phoenix Downs, and 1,000 gil (no source gives any of the three figures).
  *
  * Both are deep copies, so no chapter's preset can ever mutate another's.
  */
@@ -71,7 +71,7 @@ export const lucaOpenerBuild: FFX2PartyBuild = {
     { itemId: 'x2-potion', count: 10 },
     { itemId: 'x2-phoenix-down', count: 3 },
   ],
-  gil: 1000,
+  gil: 1000, // [estimate] (LO2): no source gives the purse either; no shop in the chapter reads it
 };
 
 /** Act 2: Yuna in the Songstress, held to Darkness Dance (LO3); Rikku and Paine as they were. A deep copy of act 1 with one member changed, so the bag is the same bag. */

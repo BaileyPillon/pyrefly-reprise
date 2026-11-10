@@ -1,5 +1,5 @@
 {
- "source": "FFX2_Data.vbf (Steam HD Remaster, build 25501027), kernel monster.bin rows 129, 130 and 131 and monmagic.bin 0x4000, 0x405f, 0x40e4, 0x40e7, 0x40f1, 0x41da and 0x41eb; the two scenes lchb03_229 and lchb03_228; read-only, numbers only (research/re-ffx2-luca-opener.md sections 0 to 4)",
+ "source": "FFX2_Data.vbf (Steam HD Remaster, build 25501027), kernel monster.bin rows 129, 130 and 131 and monmagic.bin 0x4000, 0x405f, 0x40e4, 0x40e7, 0x40f1, 0x41da and 0x41eb; the two scenes lchb03_229 and lchb03_228; read-only, numbers only (research/re-ffx2-luca-opener.md sections 0 to 4) The three steal items' buy prices: accessory.bin (the same build), the u32 at +32 of the 84-byte record of accessory 0x9000 + index (records start at byte 32); three corroborating rows whose prices the research gives are read from the same field.",
  "monsters": {
   "x2-luca-ormi": {
    "row": 129,
@@ -432,6 +432,38 @@
    "attacksBeforeThunder": 3,
    "thunderBelowMp": 8,
    "thunderMp": 4
+  }
+ },
+ "accessories": {
+  "0x9000": {
+   "role": "steal of Ormi",
+   "offset": 64,
+   "buy": 500
+  },
+  "0x9049": {
+   "role": "steal of Logos",
+   "offset": 6196,
+   "buy": 3000
+  },
+  "0x9004": {
+   "role": "steal of Leblanc",
+   "offset": 400,
+   "buy": 500
+  },
+  "0x9008": {
+   "role": "corroboration: Power Wrist, priced 6,000 (buy) in the research",
+   "offset": 736,
+   "buy": 6000
+  },
+  "0x9048": {
+   "role": "corroboration: White Cape, priced 3,000 in the research",
+   "offset": 6112,
+   "buy": 3000
+  },
+  "0x9067": {
+   "role": "corroboration: White Lore, priced 50,000 in the research",
+   "offset": 8716,
+   "buy": 50000
   }
  }
 }

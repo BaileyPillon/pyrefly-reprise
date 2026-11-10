@@ -100,7 +100,7 @@ export const GIRL_CLIP_FRAMES: Readonly<Record<number, ClipFrames>> = {
  * difference has no effect on any window of ours (comment corrected at the stacking on r52; no number changed).
  */
 export const MONSTER_MOTION_SET: Readonly<Record<number, number>> = {
-  129: 0x1081, // x2-luca-ormi (the hidden Luca Opener: the Chateau Ormi's model, row 129 names motion set 0x1081)
+  129: 0x1081, // x2-luca-ormi (the hidden Luca Opener: the opener's own Ormi row 129 names motion set 0x1081, the set the Chateau Ormi rows 243 to 245 also share; the paintings are the Chateau set's)
   130: 0x1082, // x2-luca-logos
   131: 0x1083, // x2-luca-leblanc
   135: 0x1085, // dr-goon

@@ -83,6 +83,10 @@ export interface LucaRun {
   kos: number;
   /** Steals begun by Rikku (any target). */
   steals: number;
+  /** Logos' Potions that started AFTER Ormi had fallen (the script's test reads a fallen body as 0 HP and queues it anyway; the engine turns the heal onto a living friend, so it mends nobody who needed it). Counted within `moves[potion]`. */
+  potionsAtFallenOrmi: number;
+  /** Logos' Potions that mended Ormi: a negative `damage` (a heal) on Ormi's id. At most one a run. */
+  potionsOnOrmi: number;
   /** Damage the three took in all (HP lost). */
   damageTaken: number;
   /** Every link's full event log, in order. */
@@ -146,7 +150,7 @@ export function driveLuca(line: LucaLine, seed: number, opts: LucaDriveOptions =
   engine.init(setup);
   Object.assign(engine.state().flags, opts.flags ?? {});
   opts.rig?.(engine);
-  const run: LucaRun = { outcome: undefined, links: 1, won: 0, ticks: 0, moves: {}, order: [], pitchVictims: [], thunderVictims: [], partyTurns: 0, kos: 0, steals: 0, damageTaken: 0, logs: [], states: [], results: [] };
+  const run: LucaRun = { outcome: undefined, links: 1, won: 0, ticks: 0, moves: {}, order: [], pitchVictims: [], thunderVictims: [], partyTurns: 0, kos: 0, steals: 0, potionsAtFallenOrmi: 0, potionsOnOrmi: 0, damageTaken: 0, logs: [], states: [], results: [] };
   const decisionMs = opts.decisionMs ?? 0;
 
   const closeLink = (outcome: string | undefined): void => {
@@ -155,7 +159,11 @@ export function driveLuca(line: LucaLine, seed: number, opts: LucaDriveOptions =
     run.states.push(state);
     const log = [...state.log] as BattleEvent[];
     run.logs.push(log);
+    let ormiDown = false;
     for (const e of log as readonly Ev[]) {
+      if (e.type === 'damage' && e.targetId === X2_LUCA_ORMI_ID && (e.amount ?? 0) < 0) run.potionsOnOrmi += 1;
+      if (e.type === 'ko' && e.targetId === X2_LUCA_ORMI_ID) ormiDown = true;
+      if (e.type === 'action-start' && e.actorId === X2_LUCA_LOGOS_ID && e.abilityId === 'x2-luca-logos-potion' && ormiDown) run.potionsAtFallenOrmi += 1;
       if (e.type === 'action-start') {
         if (e.actorId !== undefined && ENEMY_ORDER.includes(e.actorId) && e.abilityId !== undefined) {
           run.moves[e.abilityId] = (run.moves[e.abilityId] ?? 0) + 1;
