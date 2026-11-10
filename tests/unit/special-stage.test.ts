@@ -271,6 +271,24 @@ describe.each(GIRLS)('a form up: $id', (g) => {
     }
   });
 
+  it('under (b) the part ring is scaled to the figure actually on screen: smaller on a 390 x 844 phone than on a 1600 x 900 desktop, by the ratio of their heights', async () => {
+    setSpecialLook({ mark: 'b' });
+    const radiusAt = async (w: number, h: number): Promise<{ radius: number; height: number }> => {
+      const stage = stageFor(w, h);
+      await stage.stage(stateOf());
+      await enter(stage, g);
+      place(stage);
+      const anchor = (stage as unknown as { actors: Map<string, { anchor?: { ring: { radius: number } } }> }).actors.get(g.pods[0])!.anchor!;
+      return { radius: anchor.ring.radius, height: figureOf(g.id)['worldHeight'] as number };
+    };
+    const desktop = await radiusAt(1600, 900);
+    const phone = await radiusAt(390, 844);
+    expect(phone.height).toBeLessThan(desktop.height);
+    expect(phone.radius / desktop.radius).toBeCloseTo(phone.height / desktop.height, 6);
+    const rows = SPECIAL_PARTS[g.special].poses['idle']!;
+    expect(phone.radius).toBeCloseTo((rows.right.radiusPx / (rows.paint.baselineY - rows.paint.contentTop)) * phone.height, 6);
+  });
+
   it('the phase floor centre, the StageArt party list and the smear\'s warm figure ignore a stub', async () => {
     const stage = stageFor(1600, 900);
     await stage.stage(stateOf());

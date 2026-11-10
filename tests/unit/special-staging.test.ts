@@ -122,6 +122,25 @@ describe('with a form registered', () => {
     });
   }
 
+  it('mode (b), a phone: the ring follows the figure on screen, not the desktop reference (anchorSourceOf takes the main\'s live height; absent, the desktop one)', () => {
+    for (const special of SPECIALS) {
+      const stage = {};
+      const form = formOf(special, special === 'floral-fallal' ? 'yuna' : special === 'machina-maw' ? 'rikku' : 'paine');
+      setStageForm(stage, form);
+      setSpecialLook({ mark: 'b' });
+      const desktop = specialFitGirls(`${form.girl}-${special}`, 'desktop', ENEMY_OVER_PARTY, look({ mark: 'b' }))! * 1.82;
+      const phone = specialFitGirls(`${form.girl}-${special}`, 'phone', ENEMY_OVER_PARTY, look({ mark: 'b' }))! * 1.82;
+      expect(phone, special).toBeLessThan(desktop); // a phone fits the figure smaller
+      const radius = (h?: number): number => (anchorSourceOf(stage, h)!(form.right, 'idle') as { ring: { radius: number } }).ring.radius;
+      expect(radius(), 'no height given: the desktop reference').toBeCloseTo(radius(desktop), 9);
+      expect(radius(phone) / radius(desktop), special).toBeCloseTo(phone / desktop, 9);
+      const rows = SPECIAL_PARTS[special].poses['idle']!;
+      expect(radius(phone), special).toBeCloseTo((rows.right.radiusPx / (rows.paint.baselineY - rows.paint.contentTop)) * phone, 9);
+      setSpecialLook(null);
+      setStageForm(stage, null);
+    }
+  });
+
   it('the main has no row', () => {
     expect(anchorRowFor('floral-fallal', 'main', 'idle')).toBeUndefined();
   });

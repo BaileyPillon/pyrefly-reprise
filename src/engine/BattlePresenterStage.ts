@@ -903,7 +903,7 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     const parent = staged?.anchor ? this.parentPose(staged) : undefined;
     if (!staged?.anchor || !parent) return;
-    const src = anchorSourceOf(this); // FFX-2 Special look: the row for the painting the figure shows now; undefined with no form, so nothing else changes
+    const src = anchorSourceOf(this, this.actors.get(staged.parentId ?? '')?.actor.height); // FFX-2 Special look: the row for the painting the figure shows now, its ring scaled to the figure on screen; undefined with no form, so nothing else changes
     if (src) {
       staged.anchor = SA.anchorNow(staged.anchor, src, id, this.actors.get(staged.parentId ?? '')?.actor.pose ?? 'idle') ?? staged.anchor;
       this.partRings.setAnchor(id, staged.anchor);

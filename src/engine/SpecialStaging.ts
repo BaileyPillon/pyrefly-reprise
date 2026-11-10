@@ -115,7 +115,8 @@ const specialOfArt = (artId: string): SpecialId | undefined => {
 
 /**
  * The anchor row of a part for the painting shown (`pose`; a pose with no table row shows the idle painting). The right part is the row named `right`, never the lower x.
- * Mode (a): a whole-figure row (the number point as `px` and `chestPx`, the figure's box, a hidden ring). Mode (b): the part's own region, a gold mark ring. The main has no row.
+ * Mode (a): a whole-figure row (the number point as `px` and `chestPx`, the figure's box, a hidden ring). Mode (b): the part's own region, a gold mark ring whose world radius is scaled to `refHeight`,
+ * the figure's world height (the stage passes the live one through `anchorSourceOf`; absent, the trial row's desktop height). The main has no row.
  */
 export function anchorRowFor(special: SpecialId, role: FormRole, pose: string, lookIn: SpecialLook = look, refHeight?: number): OnParentAnchor | undefined {
   if (role === 'main') return undefined;
@@ -221,12 +222,15 @@ export function markedPartsOf(stage: object, ids: readonly CombatantId[]): Reado
   return form && look.mark === 'b' ? [form.right, form.left].map((id) => [id, ids.includes(id)] as const) : [];
 }
 
-/** The per-frame row source for the registered form's stubs (`StageAnchors.anchorNow`), else undefined. */
-export function anchorSourceOf(stage: object): ((partId: string, pose: string) => PartAnchor | undefined) | undefined {
+/**
+ * The per-frame row source for the registered form's stubs (`StageAnchors.anchorNow`), else undefined. `mainHeight` is the figure's live world height (the stage passes the main actor's own): under the mark (b)
+ * the ring's world radius follows the figure actually on screen, on a phone as on a desktop; absent, the desktop reference height (`anchorRowFor`).
+ */
+export function anchorSourceOf(stage: object, mainHeight?: number): ((partId: string, pose: string) => PartAnchor | undefined) | undefined {
   const form = forms.get(stage);
   if (!form) return undefined;
   return (partId, pose) => {
     const role = roleIn(form, partId);
-    return role === 'right' || role === 'left' ? anchorRowFor(form.special, role, pose, look) : undefined;
+    return role === 'right' || role === 'left' ? anchorRowFor(form.special, role, pose, look, mainHeight) : undefined;
   };
 }
