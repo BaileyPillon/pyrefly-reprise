@@ -6,6 +6,10 @@ import { fileURLToPath } from 'node:url';
 import { expect, type Page } from '@playwright/test';
 
 import './pyrefly-window.ts';
+import { LEAVE_ROW, PARTS, PASS_ROWS, ROW_ATTACK, ROW_CHANGE, firstPresent, nextChangeRow, type Girl, type RowPick } from './special-rows.ts';
+
+// The chapter and part tables live in `special-rows.ts` (no playwright import), where the unit test that proves them on the real engine reads the same ones.
+export { CHAPTER_OF, PARTS, type Girl } from './special-rows.ts';
 
 /**
  * What the two Special-form end-to-end specs share (`pause-with-form.spec.ts`, `special-touch-aim.spec.ts`): an own vite dev server, a Special-on boot, and the greedy walk of one girl
@@ -21,16 +25,7 @@ const REPO_ROOT = join(HERE, '..', '..', '..');
 const PORT_MIN = 5400;
 const PORT_MAX = 5990;
 
-export type Girl = 'yuna' | 'rikku' | 'paine';
-
-/** The chapter each girl's Special is reached in: Chapter IV for Yuna and Rikku; Chapter V for Paine (the build gives her Full Throttle there, `farplane.ts`). */
-export const CHAPTER_OF: Record<Girl, string> = { yuna: 'ffx2-bahamut', rikku: 'ffx2-bahamut', paine: 'ffx2-vegnagun-shuyin' };
-/** The ids of each girl's two parts, right part first (`FORMS[special].pods`), and the badge letters of her Special. */
-export const PARTS: Record<Girl, readonly [string, string]> = {
-  yuna: ['floral-fallal-right-pistil', 'floral-fallal-left-pistil'],
-  rikku: ['machina-maw-smasher-r', 'machina-maw-crusher-l'],
-  paine: ['full-throttle-right', 'full-throttle-left'],
-};
+/** The badge letters of each girl's Special. */
 export const BADGE: Record<Girl, string> = { yuna: 'FF', rikku: 'MW', paine: 'FT' };
 export const PLATE_NAMES: Record<Girl, readonly [string, string, string]> = {
   yuna: ['Yuna', 'Right Pistil', 'Left Pistil'],
@@ -177,6 +172,36 @@ export async function takeRow(page: Page, label: string): Promise<boolean> {
   return false;
 }
 
+/**
+ * Open the first of `picks` that the menu shows enabled, wherever it sits: the top level, or the first submenu that lists any of them (a part's menu is one Skill submenu, the White Mage's
+ * is White Magic). Returns the pick that was opened, so the caller can assert the aim it names. Throws, naming every row it saw, when none is there. The candidate lists are the tables of
+ * `special-rows.ts`, which `tests/unit/special-e2e-rows.test.ts` proves on the real engine.
+ */
+export async function openRowAnywhere(page: Page, picks: readonly RowPick[]): Promise<RowPick> {
+  const top = await menuView(page);
+  const here = firstPresent(picks, top.rows, top.disabled);
+  if (here) {
+    expect(await takeRow(page, here.label), `${here.label} on the top list`).toBe(true);
+    return here;
+  }
+  const seen: string[] = [`top: ${top.rows.join(' | ')}`];
+  for (const row of top.rows) {
+    if ([ROW_ATTACK, ROW_CHANGE].includes(row) || LEAVE_ROW.test(row)) continue;
+    if (!(await takeRow(page, row))) continue;
+    await page.waitForTimeout(300);
+    const sub = await menuView(page);
+    seen.push(`${row}: ${sub.rows.join(' | ')}`);
+    const hit = firstPresent(picks, sub.rows, sub.disabled);
+    if (hit) {
+      expect(await takeRow(page, hit.label), `${hit.label} in ${row}`).toBe(true);
+      return hit;
+    }
+    await page.keyboard.press('Escape'); // back to the top list of the menu
+    await page.waitForTimeout(300);
+  }
+  throw new Error(`none of ${picks.map((p) => p.label).join(', ')} on the menu (${seen.join(' ; ')})`);
+}
+
 export const activeIds = (page: Page): Promise<string[]> => page.evaluate(() => [...(window.__pyrefly!.battleState()?.activeIds ?? [])]);
 
 /** Wait, on the real clock, for any command menu to be open; throws with `what` on the cap. */
@@ -189,8 +214,12 @@ export async function waitForMenu(page: Page, what: string, timeoutMs = 90_000):
 
 /**
  * The greedy walk: at each menu of `girl`, open Change; take the row labelled `... (Special)` if there is one, else the first enabled row whose dress has not been worn yet; at every other
- * plate's menu take Attack at whatever is aimed. Ends when the engine's live list holds her two parts and a menu of one of the three plates is open. Capped at `maxDecisions` menus; fails with
- * a message that names the last menu seen, never loops.
+ * plate's menu take the first of `PASS_ROWS` (Attack, or Cure on the White Mage's menu, which has no Attack row) at whatever is aimed. Ends when the engine's live list holds her two parts and
+ * a menu of one of the three plates is open. Capped at `maxDecisions` menus; fails with a message that names the last menu seen, never loops.
+ *
+ * Known risk (found on the real engine in review fix pass 2, not fixed here): the foe's Curse shuts the Change list (every row greyed, "Cursed"); Bahamut puts it on a girl in Chapter IV
+ * within the first menus at seed 1. The walk then throws with the rows it saw rather than wandering. `specialDrive.walkTo` lifts the status as a rig; this page has no such rig, and Holy Water
+ * aimed at the girl is the in-game answer (a Stage 2 call; see the handoff, section 15).
  */
 export async function walkToForm(page: Page, girl: Girl, maxDecisions = 60): Promise<{ decisions: string[] }> {
   const decisions: string[] = [];
@@ -200,18 +229,18 @@ export async function walkToForm(page: Page, girl: Girl, maxDecisions = 60): Pro
     const ids = await activeIds(page);
     if (PARTS[girl].every((p) => ids.includes(p))) return { decisions };
     if (m.actor !== girl) {
-      if (!(await takeRow(page, 'Attack'))) throw new Error(`${m.actor}'s menu has no Attack row: ${m.rows.join(' | ')}`);
+      const pass = await openRowAnywhere(page, PASS_ROWS);
       await page.waitForTimeout(250);
-      await page.keyboard.press('Enter'); // the aim opens on the foe: confirm it
-      decisions.push(`${m.actor}: Attack`);
+      await page.keyboard.press('Enter'); // the aim opens on the sensible side (the foe for Attack, an ally for Cure): confirm it
+      decisions.push(`${m.actor}: ${pass.label}`);
       await page.waitForTimeout(400);
       continue;
     }
-    if (!(await takeRow(page, 'Change'))) throw new Error(`${girl}'s menu has no Change row: ${m.rows.join(' | ')}`);
-    await page.waitForFunction(() => document.querySelector('.ffx2hud__command .ffx2cmd__title')?.textContent?.trim() === 'Change', null, { timeout: 3_000 }).catch(() => null);
+    if (!(await takeRow(page, ROW_CHANGE))) throw new Error(`${girl}'s menu has no ${ROW_CHANGE} row: ${m.rows.join(' | ')}`);
+    await page.waitForFunction((title) => document.querySelector('.ffx2hud__command .ffx2cmd__title')?.textContent?.trim() === title, ROW_CHANGE, { timeout: 3_000 }).catch(() => null);
     const change = await menuView(page);
-    const special = change.rows.findIndex((r, i) => /\(Special\)$/.test(r) && !change.disabled[i]);
-    const next = special >= 0 ? special : change.rows.findIndex((r, i) => !change.disabled[i] && !worn.has(r));
+    if (change.title !== ROW_CHANGE) throw new Error(`${girl}: the ${ROW_CHANGE} list did not open (a Curse greys it; decision ${n}): ${change.rows.join(' | ')}`);
+    const next = nextChangeRow(change.rows, change.disabled, worn); // the rule is in `special-rows.ts`, where the unit test runs it on the real engine
     if (next < 0) throw new Error(`${girl}: the Change list offers no unworn dress (decision ${n}): ${change.rows.join(' | ')}`);
     worn.add(change.rows[next]!);
     decisions.push(`${girl}: Change -> ${change.rows[next]}`);

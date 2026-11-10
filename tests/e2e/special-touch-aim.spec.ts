@@ -4,7 +4,8 @@ import { resolve } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 
 import './support/pyrefly-window.ts';
-import { BADGE, CHAPTER_OF, PARTS, menuView, openChapterWithSpecials, startOwnServer, takeRow, waitForFormMenu, waitUntil, walkToForm, type Girl, type OwnServer } from './support/special-walk.ts';
+import { AIMED_GIRLS, ALLY_ROWS, ENEMY_ROWS, ROW_ATTACK } from './support/special-rows.ts';
+import { BADGE, CHAPTER_OF, PARTS, openChapterWithSpecials, openRowAnywhere, startOwnServer, takeRow, waitForFormMenu, waitUntil, walkToForm, type Girl, type OwnServer } from './support/special-walk.ts';
 
 /**
  * E2E 24 of the FFX-2 Special look (step D2): a part can be aimed by a real tap at 390x844, and the badge and the names read there. FFX-2 only: the three Special dresspheres exist only in
@@ -39,11 +40,12 @@ test.afterAll(() => {
   server = null;
 });
 
-/** The one-target ENEMY row of each part (read off the real engine in review fix R3-2): a part is offered no Attack row, only its own skills; Howitzer is on both of Rikku's parts, Paine's right wing has Venom Wing and her left Ma'at's Feather. */
-const ENEMY_ROW: Record<string, string> = { 'machina-maw-smasher-r': 'Howitzer', 'machina-maw-crusher-l': 'Howitzer', 'full-throttle-right': 'Venom Wing', 'full-throttle-left': "Ma'at's Feather" };
-
-/** The one-target ally row of each girl's parts. */
-const ALLY_ROW: Partial<Record<Girl, string>> = { rikku: 'HP Repair', paine: 'Stamina' };
+/**
+ * The rows this spec opens are the candidate lists of `support/special-rows.ts` (`ENEMY_ROWS`, `ALLY_ROWS`): each part has a short list and the spec opens the first row the menu shows enabled.
+ * `tests/unit/special-e2e-rows.test.ts` runs the real engine on the party build of the chapter this spec plays (Chapter IV for Rikku, Chapter V for Paine) and asserts every entry is offered
+ * there with the aim the step needs, so a row only a mastered rig offers (review finding R3-2: Ma'at's Feather) cannot come back. A part is offered no Attack row, only its own skills. Paine's
+ * left wing has no one-foe skill in Chapter V's own build, so its pick is a group aim (White Feather hits all enemies): the foe is aimed as a group and the plate taps must still do nothing.
+ */
 
 /** The class tokens the party list carries today (read from the OFF pin, taken before the look steps). */
 function todaysPartyClasses(): Set<string> {
@@ -55,7 +57,7 @@ const selection = (page: Page): Promise<{ ids: string[]; mode: string } | null> 
 
 /** Pass a turn by taking Attack at whatever is aimed (the foe). */
 async function attack(page: Page): Promise<void> {
-  expect(await takeRow(page, 'Attack'), 'an Attack row').toBe(true);
+  expect(await takeRow(page, ROW_ATTACK), 'an Attack row').toBe(true);
   await page.waitForTimeout(300);
   await page.keyboard.press('Enter');
   await page.waitForTimeout(400);
@@ -71,25 +73,6 @@ async function toPartMenu(page: Page, girl: Girl): Promise<string> {
   throw new Error(`no menu of ${girl}'s parts within 30 turns`);
 }
 
-/** Open the row named `label` wherever it sits: the top level, or the first submenu that lists it. */
-async function openRowAnywhere(page: Page, label: string): Promise<void> {
-  const top = await menuView(page);
-  if (top.rows.includes(label)) return void (await takeRow(page, label));
-  for (const row of top.rows) {
-    if (['Attack', 'Change'].includes(row) || /^Leave /.test(row)) continue;
-    if (!(await takeRow(page, row))) continue;
-    await page.waitForTimeout(300);
-    const sub = await menuView(page);
-    if (sub.rows.includes(label)) {
-      expect(await takeRow(page, label), `${label} in ${row}`).toBe(true);
-      return;
-    }
-    await page.keyboard.press('Escape'); // back to the top list of the menu
-    await page.waitForTimeout(300);
-  }
-  throw new Error(`no row ${label} on the menu: ${top.rows.join(' | ')}`);
-}
-
 const plateBox = (page: Page, id: string) => page.locator(`.ffx2hud__party [data-actor-id="${id}"]`).first().boundingBox({ timeout: 2_000 });
 async function tapPlate(page: Page, id: string): Promise<void> {
   const box = await plateBox(page, id);
@@ -98,7 +81,7 @@ async function tapPlate(page: Page, id: string): Promise<void> {
   await page.waitForTimeout(350);
 }
 
-for (const girl of ['rikku', 'paine'] as const) {
+for (const girl of AIMED_GIRLS) {
   test(`${girl} in her Special at 390x844: the badge and the names read, and a real tap on each plate aims it`, async ({ page }) => {
     const thrown = await openChapterWithSpecials(page, server!.baseUrl, CHAPTER_OF[girl]);
     await walkToForm(page, girl);
@@ -122,11 +105,11 @@ for (const girl of ['rikku', 'paine'] as const) {
     for (const c of classes) expect(today.has(c), `the party list carries ${c}, which today's does not`).toBe(true);
 
     // a one-target pick of the part's own: its aim opens on a plate
-    await openRowAnywhere(page, ALLY_ROW[girl]!);
-    expect(await waitUntil(page, async () => (await selection(page)) !== null, { timeoutMs: 5_000, intervalMs: 150 }), 'the ally aim opened').toBe(true);
+    const allyPick = await openRowAnywhere(page, ALLY_ROWS[part]!);
+    expect(await waitUntil(page, async () => (await selection(page)) !== null, { timeoutMs: 5_000, intervalMs: 150 }), `the ${allyPick.label} aim opened`).toBe(true);
     const all: string[] = [girl, ...PARTS[girl]];
     const first = (await selection(page))!;
-    expect(first.mode).toBe('single');
+    expect(first.mode, `the ${allyPick.label} aim`).toBe(allyPick.aim);
     // each of the three plates takes the aim by one tap and the pick stays open
     for (const id of all.filter((p) => p !== first.ids[0])) {
       await tapPlate(page, id);
@@ -143,9 +126,10 @@ for (const girl of ['rikku', 'paine'] as const) {
 
     // a tap on a plate while an ENEMY is aimed does nothing
     const partNow = await toPartMenu(page, girl);
-    await openRowAnywhere(page, ENEMY_ROW[partNow]!); // not Attack: the engine offers a part no Attack row
-    expect(await waitUntil(page, async () => (await selection(page)) !== null, { timeoutMs: 5_000, intervalMs: 150 }), 'the enemy aim opened').toBe(true);
+    const enemyPick = await openRowAnywhere(page, ENEMY_ROWS[partNow]!); // not Attack: the engine offers a part no Attack row
+    expect(await waitUntil(page, async () => (await selection(page)) !== null, { timeoutMs: 5_000, intervalMs: 150 }), `the ${enemyPick.label} enemy aim opened`).toBe(true);
     const foe = (await selection(page))!;
+    expect(foe.mode, `the ${enemyPick.label} aim`).toBe(enemyPick.aim);
     expect(foe.ids.some((id) => all.includes(id)), 'the pick aims a foe').toBe(false);
     for (const id of all) {
       await tapPlate(page, id);
