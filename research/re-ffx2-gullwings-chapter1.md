@@ -10,7 +10,7 @@ Written 2026-11-09 by a Sonnet sub-agent of the Echoes of Spira driver (program 
 ## Summary for the driver
 
 1. **Four rows, four short scripts, no new mechanic.** Boris 480 HP (Lv 8), Flame Dragon 980 (Lv 16), Guardian Beast 2,886 (Lv 18), YSLS-Zero 1,935 (Lv 11). Each stands **alone** in its formation; the sources equal their compiled workers (command ids, the `random() % n` moduli, the scene constant: `cmp-src-bin.out.txt`). [R]
-2. **Boris (script).** Three Spider Attacks, then **Sticky End once** (all three girls, about 50 each, Stop 40 percent), then for ever: Spider Attack three polls in four, Spider Bite one in four. **The guides say Sticky End loops every fifth turn; the compiled worker sets a one-shot flag.** The file wins (it is the game's data). [R; G conflict]
+2. **Boris (script).** Three Spider Attacks, then **Sticky End once** (all three girls, about 50 each, Stop 40 percent [the base at equal levels; about 15 percent at this chapter's levels: Corrections 1 below]), then for ever: Spider Attack three polls in four, Spider Bite one in four. **The guides say Sticky End loops every fifth turn; the compiled worker sets a one-shot flag.** The file wins (it is the game's data). [R; G conflict]
 3. **Flame Dragon.** **Flame Breath on all three on its first poll**, then Attack on the girl with the **most current HP**, and one more Flame Breath the first time its own HP is under 100. Weak to Ice, half Fire. [R; G agrees]
 4. **Guardian Beast.** A four-poll beat: three Attacks then **Curse** on the first living girl who does not already carry it; once its HP is under a third (under 962) the Curse becomes **Damocles Photon on all three, half of each girl's maximum HP** (formula 7, power 8). Weak to Fire, Ice, Thunder, Water and Holy. [R; G agrees, both quote "half"]
 5. **YSLS-Zero.** One draw of 4 per poll: Haymaker (two hits, always hits) about 46 percent of polls, **Blast Punch** (half of max HP on one girl, cast 140, delays) about 21 percent, Attack about 33 percent. Targets: lowest-HP girl, highest-HP girl, the farthest girl, or a living girl. [R, calc]
@@ -101,7 +101,7 @@ Per poll: Haymaker 1/4 + 1/8 + 1/12 = **55/120 (45.8 percent)**, Blast Punch 1/8
 | Move | Row | Class and formula | Power | Target | Cost, timing and riders |
 |---|---|---|---:|---|---|
 | Spider Attack (Boris) | 0x40c7 | physical, f0, accuracy formula 1 (acc 95) | 16 x **2 hits** | one | ATB 100; crit 10 |
-| Sticky End (Boris) | 0x40c8 | f8 (fixed with variance: v x P x 50 / 256) | 1 | all three | cast 10; **Stop at 40 percent, count 20**; no Shell/Protect effect |
+| Sticky End (Boris) | 0x40c8 | f8 (fixed with variance: v x P x 50 / 256) | 1 | all three | cast 10; **Stop at 40 percent, count 20** [40 is the base at equal levels, lowered by the level gap: Corrections 1 below]; no Shell/Protect effect |
 | Spider Bite (Boris) | 0x40ca | f1 (no DEF term) | 32 | one | cast 180; "eats and spits out" |
 | Attack (no cancel) | 0x41da | physical, f0, accuracy formula 2 (acc 95) | 16 | one | ATB 100; crit 5 |
 | Flame Breath (Flame Dragon) | 0x40d8 | magical, **f9**, Fire | 32 | all three | cast 140, MP 30 |
@@ -131,7 +131,7 @@ None is reachable in play (Boris acts about every other beat of the girls). The 
 | Statement | The files |
 |---|---|
 | Gamer Guides: Boris uses an attack "for four turns, then Sticky End, looping from there" | **disagrees**: three Spider Attacks, one Sticky End, then no more (a one-shot flag in the compiled worker) |
-| Jegged: Boris's Sticky End "hits all party members for around 50 and inflicts Stop", claw attack twice for 20 to 30 | agrees (f8 power 1 = 46 to 52; two hits; Stop 40 percent) |
+| Jegged: Boris's Sticky End "hits all party members for around 50 and inflicts Stop", claw attack twice for 20 to 30 | agrees (f8 power 1 = 46 to 52; two hits; Stop 40 percent at equal levels, about 15 percent at this chapter's: Corrections 1 below) |
 | Both guides: Flame Dragon opens with Flame Breath (150 to 200), the Attack aims at the highest-HP girl | agrees exactly |
 | Both: Guardian Beast Attack x3 then Curse; under about a third (about 960 HP) Damocles Photon replaces Curse, half of max HP | agrees exactly (962) |
 | Gamer Guides: YSLS-Zero uses a basic physical, **Blast Punch (half max HP, delay)** and **Haymaker (two hits)** | agrees; the script gives the odds in section 3.4 |
@@ -161,7 +161,7 @@ The paper preflight is `docs/plans/ch-dragon-review.md` in this repo. The row du
 
 ## Corrections found by building and running it (2026-11-09, the chapter lane)
 
-These are written into the build's tests and the handoff (`docs/handoff/ch-gullwings-ch1.md`); the note above is left as the research lane wrote it.
+These are written into the build's tests and the handoff (`docs/handoff/ch-gullwings-ch1.md`); the note above is left as the research lane wrote it, apart from three bracketed pointers (the summary's item 2, the §4 Sticky End row and the §6 Jegged row) that send a reader of "Stop 40 percent" to finding 1 below.
 
 1. **Sticky End's Stop is 40 at equal levels, about 15 percent at this chapter's levels.** The row's Stop slot reads 40 with a counter of 20 (the note's §4 table says "Stop 40 percent", which is right as the base). The engine's status roll is `draw % 101 < c + 5 * (lvA - lvT) - r` (`src/battle/ffx2/kernel/status.ts`), so Boris at Lv 8 against girls at Lv 12 / 13 / 14 gives 20, 15 and 10 in 101 (14.9 percent on average; 52 of 300 girls stopped, 17.3 percent measured); a Lv 8 party would see 40 percent. The guides' "may inflict Stop" agrees with the measure and not with four in ten. (Reading the 40 as "a byte of 40 of 255" was the build's first reading and is withdrawn.)
 2. **The Guardian Beast's Curse target is a `searchr` over the girls without Curse** (a random pick among them, uniform here because the scene's position file is empty), not "the first living girl" the note's §3.3 says; the source's search has no "first" in it.
