@@ -104,6 +104,11 @@ export interface HudPort {
    * frame-rate defect dressed as a feature.
    */
   syncGauges?(snapshot: AtbSnapshot): void;
+  /**
+   * Draw THESE ids as the party rows instead of the engine's `activeIds`, until called with `null` (the Special dress-up, FFX-2 only: the frames show the three girls, then her row alone,
+   * then the three parts). Optional and additive; named `holdRows` because `SceneSlots.holdParty` exists. With it never called the HUD draws `activeIds` as always.
+   */
+  holdRows?(ids: readonly CombatantId[] | null): void;
   /** Open the command menu; resolves the chosen command. previewRank re-renders the CTB list for the highlighted command. */
   chooseCommand(actorId: CombatantId, commands: AvailableCommand[], previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot): Promise<Command>;
   /**
@@ -130,6 +135,8 @@ export interface HudPort {
    * the default (D-029; the verifier's ch. 4 seed 3 capture).
    */
   setAtbMode?(mode: 'wait' | 'active'): void;
+  /** Show or hide the Wait/Active chip outside a live target cursor (FFX-2 only, optional and additive: the Special dress-up shows it for its sequence). */
+  showAtbChip?(on: boolean): void;
   /**
    * Subscribe to where the open command menu's cursor is: `'top'` on the
    * top-level command list, `'deep'` in a submenu or the target cursor. Returns

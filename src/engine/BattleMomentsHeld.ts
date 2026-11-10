@@ -40,6 +40,11 @@ export class BattleMomentsHeld extends BattleMomentsActions {
     return p;
   }
 
+  /** The same promise for a caller outside the moments (the Special dress-up's entry waits on its portrait; FFX-2 only, additive). Null at skip speed (no portrait plays) and with no portrait. */
+  portraitWait(): Promise<void> | null {
+    return this.takeCutIn();
+  }
+
   // -------------------------------------------------------------- overdrive
 
   /**

@@ -1,5 +1,6 @@
 import { artNamespaceOf, baseArtId } from '../../../data/art/artNamespace.ts';
 import type { PoseMeta } from '../../PaintedArt.ts';
+import { isSpecialArtId } from '../../SpecialArtIds.ts'; // the dependency-free file: the shared bundles gain three string literals
 
 /**
  * The twirl keys' pure parts (D-322; FFX-2 only: only FFX-2 has a spherechange), moved out of `twirl.ts` in round 21 (PR-0314) so the slot
@@ -47,6 +48,7 @@ export interface TwirlKey {
  * `statesOf` lists; empty means today's flourish. Pure on its input.
  */
 export function twirlPlan(from: string, to: string, statesOf: (id: string) => readonly string[] | null, others: readonly string[] = []): TwirlKey[] {
+  if (isSpecialArtId(from) || isSpecialArtId(to)) return []; // a Special's dress-up owns its beat (FFX-2 only); the old dress's twirl keys never play into or out of it
   const has = (fig: string, key: string): boolean => !!fig && (statesOf(fig) ?? []).includes(key);
   const plan: TwirlKey[] = [];
   for (const key of ['twirl-start', 'twirl-going']) if (has(from, key)) plan.push({ figure: from, key });

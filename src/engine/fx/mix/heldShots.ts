@@ -1,3 +1,4 @@
+import { isSpecialArtId } from '../../SpecialArtIds.ts';
 import { figOf, stillActor, subjectId, type Actor, type Fig, type Pose } from './geometry.ts';
 import { battleCanvas, fieldOf, hudPanels } from './hudPanels.ts';
 import type { Plate } from './plate.ts';
@@ -110,7 +111,7 @@ export class HeldShots {
     for (const a of party) {
       const s = subjectId(a);
       const was = this.subjects.get(a);
-      if (was && was !== s) changed.push(a);
+      if (was && was !== s && !isSpecialArtId(s) && !isSpecialArtId(was)) changed.push(a); // a Special's dress-up owns its camera: no DRESSPHERE SHOT into or out of it
       this.subjects.set(a, s);
     }
     const h = this.held;

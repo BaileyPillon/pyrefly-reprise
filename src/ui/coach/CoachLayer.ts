@@ -221,6 +221,14 @@ class CoachedHud implements HudPort {
     this.inner.setAtbMode?.(mode);
   }
 
+  // The Special dress-up (FFX-2 only), the same hole a seventh time: the held rows and the Wait/Active chip. `special-party-hold.test.ts`.
+  holdRows(ids: readonly CombatantId[] | null): void {
+    this.inner.holdRows?.(ids);
+  }
+  showAtbChip(on: boolean): void {
+    this.inner.showAtbChip?.(on);
+  }
+
   // Wait's split (§1.5): the menu level, the same wrapper hole a third time.
   onMenuLevel(listener: (level: 'top' | 'deep') => void): () => void {
     return this.inner.onMenuLevel?.(listener) ?? (() => undefined);

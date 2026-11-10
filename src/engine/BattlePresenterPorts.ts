@@ -542,6 +542,8 @@ export interface PresenterDeps {
   itemGesture?: 'orb' | 'spark' | null;
   /** The chapter's game (`app/screens/BattleScreenGameDeps.ts`), for the few beats that are one game's own (release 62: FFX-2's Mega Flare shakes the camera harder, `MegaFlareImpact.ts`). Absent: no such beat. */
   game?: GameId;
+  /** The first-time answer for a girl's Special (the app fills it from the coach state); absent: every entry plays in full. FFX-2 only, additive, `SpecialBeatPlans.entryKind`. */
+  specialSeen?: { has(id: string): boolean; mark(id: string): void } | null;
 }
 
 /** One line of the presenter's own trace, for the debug API and e2e. */

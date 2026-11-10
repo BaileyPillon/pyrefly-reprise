@@ -1,6 +1,7 @@
 import type { Object3D } from 'three';
 import { artManifest } from '../../ArtManifest.ts';
 import { artUrl, loadPainted, prewarmPainted, softSilhouette, tryLoadMeta, type PaintedTexture, type PoseMeta } from '../../PaintedArt.ts';
+import { isSpecialArtId } from '../../SpecialArtIds.ts';
 import { giveBackColumn, hideColumn, showColumn } from './twirlColumn.ts';
 import { GRID_EVENT, HOLD_MAX_MS, LATE_MS, TWIRL_WEIGHT, girlOf, keyRescale, namespacePrefixOf, playAt, twirlKeysOf, twirlPlan, twirlStepMs, twirlTimes, type TwirlKey } from './twirlPlan.ts';
 
@@ -131,7 +132,7 @@ export class TwirlSlot {
       const from = subjectOf(a.poseUrls['idle']);
       const to = subjectOf(poses['idle']);
       const done = load.call(a, poses, initial);
-      if (self.on && from && to && from !== to) {
+      if (self.on && from && to && from !== to && !isSpecialArtId(from) && !isSpecialArtId(to)) { // a Special's dress-up owns its beat: no twirl begins into or out of it
         self.began.push(a);
         void self.start(a, from, to, done);
       }

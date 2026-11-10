@@ -196,6 +196,7 @@ export class FFX2BattleHud implements HudPort {
   private layoutProject: ((id: CombatantId, anchor?: 'head' | 'chest' | 'feet') => { x: number; y: number } | null) | null = null;
   private labelsAtRest: () => boolean = () => false;
   private lastState: BattleState | null = null;
+  private held: readonly CombatantId[] | null = null; // `HudPort.holdRows`: the Special dress-up's list; null = the engine's `activeIds`
   private lastSnapshot: AtbSnapshot | null = null;
   private readonly endHold = new EndHold();
   /** The actor whose command menu is currently open, if any — drives `.ig-stat--acting`. */
@@ -924,6 +925,12 @@ export class FFX2BattleHud implements HudPort {
     this.renderEnemies(state, snapshot);
   }
 
+  /** `HudPort.holdRows` (FFX-2 only, the Special dress-up): draw these ids as the party rows until `null`; repainted at once so each change of the list shows. */
+  holdRows(ids: readonly CombatantId[] | null): void {
+    this.held = ids;
+    if (this.lastState && this.lastSnapshot) this.renderParty(this.lastState, this.lastSnapshot);
+  }
+
   /**
    * Tear the open command menu down from outside (`HudPort.closeCommandMenu`).
    *
@@ -1245,6 +1252,11 @@ export class FFX2BattleHud implements HudPort {
     this.paintAtbMode();
   }
 
+  /** `HudPort.showAtbChip` (FFX-2 only): the Wait/Active chip outside a live target cursor; the only way to the private `setActiveWaitVisible`. */
+  showAtbChip(on: boolean): void {
+    this.setActiveWaitVisible(on);
+  }
+
   private paintAtbMode(): void {
     paintAtbChip(this.activeWaitEl, this.atbMode);
   }
@@ -1303,7 +1315,7 @@ export class FFX2BattleHud implements HudPort {
 
   private renderParty(state: BattleState, snapshot: AtbSnapshot): void {
     const smooth = this.atb.smooth;
-    const rows = state.activeIds
+    const rows = (this.held ?? state.activeIds)
       .map((id, i) => {
         const c = state.combatants[id];
         if (!isFfx2(c)) return '';
