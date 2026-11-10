@@ -178,11 +178,123 @@ GA4 (the party, Auron's Piercing), GA5 (500 kills, flagged), GA6 (Zanmato allowe
 - The `intent`/preview code calls `chooseAiCommand` on a clone: the Cactuar King's rest counter and the Run Away flag are written on the clone only.
 - Disk: D: 28 GiB free at the end; tsc and a test file run in seconds when the machine is quiet.
 
+## Stage 3 of 5: tier 2 (Earth Eater, the Greater Sphere, Catastrophe) — DONE 2026-11-10
+
+Game case: **FFX only** (as before; the kernel table row and the set-up hook are keyed by this chapter's ids, and the FFX-2 absence test still passes). `GAUNTLET_TIERS_BUILT` is **2**: the chain is **six acts**, and acts 7 to 9 are still not registered.
+
+### What exists now (files)
+
+| File | What it is |
+|---|---|
+| `src/battle/ffx/ai/gauntlet-earth-eater.ts` | act 4: the standing turn (a coin: Attack, or two Megaton Punches), the running total, the strict 100,000 line, the crossing hit that asks for nothing, the two turns down and Gets up, the Flare at itself |
+| `src/battle/ffx/ai/gauntlet-greater-sphere.ts` | act 5: Spherimorph's machine with the bytecode's own answers (the four states, the turn, the reply table, the shift, the Doublecast gate) |
+| `src/battle/ffx/ai/gauntlet-catastrophe.ts` | act 6: rest then cloud, the change below 4/5 of its HP, the three-turn cycle of the second form |
+| `src/battle/ffx/ai/gauntlet-setup.ts` | the opening state: Earth Eater's Reflect, the Greater Sphere's first element; hung on `dark-aeons-setup.ts` by one line |
+| `src/battle/ffx/ai/gauntlet-rules.ts` | (extended) the three ids, scripts, group ids, the move rows, the flag keys, `setArmored` |
+| `src/engine/tactics/gauntlet.ts` | (extended) rules 8 to 10 of the line and their `LineOptions` |
+| `tests/unit/chapters/gauntlet-{earth-eater,greater-sphere,catastrophe}.test.ts` | **84 new tests** (22, 46, 16); `gauntlet-bench` 7 to 16, `gauntlet-chain` 18 to 19, `gauntlet-data` 141 to 144 |
+| `tests/unit/helpers/gauntletSphere.ts`, `gauntletSphereMatrix.ts` | the Greater Sphere's reply helper and the **literal reply matrix generated from the interpreter's run** (`gen-matrix3.mjs`, lane scratch) |
+
+### The three scripts, as the tests pin them (RE n 3.3 to 3.5)
+
+- **Earth Eater** (`m279`; the disassembly, with its returns, is the source; the `.c` dump elides them). Standing: a draw `mod 2` (32,768 each over 65,536): Attack on one member, or **two Megaton Punches**, the second queued behind the first as a free follow-up of the same turn (its target picked at once, the queue drops it if that member is gone). Every hit that does HP damage adds the action's `LastDamageTakenHP` (overkill included; an Overdrive is one event) to a running total and draws **one Megaton Punch** on a random living member; the hit that takes the total **strictly past 100,000** (`+1` at exactly 100,000 is still answered) knocks it down, **Armored off**, total back to 0, and **is not answered**. Down: its first two turns queue nothing (no draw), the third is **Gets up** on itself (Armored back on, total and counters reset); every damaging hit while it lies is answered by **a Flare it casts at itself**, which its Reflect (the record's start-up word 0x20, written by `gauntlet-setup.ts`) bounces onto a random party member (2,355 to 2,660 a member on the preset, tested on the real engine; never on itself). **Its bytes never test `isCounterattackAllowed()`**, so it queues its answers itself (the owner must be able to act, no reaction of its own waiting) and not through `react()`; nothing in the preset hits it from inside a reaction, so the difference does not show here (a test pins that a hit inside a reaction is still answered).
+- **Greater Sphere** (`m281`): see the next section. Its turn: a draw `mod 100` every turn, below half its HP (strictly: 750,000) and under 50 a **Hydraulic Press** on the living front line without a second draw, otherwise a draw `mod 2`: Press or an Attack on a random member. **Above half it presses 50.00 percent of its turns (65,536 of 131,072 draw pairs), below half 75.01 percent (98,322 of 131,072)**, the interpreter's `3,221,815,296 / 2^32`.
+- **Catastrophe** (`m277`): form 1 alternates a lost turn and **Toxic Cloud** on the front line (no draw at all); **its `onHit` transforms it the moment its HP is strictly below `maxHP x 4 / 5` (1,760,000)**: Armored off, Luck 30, **Agility 60** (from 34), the second painting, `v1` back to 0, **Transform** on itself as a free action and a `form-change` banner after the action's events (the pattern of Penance: it stays one form in the engine's sense, a second would turn its death into a transformation). Form 2 cycles **Toxic Spray on the living member with the most HP** (a tie is one picker draw), **Demi on the front line**, **Hundred Thorns on the front line**. It answers nothing else. Agility 60 is on the real clock (tested: more turns over the same ticks).
+
+### The Greater Sphere's reply table, read end to end (RE n 3.5 had it "in outline only")
+
+The note owed "about 2 hours with the Spherimorph harness". I adapted that harness (`t-sphere.mjs`, read only) to `m281`'s variables (`t-gsphere.mjs`, lane scratch) and **ran the real hook bytecode** for 20 commands in each of the four states and both signs of the damage (`t-gsphere.out.txt`). Nothing had to be left out: **every reply is certain**, and the disassembly agrees line by line. What the run says (and what the note had not):
+
+- The four states are Spherimorph's (weak Fire/Ice/Thunder/Water, the other three elements and Holy absorbed, 16,384 of 65,536 each). The **player-side row `v7` is the -aga of the opposite element** (state 0 Blizzaga, 1 Firaga, 2 Waterga, 3 Thundaga) and the **monster-side row `v8` is Ultima, row 0x40F3, in all four states** (the Ultima Buster's own row, `ROW.ultima`; the record's command list names the player's Ultima 0x3053 instead, which the script never performs: the data lists both).
+- **Magic:** absorbed -> **Ultima on the front line** (the **player-side -aga on the front line** when an aeon holds the field: the aeon alone); no element at all (Flare, Demi, Ultima) -> Ultima on the front line; the weakness -> **shift**. **Physical: it took damage and the command carries an element (a weapon's counts) -> Hydraulic Press on the front line; any other physical hit, a plain blow included -> Ultima on the front line. A physical hit never shifts it.** **Special** (Overdrives, Wakka's shots): absorbed -> Ultima; **healed -> Flare on one random member**; elemental -> shift; **otherwise Hydraulic Press on the front line**. Scan -> Ultima on the front line. The Doublecast gate and the gates (Threaten, no counter allowed, HP 0) are Spherimorph's. Not Spherimorph's: the answers themselves, the no-shift physical branch and the absence of banners.
+- **For the party this means:** a plain blow of Tidus draws an **Ultima (about 900 each with the Sphere's MAG 102)** on all three; an Overdrive draws a **Hydraulic Press (4,687 each with Auto-Protect, 9,374 without)**, which kills whoever is below that.
+- `tests/unit/chapters/gauntlet-greater-sphere.test.ts` pins the engine to the **literal interpreter table**: 20 commands x 4 states x the damage sign the kernel actually produced (Element Reels is a minigame shell here with no hit record: its reading, an elemental-free special even in a fire weapon's hands, is tested through the shared reader), the ten aeon cells, the shift tally, the gates, the Doublecast triple (nothing, Ultima, nothing).
+
+### Registrations in shared tables made in stage 3 (the integrator lists these; each a minimal add)
+
+1. `src/battle/ffx/ai/index.ts`: three imports on the Gauntlet line. 2. `src/battle/ffx/ai/dark-aeons-setup.ts`: one import and one line, `applyGauntletSetup(ctx, group)`, beside the Belgemine and Dark Aeons set-ups (a no-op unless the group is Earth Eater's or the Greater Sphere's). 3. **`src/battle/ffx/kernel/forced-action-table.ts`: six rows (0x0000, the record's word) for the six creatures built**; stage 2 had left the three of tier 1 out, and `tests/unit/parity-ffx-default-attack.test.ts` (which sweeps every shipped group) would have failed on them; it passes now. Stage 4 adds its creatures' rows. 4. `src/data/ffx/gauntlet-ids.ts`: `GAUNTLET_TIERS_BUILT = 2` (registers acts 4 to 6 through `HIDDEN_FFX_GROUPS`). **No contract file changed** (`docs/CONTRACTS.md` lists none of these), so no CONTRACT-CHANGES entry this stage.
+
+**Inert for every other chapter, proved by running:** `ab-hash.mjs` (stage 2's script, unchanged) plays the 12 listed FFX chapters through their whole chains and the 64 other formations of the data layer, 3 seeds, 2 policies, once on `git archive 8e82fd2e7 src` (run by plain Node from `base/`) and once on this tree: **456 digests, identical** (`ab-base-s3.out.txt`, `ab-cand-s3.out.txt`, md5 `80e0a534059c9a73f38377bdeec2650d` both). `ffx-engine-golden.test.ts` passes unchanged.
+
+### The bench (100 seeds a cell; `bench-s3-final.out.txt`, `bench-s3-100b.out.txt`)
+
+`node --experimental-transform-types tools/gauntlet-bench.mjs --tier 2 --seeds 100 --lines advisor,careless,no-zanmato,zanmato-t2,... --chain`; the tool now takes `--tier N`, `--chain-acts` and `--deathproof <armour ability>`.
+
+| act | advisor | Yojimbo against tier 2 | without Yojimbo | careless |
+|---|---:|---:|---:|---:|
+| Earth Eater | 100 | 100 | 100 | 100 |
+| Greater Sphere | 100 | 100 | 100 | **66** (34 lost) |
+| Catastrophe | 100 | 100 | 100 | 100 |
+| the chain of the three (tier 2 alone) | 100 | 100 | 100 | 67 (33 lost at act 5) |
+| **the chain of all six built** | **100** | 100 | | **59** (41 lost at act 5) |
+
+**The result: the preset wins tier 2 every time with the advisor's line; only a line that never heals loses (the Greater Sphere, a third of the time).** What the lines cost (`cost-s3.mjs`, 100 seeds): Earth Eater **26 inputs and 1.0 member lost a fight** (one Megaton Punch; 12.95 Flares at itself, all on the party), careless 18 inputs and 5.8 members lost; the Greater Sphere **21.6 inputs, 15.0 Ultimas, 0.69 Presses, 0.36 members lost** (careless 14.6 inputs, 4.1 lost); Catastrophe **23 inputs and no member lost**, it hardly acts at all (0.82 Toxic Sprays a fight, no Toxic Cloud and no Demi: the party empties its 2,200,000 HP before its second turn comes).
+
+**The line's rules, each by an ablation** (100 seeds; chain of the three unless said):
+
+| rule | shipped | ablation | result |
+|---|---|---|---|
+| Earth Eater: only Auron strikes while it stands | on | everybody strikes (`no-eater-focus`) | wins 100 both; **1.95 members lost a fight against 1.01**, 23 inputs against 26 |
+| Earth Eater: hit it while it lies down | on | wait out its two turns (`eater-wait`) | wins 100 both; **372 inputs and 7.7 members lost against 26 and 1.0**: waiting is the worse line, the note's "wait two turns" does not hold for this party (a Flare at itself is 2,400 a member, a blow on it lying is 70,000 or more) |
+| the Greater Sphere: no Overdrive | on | Overdrives allowed (`sphere-od`) | **97 against 100** (3 chains lost at act 5: the gauges carry, the first Overdrive draws a Press that kills whoever is under 4,687); alone the same cell is 100 both, because the gauges start empty |
+| an aeon as the shield against the Greater Sphere | off | on (`sphere-fodder`) | wins 100 both; 36 inputs against 22; no member lost, but slower; left off |
+| an aeon as the shield against Earth Eater | off | on (`eater-fodder`) | 100 both; 44 inputs against 26, 17 punches on the aeon; left off |
+| Yojimbo's Zanmato against tier 2 | none (`zanmatoAt` stays `[]`) | `zanmato-t2` | 100 both: not needed |
+
+**The levers** (the advisor's line, 100 seeds a cell; `bench-s3-levers*.out.txt`). The **stat estimate** moves tier 2 along cliffs that are **not monotonic and not aligned**, because it scales Strength, Defense, Magic and Magic Defense together and the creatures' damage depends on them in steps:
+
+| share of the stat caps | Earth Eater | Greater Sphere | Catastrophe | chain of the three |
+|---:|---:|---:|---:|---:|
+| 1 (the preset), 0.95, 0.9 | 100 | 100 | 100 | 100 |
+| 0.88 | 100 | 95 | 100 | 95 |
+| 0.87, 0.86, 0.85, 0.84 | 100 | **62** | 100 | **63** |
+| 0.83 to 0.79 | 99 to 100 | 96 to 100 | 100 | 74 to 99 |
+| 0.78 | 100 | 82 | 100 | 85 |
+| 0.77 | 100 | 17 | 100 | 9 |
+| 0.765 / 0.76 / 0.757 | 97 / 94 / 78 | 8 to 34 | 100 | 1 to 7 |
+| 0.752 | **64** | 51 | 100 | 10 |
+| 0.75 | 32 | **77** | 100 | 6 |
+| 0.74, 0.72 | 16, 9 | 94, 97 | 100 | 3, 2 |
+| 0.7 | 0 | 94 | 100 | 0 |
+| 0.65 to 0.53 | 0 | 0 | 100 | 0 |
+| 0.515 / 0.51 / 0.505 / 0.5 / 0.49 / 0.48 | 0 | 0 | 96 / **78** / **69** / 57 / 17 / 3 | 0 |
+
+**A cell inside the 60 to 80 percent band exists for each act** (the Earth Eater at 0.752 and 0.755 to 0.757, the Greater Sphere at 0.84 to 0.87 and 0.75, Catastrophe at 0.505 to 0.51) **and for the chain of the three** (0.84 to 0.87: 63; 0.79: 74), but **no single stat estimate puts the three acts in the band together**, and tier 1 needs a quarter of the caps or less for its band (stage 2). This is a result for Bailey, not a reason to touch a creature (rule 15). The options: (a) leave tier 2 as the arena's middle: the preset wins it, and its weight is length (recommended); (b) a whole-chapter stat estimate near 0.85, which puts the tier-2 chain at 63 percent (the Greater Sphere the act that falls) and leaves tier 1 at 100 and tier 3 to be measured; (c) the armour lever below.
+
+**Other levers.** **Deathproof in place of the Ribbon** takes Earth Eater's punch from 1.01 members lost a fight to **0.01** and costs tier 2 nothing (the numbers above are unchanged: 100 / 100 / 100, careless Sphere 66; the six-act chain 100 / careless 67), because Jormungand dies before it acts and the Ribbon's other wards matter at tier 3 (Th'uban's Rainbow, Slime, Toxic Cloud): **the party is not changed here; tier 3's bench decides**. **Deathproof in place of Auto-Protect** drops the Greater Sphere to **37 percent** (a Press is 9,374 without it: every wounded member dies; the Eater is unaffected), the one armour lever that lands near the band at tier 2 for a single act. **Phoenix Downs 0 or 5, Evasion 0 or 100: nothing moves** (Auto-Phoenix pays the one KO a fight; the creatures' Attacks are the only moves Evasion changes and they are rare). **Luck 0** slows the party (Earth Eater 37 inputs against 26, Catastrophe 32 against 23) and wins everything.
+
+### Findings of this stage
+
+1. **The Greater Sphere punishes specials, not magic** (the table above): an Overdrive is an elemental-free special and draws the Press. The carried gauges are why the chain loses what the act alone never does; the line bars Overdrives against it (rule 10).
+2. **The Earth Eater is a pounding fight**: a Piercing blow or two takes the total past 100,000 with one punch, and the party then hits an unarmored creature for 70,000 to 99,999 a blow, at the price of 2,400 a member per blow. The note's "wait out two turns" costs 14 times the inputs.
+3. **Catastrophe is length**: Armored form 1 divides Tidus's blows by three, Auron's Piercing ignores it, form 2 hardly gets a turn.
+4. **The Ribbon swap for a Death ward is free through tier 2** (finding F1 of stage 1, now measured); whether it stays free is tier 3's bench.
+5. **A gap in stage 2, closed here:** `tests/unit/parity-ffx-default-attack.test.ts` sweeps every shipped enemy for a forced-action word; stage 2 did not run it, so tier 1's three creatures had no row. Six rows now (0x0000, the record's word, `gauntlet_rows.json`).
+6. **A wrong reading of mine, caught before the commit:** the first Greater Sphere data had the player's Ultima (0x3053, the record's command list) as the reply; the bytecode's `v8` is 16627 = 0x40F3 in all four states, confirmed by the run. The data lists both rows.
+
+### Picks taken in this stage (the driver's call, his to overturn)
+
+The Greater Sphere stays in the chain (nothing was left out: the table is certain); the Overdrive bar against it; Earth Eater: Auron alone while it stands, everybody while it lies; no aeon shield against either (the ablations lose on inputs); Yojimbo not used at tier 2; **the party unchanged, no Death ward** (the lever is listed with numbers); the second Megaton Punch as a queued follow-up (a `counter` event with cause `script` in the log); Earth Eater's answers not gated by `isCounterattackAllowed` (its bytes have none); Reflect as a 254-turn status like a cast one; the Transform row queued and the `form-change` banner after it; **a dying Catastrophe is left alone** (the bytes transform it on the killing blow too; presentation only) and its death handler's transform (reachable only by a death with no hit) is not modelled; Catastrophe's second painting is the first one's stand-in (`GAUNTLET_CATASTROPHE_FORM2_SPRITE`, `catastrophe-form-2` owed to the art lane); `GAUNTLET_TIERS_BUILT = 2`.
+
+### What is LEFT (exact list)
+
+1. **Stage 4 (tier 3):** Th'uban, Neslug, the Ultima Buster body, Head and Arms (the targeting-time DEF/Armored write: T0 C4; the Head's cycle; the body's counter `v10`); `GAUNTLET_TIERS_BUILT = 3`; their six `forced-action-table` rows (and the Head's and Arm's, if the sweep wants them); the tactic's tier-3 rules and `GAUNTLET_BOSS_IDS`; the tier-3 bench and the nine-act chain (the Zanmato budget of the purse, the Death ward lever against Rainbow/Slime/Toxic Cloud); update the pins that name six acts (`gauntlet-chain.test.ts` "only the tiers built", `gauntlet-bench.test.ts` harness test, `tierActs(3)`).
+2. **Stage 5 (integration):** unchanged from stage 2's list, plus: the scene reads `gauntlet.earthEater.down` (the lying pose), `gauntlet.earthEater.total` (a gauge, if Bailey wants one), `gauntlet.sphere.state` (the element glow; the four colours are code), `gauntlet.catastrophe.form` and the `form-change` event; the withdrawal card's "got away" line; the absence test.
+3. **Art list additions** (nothing is final): Catastrophe's second painting `catastrophe-form-2` (idle, attack); Earth Eater's lying and getting-up poses are already on the list (the scene swaps on the flag).
+
+### What the next stage must know
+
+- The scripts of tier 2 are the pattern for tier 3: one file a creature, the numbers at the top with their source, the state in `rtOf(ctx, id).ai` and the few flags the scene needs in `state.flags`, tests on a fake context (all 65,536 draws) and then the real engine, and a literal table from the interpreter where a reply matrix exists (the Greater Sphere's; Neslug's three states and the Ultima Buster's parts are the same kind of job). **Read the `.dis.txt`, not the `.c.txt`: the decompile elides the `return`s** (the Earth Eater's first reading from the `.c` had the crossing hit answered with a Flare; the disassembly has it return).
+- `lineWith`'s new options: `fodderAt`, `eaterAuronOnly`, `eaterPound`, `odBarredAt`; the bench ablations `zanmato-t1`, `zanmato-t2`, `sphere-fodder`, `eater-fodder`, `sphere-od`, `no-eater-focus`, `eater-wait`. `zanmato-all` now means every creature the line knows.
+- `playChain` and `chainRate` take the acts of the chain (`tierActs(n)`); `--tier N` on the tool plays that tier's acts and chains them alone.
+- A chain test run takes seconds; the 100-seed tier table about 100 seconds; the whole lane about 20 seconds.
+- The working tree is CRLF in places and LF in others; git normalises either; the Edit tool is safe.
+
 ## Records owed (for the release pipeline)
 
-- **ACTIONS.md** (two rows, FFX only): hidden chapter 54 Gauntlet, stage 1 (the branch, T0 and T1; evidence: this note, `tests/unit/chapters/gauntlet-*.test.ts`, the fixture `gauntlet_rows.json`) and stage 2 (the chain, the party, the bench tool and tier 1, the Karma and Run Away seams; evidence: the bench table above, the A/B of 456 digests, `tests/unit/chapters/gauntlet-{cactuar-king,don-tonberry,jormungand,chain,bench}.test.ts`); no decisions of Bailey's.
-- **DECISIONS.md / decisions.json**: the driver's calls GA1, GA2, GA3, GA8 and GA13 (stage 1) and GA4, GA5, GA6, GA9 and the stand-ins of GA10 to GA12 (stage 2), as taken above (his to overturn); no row of Bailey's own. **For Bailey (options, not a build): tier 1 cannot be placed in the 60 to 80 percent band by any lever tried** (stage 2, the bench section: leave it as the easy opening, or a stat estimate near 0.25, or fewer Phoenix Downs).
-- **NOW.md**: the lane `ch-gauntlet` (stages 1 and 2 of 5 done; stage 3, tier 2, next); the findings F1 (Ribbon is no Death ward) and F2 (Evasion 255) belong in the bench notes; the tier-1 bench result (every act won every time).
+- **ACTIONS.md** (three rows, FFX only): hidden chapter 54 Gauntlet, stage 1 (the branch, T0 and T1; evidence: this note, `tests/unit/chapters/gauntlet-*.test.ts`, the fixture `gauntlet_rows.json`) and stage 2 (the chain, the party, the bench tool and tier 1, the Karma and Run Away seams; evidence: the bench table above, the A/B of 456 digests, `tests/unit/chapters/gauntlet-{cactuar-king,don-tonberry,jormungand,chain,bench}.test.ts`) and **stage 3** (tier 2: Earth Eater, the Greater Sphere read end to end from the bytecode, Catastrophe; the set-up hook, six forced-action rows, the tier-2 line and bench; evidence: the stage 3 section above, the interpreter run `t-gsphere.out.txt`, the A/B of 456 digests, `tests/unit/chapters/gauntlet-{earth-eater,greater-sphere,catastrophe,chain,bench,data}.test.ts`); no decisions of Bailey's.
+- **DECISIONS.md / decisions.json**: the driver's calls GA1, GA2, GA3, GA8 and GA13 (stage 1) and GA4, GA5, GA6, GA9 and the stand-ins of GA10 to GA12 (stage 2), and the stage 3 picks above (the Greater Sphere in the chain, the Overdrive bar, Auron alone while Earth Eater stands and everybody while it lies, no aeon shield, no Death ward in the party, the second form's stand-in painting), as taken above (his to overturn); no row of Bailey's own. **For Bailey (options, not a build): tier 1 cannot be placed in the 60 to 80 percent band by any lever tried** (stage 2, the bench section: leave it as the easy opening, or a stat estimate near 0.25, or fewer Phoenix Downs). **And tier 2:** the preset wins it every time (100 / 100 / 100, the chain 100); a cell in the band exists for each act and for the tier-2 chain (0.84 to 0.87 of the caps: 63) but no single stat estimate serves tier 1 (a quarter of the caps) and tier 2 (above three quarters) together (stage 3, the levers table); the options are in that section.
+- **NOW.md**: the lane `ch-gauntlet` (stages 1 to 3 of 5 done; stage 4, tier 3, next); the findings F1 (Ribbon is no Death ward; a Deathproof in its place is free through tier 2) and F2 (Evasion 255) belong in the bench notes; the tier-1 and tier-2 bench results (every act won every time by the advisor's line; the Greater Sphere 66 percent for a line that never heals).
 - **CHANGELOG.md**: nothing yet (nothing ships from stage 1; the chapter is not registered).
-- **CONTRACT-CHANGES.md**: stage 1 none; **stage 2 wrote its entry (2026-11-10)** for `FormulaKey 'kill-count'`, `FFXMemberBuild.kills` and `FFXCombatant.kills` (it is already in the file).
+- **CONTRACT-CHANGES.md**: stage 1 none; **stage 2 wrote its entry (2026-11-10)** for `FormulaKey 'kill-count'`, `FFXMemberBuild.kills` and `FFXCombatant.kills` (it is already in the file); stage 3 none (no contract file touched).
 - **`docs/target/in-flight.json`**: add `ch-gauntlet` as in flight (FFX only).
