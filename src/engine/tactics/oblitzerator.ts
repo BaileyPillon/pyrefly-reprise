@@ -11,11 +11,12 @@
  * ## The line, and where each rule comes from
  *
  * 1. **Keep the party up** (the skeleton): Phoenix Down on a fallen member; a potion for anyone under 45 percent of his HP (the Rush is ten balls of about 35, so a member under 400 can fall to a bad spread: RE 4.1). No
- *    cure is in the line: in this engine the Darkness and Silence a ball leaves tick off at the end of the very turn it lands in (`docs/handoff/ch-oblitzerator.md`, the finding), so there is never anything to cure.
+ *    cure is in the line, because the line never swings at the machine while the crane is dark, so no ball is ever drawn (the Darkness and Silence a ball leaves last through its victim's next turn, as the game orders it:
+ *    `research/re-ffx-oblitzerator-crane.md` section 10; the cures are for the slow way, and the bench's `slog-cure` line plays them).
  * 2. **Lulu casts Thunder at the crane** (RE 4.5): the first two casts are answered with a line, the third powers it. A cast at the crane draws no ball (the Oblitzerator's counters belong to the Oblitzerator alone, RE 4.5).
  *    Nobody swings at the machine meanwhile: a plain blow draws a Blind Ball and a spell a Mute Ball, one time in three (RE 4.2).
  * 3. **Tidus hastes Lulu once**, so her three casts come sooner (his start command; Haste is his, RE 5); every other member Defends until the crane has power.
- * 4. **With the crane powered Tidus uses it** (RE 4.5): the Oblitzerator drops to a sixteenth of its HP and stops acting and answering. **Then anyone swings**: 375 HP is two blows.
+ * 4. **With the crane powered Tidus uses it** (RE 4.5): the Oblitzerator drops to a sixteenth of its HP and stops acting and answering. **Then anyone swings**: 375 HP is two to four blows.
  * 5. If the crane is spent or gone and the machine is alive, swing at the machine.
  *
  * Measured on the real engine over seeds 1 to 200 with the shipped build (Tidus, Lulu and Kimahri on the Luca estimate): see `docs/handoff/ch-oblitzerator.md`. The tactic only picks among the rows the engine offers.
@@ -62,7 +63,7 @@ export const oblitzeratorLine: Tactic = (actorId, commands, engine: BattleEngine
   const tended = care(commands, front);
   if (tended) return tended;
 
-  // 4. The machine is lifted: anyone swings (375 HP is two blows, and it answers nothing now).
+  // 4. The machine is lifted: anyone swings (375 HP is two to four blows, and it answers nothing now).
   if (lifted) return pick(commands, 'attack', undefined, OBLITZERATOR_ID);
 
   // 4. The crane has power: Tidus uses it.

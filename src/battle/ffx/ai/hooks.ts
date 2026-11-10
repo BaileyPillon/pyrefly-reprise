@@ -172,6 +172,13 @@ export type Reaction =
        * though the owner is no longer alive, as the game's death handler does. Absent for every other reaction, whose dead owner still drops it, so no other battle changes.
        */
       ownerMayBeDead?: boolean;
+      /**
+       * The reaction runs **after the action's end-of-turn tick**, not before it (the hidden Oblitzerator chapter's balls, FFX only). The game's `pp_BtlApplyResults` (VA 0x0078d980) calls the
+       * triggering action's `pp_BtlActionDone` (VA 0x007b20e0: recovery, then the end-of-turn status tick) in the same pass that raised the `onHit` event, and the reaction the script asked
+       * for is queued behind that action's entry, so it only runs afterwards: a status of duration code 1 it puts on the attacker is not ticked off by the turn that set it off
+       * (`research/re-ffx-oblitzerator-crane.md` section 10). Absent for every other reaction, which keeps the engine's older order (before the tick), so no other battle changes.
+       */
+      afterTick?: boolean;
     }
   | {
       /** Mortibsorption: the mount's max HP into the host, and the mount comes back (`scripted.ts#mortibsorption`). */
@@ -209,7 +216,7 @@ export function queueReaction(
   ctx: Ctx,
   ownerId: CombatantId,
   command: Command,
-  options: { forced?: boolean; keepsControl?: boolean; byId?: CombatantId; requiresAlive?: CombatantId; ownerMayBeDead?: boolean } = {},
+  options: { forced?: boolean; keepsControl?: boolean; byId?: CombatantId; requiresAlive?: CombatantId; ownerMayBeDead?: boolean; afterTick?: boolean } = {},
 ): void {
   queueOf(ctx).push({
     kind: 'command',
@@ -220,6 +227,7 @@ export function queueReaction(
     byId: options.byId ?? ownerId,
     ...(options.requiresAlive !== undefined ? { requiresAlive: options.requiresAlive } : {}),
     ...(options.ownerMayBeDead === true ? { ownerMayBeDead: true } : {}),
+    ...(options.afterTick === true ? { afterTick: true } : {}),
   });
 }
 
@@ -233,9 +241,26 @@ export function queueDrain(ctx: Ctx, mountId: CombatantId, hostId: CombatantId):
   queueOf(ctx).push({ kind: 'drain', mountId, hostId });
 }
 
-/** The next reaction, removed from the queue. */
-export function takeReaction(ctx: Ctx): Reaction | undefined {
-  return QUEUES.get(ctx.rt)?.shift();
+/** True for a reaction that waits for the action's end-of-turn tick (see {@link Reaction}, `afterTick`). */
+export function isAfterTick(reaction: Reaction): boolean {
+  return reaction.kind === 'command' && reaction.afterTick === true;
+}
+
+/**
+ * The next reaction, removed from the queue. With `skipAfterTick` the reactions that wait for the end-of-turn tick stay where they are (the
+ * drains that run before the tick pass it); with it absent the queue is first in, first out as it always was.
+ */
+export function takeReaction(ctx: Ctx, skipAfterTick = false): Reaction | undefined {
+  const queue = QUEUES.get(ctx.rt);
+  if (!queue) return undefined;
+  if (!skipAfterTick) return queue.shift();
+  const at = queue.findIndex((r) => !isAfterTick(r));
+  return at < 0 ? undefined : queue.splice(at, 1)[0];
+}
+
+/** True when a reaction that waits for the end-of-turn tick is queued. */
+export function hasAfterTickReactions(ctx: Ctx): boolean {
+  return (QUEUES.get(ctx.rt) ?? []).some(isAfterTick);
 }
 
 /** What is waiting, oldest first, without removing it (the parity tests read the queue a hook filled). */

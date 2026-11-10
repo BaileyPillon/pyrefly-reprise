@@ -1,6 +1,6 @@
 /**
- * The hidden Oblitzerator chapter on the real engine (FFX only), the fight: the counters through the real damage path (a Blind Ball on a swing, a Mute Ball on a cast, none at the crane, and the finding that a ball's status
- * ticks off with the swinger's own turn), the crane line to its end on seeds 1 to 3 (three Thunder, Use crane, 5,625 off, no turns and no counters after, the win and what it pays), the slog to its end on seeds 1 to 3 (no
+ * The hidden Oblitzerator chapter on the real engine (FFX only), the fight: the counters through the real damage path (a Blind Ball on a swing, a Mute Ball on a cast, none at the crane, and a ball's status that
+ * outlasts the swing; its order against the tick is `oblitzerator-order.test.ts`), the crane line to its end on seeds 1 to 3 (three Thunder, Use crane, 5,625 off, no turns and no counters after, the win and what it pays), the slog to its end on seeds 1 to 3 (no
  * crane: the same payout, the crane untouched), the Thunder Fury shortcut, the speed-up on the clock, determinism and a lost fight. The opening and the Rush are `oblitzerator-engine.test.ts`. Rule 3: every claim is proved
  * by running the engine.
  */
@@ -48,7 +48,7 @@ describe('the counters through the real damage path (RE 4.2)', () => {
     expect(answered / 150).toBeLessThan(0.45);
   });
 
-  it('FINDING: in this engine the ball\'s status ticks off at the end of the very turn the counter lands in (reactions run before the end-of-turn tick, `engine-end.ts#afterAction`), so Darkness and Silence do not outlast the swing; whether the game orders it so is a live check', () => {
+  it('the ball\'s status outlasts the swing, as the game orders it (the ball runs after the swinger\'s end-of-turn tick: `oblitzerator-order.test.ts`): Darkness is added once in the swing\'s own events and is still on afterwards', () => {
     for (let seed = 1; seed <= 150; seed++) {
       const engine = newEngine(seed);
       engine.submit(swing(inputFor(engine, 'kimahri'))!);
@@ -56,8 +56,8 @@ describe('the counters through the real damage path (RE 4.2)', () => {
       if (!log(engine).some((e) => e.type === 'counter' && e.actorId === OBLITZERATOR)) continue;
       const after = fromSwing(engine, 'kimahri');
       const types = after.filter((e) => (e.type === 'status-add' || e.type === 'status-tick' || e.type === 'status-remove') && (e as { targetId?: string }).targetId === 'kimahri').map((e) => e.type);
-      expect(types.slice(0, 3)).toEqual(['status-add', 'status-tick', 'status-remove']);
-      expect(has(actor(engine, 'kimahri'), 'darkness')).toBe(false);
+      expect(types).toEqual(['status-add']);
+      expect(has(actor(engine, 'kimahri'), 'darkness')).toBe(true);
       return;
     }
     throw new Error('no Blind Ball in 150 seeds');
@@ -127,7 +127,7 @@ describe('the counters through the real damage path (RE 4.2)', () => {
 });
 
 describe('the crane line to its end, seeds 1 to 3 (RE 4.5)', () => {
-  it('three Thunders wake it, Use crane takes 5,625 off 6,000, the machine takes no turn and answers nothing after, two blows end it, and the win pays 580 gil, 36 AP and an Elixir', () => {
+  it('three Thunders wake it, Use crane takes 5,625 off 6,000, the machine takes no turn and answers nothing after, a few blows end it, and the win pays 580 gil, 36 AP and an Elixir', () => {
     for (const seed of [1, 2, 3]) {
       const engine = newEngine(seed);
       for (let k = 1; k <= 3; k++) {
@@ -158,7 +158,7 @@ describe('the crane line to its end, seeds 1 to 3 (RE 4.5)', () => {
       expect(d2.commands.find((c) => c.command.kind === 'attack')!.validTargets).toEqual([OBLITZERATOR]);
       passUntil(engine, (e) => actionList(log(e)).filter((a) => a.startsWith('tidus:') || a.startsWith('lulu:') || a.startsWith('kimahri:')).length >= 14 + 0 * seed, 400);
       expect(oblitzeratorActs(engine)).toBe(before);
-      // Two blows end it: nothing answers.
+      // A few blows end it: nothing answers.
       const finishing = row(inputFor(engine, 'kimahri'), 'attack', undefined, OBLITZERATOR)!;
       const mark = log(engine).length;
       engine.submit(finishing);
@@ -318,8 +318,8 @@ describe('the slog to its end, seeds 1 to 3, and what Use crane costs', () => {
     }
   });
 
-  it('the bench\'s slog line agrees: seeds 1 to 3 are victories', () => {
-    for (const seed of [1, 2, 3]) expect(play(seed, LINES['slog']!).outcome).toBe('victory');
+  it('the bench\'s slog line with the cures agrees: seeds 1 to 3 are victories (the slog without them is the bench\'s to report: a Silenced Lulu loses her Thunder for a turn)', () => {
+    for (const seed of [1, 2, 3]) expect(play(seed, LINES['slog-cure']!).outcome).toBe('victory');
   });
 
   it('Use crane costs a rank-3 turn (the table has no rank byte for 0x3102, and the game then uses 3)', () => {
@@ -329,13 +329,19 @@ describe('the slog to its end, seeds 1 to 3, and what Use crane costs', () => {
   });
 });
 
-/** The slog's choice: Lulu casts Thunder at the machine, the others swing, and anyone under 45 percent gets a Potion (a fallen member a Phoenix Down). */
+/** The slog's choice: Lulu casts Thunder at the machine, the others swing, anyone under 45 percent gets a Potion (a fallen member a Phoenix Down), and a Silenced Lulu or a Darkened member gets the cure the guides name. */
 function slogChoice(engine: ReturnType<typeof newEngine>, d: ReturnType<typeof inputFor>): import('../../../src/battle/common/types.ts').Command {
   const party = engine.state().activeIds.map((id) => actor(engine, id));
   const down = party.find((c) => !c.alive || c.hp <= 0);
-  if (down) return row(d, 'item', 'phoenix-down', down.id) ?? defend();
   const hurt = party.filter((c) => c.hp < c.stats.maxHp * 0.45).sort((a, b) => a.hp / a.stats.maxHp - b.hp / b.stats.maxHp)[0];
-  if (hurt) return row(d, 'item', 'potion', hurt.id) ?? defend();
+  const tended = down ? row(d, 'item', 'phoenix-down', down.id) : hurt ? row(d, 'item', 'potion', hurt.id) : null; // none left: the slog goes on without
+  if (tended) return tended;
+  const mute = party.find((c) => c.id === 'lulu' && has(c, 'silence'));
+  const echo = mute ? row(d, 'item', 'echo-screen', mute.id) : null; // none left: the slog goes on without
+  if (echo) return echo;
+  const blind = party.find((c) => has(c, 'darkness'));
+  const drops = blind ? row(d, 'item', 'eye-drops', blind.id) : null;
+  if (drops) return drops;
   if (d.actorId === 'lulu') return spell(d, 'thunder', OBLITZERATOR) ?? swing(d) ?? defend();
   return swing(d) ?? defend();
 }

@@ -50,7 +50,7 @@
  * **`wendigo`** (FFX, the hidden Wendigo, `./wendigoDoor.ts`: W is `up`, E is `start`, D is `right`; N, I, G and O are unbound) is a plain `WordDoor` too, and is **desktop-only** like `yrp`, `waker` and `gear` (the Meshy 3D tech demo): its row carries the `desktopOnly` gate.
  * **`blitz`** (FFX, the hidden Oblitzerator, `./blitzDoor.ts`: B, L, I and T are unbound, **Z is `confirm`, the last letter**, which the word claims) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast` and `wendigo`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast`, `wendigo` and `blitz`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';

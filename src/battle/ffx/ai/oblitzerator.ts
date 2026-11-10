@@ -13,7 +13,10 @@
  * 2. **The counters**, unless lifted: the formula byte of the command that hit it (`./command-formula.ts#formulaByteOf`, the byte the game's scripts read) decides. **3** (any spell, Lancet, Scan, a Fury, and the status
  *    spells whose record carries the magic formula) is answered by **Mute Ball**, **1** (a weapon blow, every physical skill and Overdrive, the Breaks) by **Blind Ball**, **2** by **Doze Ball**, each aimed at the attacker and
  *    each when `GetRandomValue() mod 3` is 0, **one time in three**. The draw is taken only for those three bytes. The counter follows the engine's rule: it is not asked for while a reaction is resolving, only if the
- *    Oblitzerator can act (`./hit-gates.ts#react`), and once per command per target.
+ *    Oblitzerator can act (`./hit-gates.ts#react`), and once per command per target. **The order against the swinger's own end-of-turn tick** (read in FFX.exe, `research/re-ffx-oblitzerator-crane.md` section 10):
+ *    the game applies the hits, raises the script's `onHit` (which queues the ball behind the swinger's action entry) and calls the swinger's `pp_BtlActionDone` (recovery, then the end-of-turn tick) in the same pass,
+ *    so the ball runs **after** the tick and its status of duration code 1 lasts until the end of the swinger's NEXT turn. The ball is therefore queued `afterTick` (the engine's older order, a reaction before the tick,
+ *    would take the status off with the very turn that set it off).
  *
  * ## When it is named (RE 4.4)
  *
@@ -105,7 +108,8 @@ function oblitzeratorOnHit(ctx: Ctx, self: FFXCombatant, used: UsedCommand, _rep
   const ball = ballFor(formulaByteOf(used.def, used.user));
   if (ball === undefined) return;
   if (gameMod(ctx, COUNTER_MODULUS) !== 0) return; // the draw is taken for formula bytes 1, 2 and 3 only
-  react(ctx, self, reactionAim(ctx, used.user), use(aiContextFor(ctx, self), ball, [used.user.id]));
+  // After the swinger's end-of-turn tick, as the game orders it (see the header): the ball's status of duration code 1 then lasts through the swinger's NEXT turn.
+  react(ctx, self, reactionAim(ctx, used.user), use(aiContextFor(ctx, self), ball, [used.user.id]), true);
 }
 
 registerAiScript(OB_SCRIPT, oblitzeratorTurn);

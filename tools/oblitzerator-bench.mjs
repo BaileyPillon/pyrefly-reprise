@@ -11,7 +11,7 @@
  *   --seeds   fights a line plays (seeds FROM to FROM + N - 1); the committed table used 200
  *   --from    the first seed (default 1)
  *   --stop    the build's stop on the road, of ten (3 is the shipped Luca build; 0 is the raw start records, the lower bound)
- *   --lines   any of careless, naive, slog, crane, crane-no-care, crane-no-haste, wrong-spells, no-thunder (comma-separated); default all
+ *   --lines   any of careless, naive, slog, slog-cure, crane, crane-no-care, crane-no-haste, wrong-spells, no-thunder (comma-separated); default all
  *   --tactic  also play the line the game ships (`src/engine/tactics/oblitzerator.ts`) through the generic ladder, the way the card and the auto-battler do
  *
  * It prints one markdown row per line and a JSON line per row. A machine that is not busy takes a few hundredths of a second a fight.

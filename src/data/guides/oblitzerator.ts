@@ -3,8 +3,8 @@
  * [research/re-ffx-oblitzerator-crane.md "RE section n" (the monster records, the formation and the Atel scripts read from the game's own files, and the arithmetic against the Luca build), research/ffx-combat-core.md
  * sections 1.4, 4.2 and 7.1 to 7.5 (Haste, the status table, the player's own spells and skills)]. Every cite below names one of them in the corpus's own form: the digest first, then the game's file.
  *
- * Written against the tactic in `src/engine/tactics/oblitzerator.ts`: every hint below explains a row that file asks for (Thunder at the crane, Haste on Lulu, Use crane, the cures, the wait while the crane is dark), so each
- * line says why the command the player is told to press is the right one. (The Eye Drops and Echo Screens the bag carries are no part of the line: the Darkness and Silence a ball leaves do not outlast the turn they land in on this engine.) The tactic is the bench's advisor line (`tests/unit/helpers/oblitzeratorBot.ts`), measured on the real engine.
+ * Written against the tactic in `src/engine/tactics/oblitzerator.ts`: every hint below explains a row that file asks for (Thunder at the crane, Haste on Lulu, Use crane, the wait while the crane is dark), so each
+ * line says why the command the player is told to press is the right one. (The Eye Drops and Echo Screens the bag carries are no part of the line, because the line never swings at the machine while the crane is dark; they are for the slow way: the Darkness and Silence a ball leaves last through its victim's next turn, as the game orders it, `research/re-ffx-oblitzerator-crane.md` section 10.) The tactic is the bench's advisor line (`tests/unit/helpers/oblitzeratorBot.ts`), measured on the real engine.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]. The Oblitzerator's record, its counters and the crane's script exist only in FFX; FFX-2 has no counterpart and no file of its own reads this one.
  *
@@ -61,14 +61,14 @@ export const OBLITZERATOR_GUIDE: ChapterGuide = {
     { when: { labels: ['Potion'] }, text: 'Top {target} up: another Rush could be the last', cite: 'ffx-combat-core §7.5; re-ffx-oblitzerator-crane §4.1' },
     { when: { labels: ['Phoenix Down'] }, text: 'Stand {target} up first: every one of you matters to the line', cite: 'ffx-combat-core §7.5; re-ffx-oblitzerator-crane §4.1' },
     { when: { kinds: ['defend'] }, text: 'Wait: a blow at the machine would draw a ball back, and the crane is the line', cite: 'ffx-combat-core §4.2; re-ffx-oblitzerator-crane §4.2' },
-    { when: { kinds: ['attack'], targetId: OBLITZERATOR }, text: 'A plain blow at the lifted machine: it answers nothing now, and a sixteenth of its HP is two blows', cite: 'ffx-combat-core §2.10; re-ffx-oblitzerator-crane §4.5' },
+    { when: { kinds: ['attack'], targetId: OBLITZERATOR }, text: 'A plain blow at the lifted machine: it answers nothing now, and a sixteenth of its HP is two to four blows', cite: 'ffx-combat-core §2.10; re-ffx-oblitzerator-crane §4.5' },
   ],
 
   watch: [],
 
   phases: [
     {
-      belowHpFraction: 0.33,
+      belowHpFraction: 1 / 3,
       label: 'UNDER A THIRD',
       note: 'It is about twice as fast now, and a twelfth of its HP makes it three times. Wake the crane if you have not.',
       cite: 'ffx-combat-core §1.4; re-ffx-oblitzerator-crane §4.2',

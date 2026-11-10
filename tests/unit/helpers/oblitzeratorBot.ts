@@ -3,12 +3,13 @@
  * Sanctuary Keeper benches' method). Test-only. It reads what a player reads (the menu's rows, the statuses on the icons, the HP bars) and the crane's state through the debug flags a stage would draw (the crane's state is
  * on the screen as the line "activated"), and never the script's counters.
  *
- * A **line** is a few switches on a common skeleton. The skeleton's priorities are fixed: stand a fallen member up (Phoenix Down), heal the hurt (a Potion), and what is left goes into the line's own plan. **No line
- * cures anything**: on this engine the Darkness and Silence a ball leaves tick off at the end of the very turn they land in (`oblitzerator-engine.test.ts`, the finding), so there is never anything to cure. The lines:
+ * A **line** is a few switches on a common skeleton. The skeleton's priorities are fixed: stand a fallen member up (Phoenix Down), heal the hurt (a Potion), and what is left goes into the line's own plan. A ball's Darkness or Silence
+ * lasts through its victim's next turn (the game's order, `research/re-ffx-oblitzerator-crane.md` section 10), so only the lines with `cure` spend a turn on Echo Screens and Eye Drops. The lines:
  *
  * - **careless**: Attack with everyone (the front line's own Attack on the Oblitzerator, Lulu's staff included); heal nobody, cure nothing (what a player does who has not read the guides).
  * - **naive**: the same, but Lulu casts Thunder (its weakness) at the machine; still no care at all. No crane.
- * - **slog**: the skeleton's care plus the sensible slog: Tidus and Kimahri attack the machine, Lulu casts Thunder at it. No crane.
+ * - **slog**: the skeleton's care plus the sensible slog: Tidus and Kimahri attack the machine, Lulu casts Thunder at it. No crane. No cure.
+ * - **slog-cure**: the slog, and a turn spent on an Echo Screen for a Silenced Lulu or Eye Drops for a Darkened member (what the guides advise) before anything else of the line's.
  * - **crane** (the advisor, the line the game ships in `src/engine/tactics/oblitzerator.ts`): the care; Tidus hastes Lulu once; Lulu casts Thunder at the crane three times; Tidus uses the crane; anyone finishes.
  * - **ablations** of the crane line: no care; no Haste; Lulu casts the wrong spells at the crane (Fire, Blizzard, Water: nothing wakes it); Lulu never casts Thunder at the crane (so Use crane is tried unpowered and the
  *   rest swing).
@@ -27,6 +28,8 @@ export interface Line {
   readonly careless?: boolean;
   /** The skeleton's care: raise the fallen, heal the hurt. */
   readonly care: boolean;
+  /** After the care: cure a Silenced Lulu (Echo Screen) or a Darkened member (Eye Drops), the statuses a ball leaves. */
+  readonly cure?: boolean;
   /** The crane line: Lulu's Thunder at the crane, Tidus's Use crane, then a swing. False: nobody names the crane. */
   readonly crane: boolean;
   /** Tidus hastes Lulu once, before anything else of his. */
@@ -43,6 +46,7 @@ export const LINES: Readonly<Record<string, Line>> = {
   careless: { name: 'careless', careless: true, care: false, crane: false, haste: false, lulusThunder: false },
   naive: { name: 'naive', care: false, crane: false, haste: false, lulusThunder: true },
   slog: { name: 'slog', care: true, crane: false, haste: false, lulusThunder: true },
+  'slog-cure': { name: 'slog-cure', care: true, cure: true, crane: false, haste: false, lulusThunder: true },
   crane: CRANE_LINE,
   'crane-no-care': { ...CRANE_LINE, name: 'crane-no-care', care: false },
   'crane-no-haste': { ...CRANE_LINE, name: 'crane-no-haste', haste: false },
@@ -81,6 +85,21 @@ function care(engine: BattleEngine, d: Input): Command | null {
   if (down) return row(d, 'item', 'phoenix-down', down.id);
   const hurt = party.filter((c) => alive(c) && c.hp < c.stats.maxHp * 0.45).sort((a, b) => a.hp / a.stats.maxHp - b.hp / b.stats.maxHp)[0];
   if (hurt) return row(d, 'item', 'potion', hurt.id);
+  return null;
+}
+
+/** Skeleton step after the care, for the lines with `cure`: Echo Screen for a Silenced Lulu, Eye Drops for a Darkened member (the icons are what a player reads). */
+function cure(engine: BattleEngine, d: Input): Command | null {
+  const lulu = actor(engine, 'lulu');
+  if (alive(lulu) && has(lulu, 'silence')) {
+    const echo = row(d, 'item', 'echo-screen', lulu.id);
+    if (echo) return echo;
+  }
+  const blind = front(engine).find((c) => alive(c) && has(c, 'darkness'));
+  if (blind) {
+    const drops = row(d, 'item', 'eye-drops', blind.id);
+    if (drops) return drops;
+  }
   return null;
 }
 
@@ -125,6 +144,8 @@ export function choose(engine: BattleEngine, d: Input, line: Line): Command {
   if (line.careless) return strike;
   const tended = line.care ? care(engine, d) : null;
   if (tended) return tended;
+  const cured = line.cure === true ? cure(engine, d) : null;
+  if (cured) return cured;
   return plan(engine, d, line) ?? strike;
 }
 
