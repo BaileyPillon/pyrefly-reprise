@@ -4,8 +4,8 @@
  * a result shows here. **No boss row is ever touched**: a cell is a choice of line or of the party's own estimate.
  *
  * What it pins (all measured, preflight section 8: the plan's target was about 70 percent per act): at the shipped preset the three area creations are won every time by the advisor's line, with Yojimbo's Zanmato and
- * without, and by the careless line (the preflight's own prediction 1); the party's stat estimate is the lever that moves them (a cliff between a quarter and a half of the caps for the careless line, and the
- * advisor's line holds on far below it).
+ * without, and by the careless line (the preflight's own prediction 1); the party's stat estimate is the lever that moves them (a cliff between a half and a quarter of the caps for the careless line, and a cliff between about a sixth and a tenth for the
+ * advisor's line without Yojimbo, the measured cells are in the handoff).
  */
 import { describe, expect, it } from 'vitest';
 

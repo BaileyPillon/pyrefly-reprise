@@ -19,7 +19,10 @@ import { GAUNTLET_ACTS_BUILT, GAUNTLET_GROUPS, gauntletGroup, gauntletGroupOf } 
 import * as ids from '../../../src/data/ffx/gauntlet-ids.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx/index.ts';
 import { GAUNTLET_BOSS_IDS, PAY_GIL, TONBERRY_WADDLES_TO_ARRIVE, TONBERRY_WADDLE_ROW, SHIPPED_LINE } from '../../../src/engine/tactics/gauntlet.ts';
-import { newEngine, actor } from '../helpers/gauntletDrive.ts';
+import type { BattleSetup } from '../../../src/battle/common/types.ts';
+import { createFFXEngine } from '../../../src/battle/ffx/index.ts';
+import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
+import { actor, careless, content, newEngine, setup } from '../helpers/gauntletDrive.ts';
 
 describe("the battle layer's copies of the ids equal the data's (the battle layer imports no src/data)", () => {
   it('the three tier-1 combatant ids, script ids and move rows', () => {
@@ -167,6 +170,21 @@ describe('the party: the Dark Aeons preset with Auron\'s Piercing and 500 kills 
     for (const id of ['tidus', 'yuna', 'auron', 'lulu', 'wakka', 'kimahri', 'rikku']) expect(actor(e, id).kills, id).toBe(500);
     expect(actor(e, 'cactuar-king').kills).toBeUndefined();
     for (const m of darkAeonsBuild.members) expect(m.kills, m.id).toBeUndefined();
+  });
+
+  it('the kill counts and the bag carry into the next act with the heal: act 2 opens with 500 kills each, every member on his feet at full HP', () => {
+    const first = newEngine(3, 'cactuar-king');
+    for (let guard = 0; guard < 400; guard++) {
+      const d = first.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind === 'player-input') first.submit(careless(d, first) ?? { kind: 'defend', targets: [] });
+    }
+    const second = createFFXEngine({ content, autoResolveMinigames: true });
+    second.init(setupForNextLink(setup(3, 'cactuar-king'), gauntletGroupOf('don-tonberry'), first.state(), 4) as BattleSetup);
+    for (const id of ['tidus', 'yuna', 'auron', 'lulu', 'wakka', 'kimahri', 'rikku']) {
+      expect(actor(second, id).kills, id).toBe(500);
+      expect(actor(second, id).hp, id).toBe(actor(second, id).stats.maxHp);
+    }
   });
 
   it('the shipped line pays Yojimbo the Dark Aeons chapter\'s 100,000 gil and calls him in against none of tier 1 (the bench: not needed)', () => {
