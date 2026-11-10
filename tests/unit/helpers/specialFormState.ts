@@ -261,3 +261,26 @@ export function captureBursts(seeds: Partial<Record<string, number>> = {}): Reco
     ...syntheticLogs(),
   };
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// Step D2: the two rigs of `ffx2-special-form-edges.test.ts` (copied, that file is not edited), for the victory case of the surface tests
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+const KO = { id: 'ko', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: true } as never;
+
+/** Knock a unit out the way the engine's own rigs in these tests do (no second chance, so it is a fall). Emits no event. */
+export function fell(u: { hp: number; alive: boolean; statuses: Record<string, unknown> }): void {
+  u.hp = 0;
+  u.alive = false;
+  u.statuses['ko'] = KO;
+}
+
+/** Step the engine until the battle is over (the result is built and any form has ended). */
+export function playUntilOver(engine: FFX2Engine): void {
+  for (let i = 0; i < 400; i++) {
+    const d = engine.nextDecision();
+    if (d.kind === 'battle-over') return;
+    if (d.kind === 'waiting') engine.tick(Math.max(1, d.nextEventMs));
+  }
+  throw new Error('the battle did not end');
+}
