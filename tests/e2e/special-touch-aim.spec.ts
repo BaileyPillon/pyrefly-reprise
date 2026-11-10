@@ -39,6 +39,9 @@ test.afterAll(() => {
   server = null;
 });
 
+/** The one-target ENEMY row of each part (read off the real engine in review fix R3-2): a part is offered no Attack row, only its own skills; Howitzer is on both of Rikku's parts, Paine's right wing has Venom Wing and her left Ma'at's Feather. */
+const ENEMY_ROW: Record<string, string> = { 'machina-maw-smasher-r': 'Howitzer', 'machina-maw-crusher-l': 'Howitzer', 'full-throttle-right': 'Venom Wing', 'full-throttle-left': "Ma'at's Feather" };
+
 /** The one-target ally row of each girl's parts. */
 const ALLY_ROW: Partial<Record<Girl, string>> = { rikku: 'HP Repair', paine: 'Stamina' };
 
@@ -139,11 +142,11 @@ for (const girl of ['rikku', 'paine'] as const) {
     expect(await waitUntil(page, async () => (await page.evaluate(() => window.__pyrefly!.battleLog().length)) > logBefore, { timeoutMs: 20_000 }), 'the command played').toBe(true);
 
     // a tap on a plate while an ENEMY is aimed does nothing
-    await toPartMenu(page, girl);
-    expect(await takeRow(page, 'Attack')).toBe(true);
-    expect(await waitUntil(page, async () => (await selection(page)) !== null, { timeoutMs: 5_000, intervalMs: 150 }), 'the attack aim opened').toBe(true);
+    const partNow = await toPartMenu(page, girl);
+    await openRowAnywhere(page, ENEMY_ROW[partNow]!); // not Attack: the engine offers a part no Attack row
+    expect(await waitUntil(page, async () => (await selection(page)) !== null, { timeoutMs: 5_000, intervalMs: 150 }), 'the enemy aim opened').toBe(true);
     const foe = (await selection(page))!;
-    expect(foe.ids.some((id) => all.includes(id)), 'the attack aims a foe').toBe(false);
+    expect(foe.ids.some((id) => all.includes(id)), 'the pick aims a foe').toBe(false);
     for (const id of all) {
       await tapPlate(page, id);
       expect((await selection(page))?.ids, `a tap on ${id} while a foe is aimed`).toEqual(foe.ids);
