@@ -59,6 +59,9 @@ import { youthLeagueLeagueScripts } from './youth-league-league.ts';
 import { x2IfritScript } from './ifrit.ts';
 // Garik Ronso and the Ronso Youths at the top of Mt. Gagazet (the hidden chapter "Garik Ronso", FFX-2 only): the game's own two scripts, hostile and friendly, poll by poll.
 import { garikRonsoScripts } from './garik-ronso.ts';
+// Almighty Shinra and the four heads of the Major Numerus (the hidden chapter "The Fiend Arena Superbosses", FFX-2 only): the game's own five scripts, poll by poll.
+import { shinraAlmightyScripts } from './shinra-almighty.ts';
+import { numerusScripts } from './numerus.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -109,6 +112,8 @@ const SCRIPTS: readonly AiScript[] = [
   ...youthLeagueLeagueScripts,
   x2IfritScript,
   ...garikRonsoScripts,
+  ...shinraAlmightyScripts,
+  ...numerusScripts,
   idleScript,
   basicAttackScript,
 ];

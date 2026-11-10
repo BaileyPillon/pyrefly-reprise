@@ -189,7 +189,8 @@ describe('XE4: the Vegnagun Core\'s death entry sets both Bulwarks to 0 hit poin
     expect(unit(b, 'vegnagun-body')).toMatchObject({ hp: 33040, alive: true });
     expect(unit(b, 'bulwark-l')).toMatchObject({ hp: 3000, alive: true });
     const withEntry = ENEMY_GROUPS.flatMap((g) => [...g.enemies, ...(g.parts ?? [])]).filter((e) => aiScriptFor(e.aiScriptId).onDeath !== undefined).map((e) => e.id);
-    expect(withEntry).toEqual(['vegnagun-body']);
+    // The Core's is the only one of the chain; the four heads of the Major Numerus (the hidden chapter "The Fiend Arena Superbosses", FFX-2 only, `ai/numerus.ts`) are the other four in the game: their death entry stores 0 HP in the body and the pod.
+    expect(withEntry).toEqual(['vegnagun-body', 'x2-numerus-unum', 'x2-numerus-duo', 'x2-numerus-tria', 'x2-numerus-quattour']);
   });
 
   it('every way the Core falls reaches the entry: damage, the Death status, and a hit in a party member\'s own action', () => {

@@ -10,10 +10,12 @@
  */
 
 import type { BattleSetup, Command, Decision, EnemyGroupDef, FFX2Combatant, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
+import { createHash } from 'node:crypto';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import { aiScriptFor, registerAiScript } from '../../../src/battle/ffx2/ai/index.ts';
 import { viaInfinitoBuild } from '../../../src/data/ffx2/builds/via-infinito.ts';
 import { act1ShinraGroup, act2NumerusGroup } from '../../../src/data/ffx2/enemies/fiend-superbosses.ts';
+import { NUMERUS_HEAD_IDS, X2_ALMIGHTY_SHINRA_ID } from '../../../src/data/fiend-superbosses-ids.ts';
 import { ffx2Options } from './ffx2ChapterDrive.ts';
 import { logOf, makeInvincible, nextInput, topUp, type AngraEv } from './angraMainyuDrive.ts';
 
@@ -160,4 +162,74 @@ export function attackOf(d: Input, target: string): Command {
   if (!r) return { kind: 'defend', targets: [] };
   const t = r.validTargets.find((x) => x === target) ?? r.validTargets[0];
   return { ...r.command, targets: t ? [t] : [] } as Command;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// Stage 2: playing an act to its end (or to a named cap), and the event log's hash
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+/** The turn cap of a run: 20 minutes of battle time (the engine counts 60 ticks a second). A run that reaches it is a RESULT named `cap`, never a failure. */
+export const CAP_TICKS = 60 * 60 * 20;
+
+/** The foes of an act that the girls aim at, in order: Shinra, or the four heads. */
+export const targetsOf = (act: Act): readonly string[] => (act === 1 ? [X2_ALMIGHTY_SHINRA_ID] : NUMERUS_HEAD_IDS);
+
+/** The first of the act's foes still standing (the headline target of the lines below). */
+export function headlineOf(engine: FFX2Engine, act: Act): string {
+  const list = targetsOf(act);
+  return list.find((id) => unit(engine, id).alive) ?? (list[0] as string);
+}
+
+/**
+ * The Darkness line, the base party's plain damage line (an input to a measurement, never game data; the Lv 99 line's Dark Knights Yuna and Paine cast Darkness, which ignores Defense, and Rikku attacks the first foe standing).
+ * Not the shipped advisor: the chapter has none yet.
+ */
+export function darknessLine(act: Act): Turn {
+  return (d, engine) => {
+    if (d.actorId === 'rikku') return attackOf(d, headlineOf(engine, act));
+    const row = d.commands.find((c) => c.enabled && c.command.kind === 'ability' && (c.command as { id: string }).id === 'x2-dark-knight-darkness');
+    return row ? ({ ...row.command, targets: [] } as Command) : attackOf(d, headlineOf(engine, act));
+  };
+}
+
+export interface RunResult {
+  /** `victory`, `defeat`, or `cap` (the turn cap was reached with the fight still on). */
+  outcome: string;
+  ticks: number;
+  decisions: number;
+  /** sha256 (first 16 hex digits) of every event of the run, serialised in order. */
+  hash: string;
+}
+
+/** The hash of the engine's event log so far (the same digest as `ffx2ChapterDrive.ts#logHash`, for one link). */
+export function eventHash(engine: FFX2Engine): string {
+  return createHash('sha256').update(JSON.stringify(engine.state().log)).digest('hex').slice(0, 16);
+}
+
+/** Play an open fight with `turn` until it ends or the cap is reached. `immortal` tops the girls up at each of their decisions (their Invincible is laid by {@link openAct}'s `immortal`). */
+export function playToEnd(engine: FFX2Engine, turn: Turn, opts: { immortal?: boolean; capTicks?: number } = {}): RunResult {
+  const cap = opts.capTicks ?? CAP_TICKS;
+  let decisions = 0;
+  let outcome = 'cap';
+  while (engine.state().ticks <= cap) {
+    const d = engine.nextDecision();
+    decisions += 1;
+    if (d.kind === 'battle-over') {
+      outcome = outcomeOf(engine) ?? 'over';
+      break;
+    }
+    if (d.kind === 'waiting') engine.tick(Math.max(1, d.nextEventMs));
+    else if (d.kind === 'player-input') {
+      if (opts.immortal) topUp(engine);
+      engine.submit(turn(d, engine) ?? { kind: 'defend', targets: [] });
+    }
+  }
+  return { outcome, ticks: engine.state().ticks, decisions, hash: eventHash(engine) };
+}
+
+/** The abilities an actor started, in order, each with its targets (`id>target+target`). */
+export function startsOf(engine: FFX2Engine, actor: string): string[] {
+  return logOf(engine)
+    .filter((e) => e.type === 'action-start' && e.actorId === actor)
+    .map((e) => `${e.abilityId}${e.targets && e.targets.length > 0 ? '>' + e.targets.join('+') : ''}`);
 }

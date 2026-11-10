@@ -6,8 +6,9 @@
  *
  * (a) **The seven-actor formation.** The engine holds the Numerus as four enemies and three hidden parts (ten combatants with the girls). The party's menu offers the four heads and no part; a move at all enemies, and an enemy-side
  *     move at all allies, reach the four heads and no part; the parts' idle turns cost nothing. The HUD for four bars and the stage for four heads are the presentation lane's (stage 3), not this file's.
- * (b) **The death rule.** The game's rule (the last of the four heads to die sets the body and the pod to 0 HP) is the engine's standing rule for parts (`battle/ffx2/results.ts`: a part never gates victory): the fight goes on
- *     while any head stands, and ends in a victory the moment the last falls, in either order, with the three parts still at 1 HP.
+ * (b) **The death rule.** The fight ending when the last of the four heads falls is the engine's standing rule for parts (`battle/ffx2/results.ts`: a part never gates victory): the fight goes on while any head stands, and ends
+ *     in a victory the moment the last falls, in either order. **Stage 1 found the three parts still at 1 HP then; since stage 2 the heads' death entry (`ai/numerus.ts`, the game's own: the last head down sets the body and the pod
+ *     to 0 HP) leaves the body and the pod at 0 HP, alive, with no knock-out, and the tail at 1 HP; the outcome and the rewards are unchanged.** The scripts' own checks are in `fiend-superbosses-ai.test.ts` and `-runs.test.ts`.
  * (c) **The 99,999 bit.** The four Commands deal far more than the 9,999 cap (Fulmen 99,999 on the Alchemist), **are not touched by Protect or Shell** (their damage flags carry neither the physical nor the magical bit; the research
  *     note's "halved by Protect" is wrong for the engine and for the row), and are stopped only by Invincible. At the Lv 99 line's real HP every Command that hits a girl puts her down.
  * (d) **The status layer.** The heads are Lv 99 and so are the girls, so a status lands on the chance byte alone (the level term of `kernel/statusGroup1.ts` is zero): the 254 rows land on nearly every cast, the 75 to 130 rows
@@ -70,7 +71,8 @@ describe('(a) the seven-actor formation [T0 a]', () => {
   });
 
   it('a girl\'s menu offers the four heads and no part, for the plain attack and for a move at all enemies', () => {
-    const engine = openAct(2, 1);
+    const { group } = forcedAct(2); // the heads queue nothing: the real scripts (stage 2) would put the line down before Yuna's Darkness is offered
+    const engine = openAct(2, 1, { group });
     const d = nextInput(engine)!;
     expect(d).not.toBeNull();
     expect(d.commands.find((c) => c.command.kind === 'attack')!.validTargets).toEqual(HEADS);
@@ -146,7 +148,7 @@ describe('(a) the seven-actor formation [T0 a]', () => {
 
 describe('(b) the death rule [T0 b]', () => {
   for (const [label, order] of [['Unum, Duo, Tria, Quattour', HEADS], ['Quattour, Tria, Duo, Unum', [...HEADS].reverse()]] as const) {
-    it(`heads taken down one by one (${label}): the fight goes on after the first three and ends in a victory when the last falls; the body, pod and tail are still at 1 HP and nothing was paid for them`, () => {
+    it(`heads taken down one by one (${label}): the fight goes on after the first three and ends in a victory when the last falls; the body and the pod then read 0 HP (the heads' death entry, stage 2), the tail 1 HP, and nothing was paid for them`, () => {
       const { group } = forcedAct(2);
       const engine = openAct(2, 3, { group, immortal: true });
       let over: { outcome: string; exp: number; gil: number; ap: number; drops: unknown[] } | null = null;
@@ -174,7 +176,8 @@ describe('(b) the death rule [T0 b]', () => {
       }
       expect(verdicts).toEqual(order.map((id, i) => `${id}:down:${i === 3 ? 'over' : 'on'}`));
       expect(over!.outcome).toBe('victory');
-      for (const id of PARTS) expect([unit(engine, id).hp, unit(engine, id).alive], id).toEqual([1, true]);
+      // stage 2: the last head's death entry (`ai/numerus.ts`) stored 0 HP in the body and the pod (a store, not a knock-out: they stay "alive" and pay nothing); the tail is not touched
+      expect(PARTS.map((id) => [unit(engine, id).hp, unit(engine, id).alive])).toEqual([[0, true], [0, true], [1, true]]);
       // the four heads pay their rows (EXP 6,000, Gil 5,000, AP 1 each); the parts pay nothing; the heads' item slots are 0 in our tables (the drops are named gaps)
       expect([over!.exp, over!.gil, over!.ap, over!.drops]).toEqual([24_000, 20_000, 4, []]);
       const kos = logOf(engine).filter((e) => e.type === 'ko').map((e) => e.targetId);

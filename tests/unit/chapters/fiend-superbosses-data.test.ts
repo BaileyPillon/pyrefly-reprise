@@ -416,7 +416,7 @@ describe('the chain: two formations, one seam (LG1, LG8)', () => {
     expect(act2NumerusGroup.headline).toBe('Major Numerus');
   });
 
-  it('both acts play the stand-in superboss cue (LG9) and the scripts the enemies name are the ids file\'s; until stage 2 an unregistered script id falls back to the idle script', () => {
+  it('both acts play the stand-in superboss cue (LG9) and the scripts the enemies name are the ids file\'s (registered since stage 2, `fiend-superbosses-ai.test.ts`)', () => {
     for (const group of fiendSuperbossesGroups) expect(group.musicCues).toEqual([{ at: 'start', track: 'boss-trema', fadeMs: 800 }]);
     expect([ids.SHINRA_SCRIPT_ID, ids.UNUM_SCRIPT_ID, ids.DUO_SCRIPT_ID, ids.TRIA_SCRIPT_ID, ids.QUATTOUR_SCRIPT_ID]).toEqual(['x2-almighty-shinra', 'x2-numerus-unum', 'x2-numerus-duo', 'x2-numerus-tria', 'x2-numerus-quattour']);
     for (const [id, enemy] of Object.entries(ENEMIES)) {
