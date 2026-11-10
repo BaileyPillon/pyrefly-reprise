@@ -9,7 +9,7 @@
  *   Dragon is weak to Ice, breathes on all three first and then hits the healthiest girl; the Guardian Beast curses (no changing dress) and, below a third of its life, looses Damocles Photon (half of everyone's maximum HP);
  *   YSLS-Zero's Blast Punch is half of one girl's maximum HP. **The tip follows the bench, not the guides' words** (`tests/unit/chapters/gullwings-ch1-bench.test.ts`): a White Mage and two Black Mages win the Beast (97 of 100) where the three starting
  *   dresspheres win 79, and the three starting dresspheres win YSLS-Zero (99 of 100) with fewer knock-outs than two Black Mages. The tip is one short form that fits the prep card's band (no entry in `./chapter-prep-tips.ts`).
- * - `quote` is Paine's line from the first seam (`../story/scripts/ffx2-gullwings-ch1.ts`), our own.
+ * - `quote` is Paine's line from the second seam (`../story/scripts/ffx2-gullwings-ch1.ts`), our own.
  * - `objectives` (exactly three): get past the Flame Dragon (act 3 reached), get past the Guardian Beast (act 4 reached), the win.
  * - `heroArt` has no painting of its own yet (`pause/ffx2-gullwings-ch1`); the Zanarkand Dome's plate is the fallback.
  * - `snapshots`: the Dome's plate (the flagged stand-in for all four acts), Yuna's FFX-2 portrait and Paine's (approved).
@@ -26,7 +26,7 @@ export const GULLWINGS_CH1_META: ChapterMeta = {
   ...GULLWINGS_CH1_TEXT,
   heroArt: 'pause/ffx2-gullwings-ch1', // no painting yet: the fallback below shows
   heroArtFallback: 'backdrops/zanarkand-dome.png',
-  quote: { text: 'Four spheres. Try to come back with all four of us.', speaker: 'Paine' },
+  quote: { text: 'Something is always standing guard.', speaker: 'Paine' },
   handwritten: 'ice for the dragon. heal for the beast',
   objectives: [
     { id: 'get-past-the-flame-dragon', label: 'Get past the Flame Dragon', rule: { kind: 'link-reached', link: 3 } },

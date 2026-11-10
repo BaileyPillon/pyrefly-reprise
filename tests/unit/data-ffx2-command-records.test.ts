@@ -106,8 +106,7 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Ifrit at Kilika Temple's four rows (Hellfire 0x4094, Meteor Strike 0x4095, Firaga 0x41f1, Time Up Meteor 0x4236) are the RE note's, pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/ifrit_kilika_rows.json,
   // tests/unit/chapters/ifrit-kilika-data.test.ts).
   if (label.startsWith('x2-ifrit-')) return;
-  // The hidden Gullwings, Chapter 1's seventeen rows (Boris's Spider Attack 0x40c7, Sticky End 0x40c8 and Spider Bite 0x40ca, the Flame Dragon's Flame Breath 0x40d8, the Guardian Beast's Damocles Photon 0x40da and Curse 0x4046, YSLS-Zero's
-  // Attacks 0x4000 and 0x41da, Blast Punch 0x4056 and Haymaker 0x4057, the shared Time Up Meteor 0x4236) are the RE note's, pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/gullwings_ch1_rows.json, tests/unit/chapters/gullwings-ch1-data.test.ts).
+  // The hidden Gullwings, Chapter 1's seventeen rows (Boris, the Flame Dragon, the Guardian Beast, YSLS-Zero and the shared Time Up Meteor) are pinned against their own fixture (tests/fixtures/parity/ffx2/gullwings_ch1_rows.json, tests/unit/chapters/gullwings-ch1-data.test.ts).
   if (label.startsWith('x2-boris-') || label.startsWith('x2-flame-dragon-') || label.startsWith('x2-guardian-beast-') || label.startsWith('x2-ysls-zero-') || label.startsWith('x2-gullwings-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();

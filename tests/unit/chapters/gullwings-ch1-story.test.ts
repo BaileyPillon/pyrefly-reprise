@@ -133,6 +133,9 @@ describe('what the draft says, against the sources and the engine', () => {
 
   it('the meta\'s quote and snapshots agree with the draft and say nothing the measure contradicts (no promise that magic beats YSLS-Zero\'s Defense)', () => {
     expect(GULLWINGS_CH1_META.quote?.speaker).toBe('Paine');
+    // The pause quote is a line the draft really has, said by Paine (review 2026-11-09: it once named a line no script held).
+    const paineLines = allScripts().flatMap(([, s]) => saysOf(s)).filter((s) => s.who === 'paine').map((s) => s.text);
+    expect(paineLines).toContain(GULLWINGS_CH1_META.quote?.text);
     const shown = JSON.stringify([S.pre, S.post, S.midScripts, GULLWINGS_CH1_META.quote, GULLWINGS_CH1_META.handwritten, GULLWINGS_CH1_META.snapshots, GULLWINGS_CH1_META.tip]);
     expect(shown).not.toMatch(/magic goes through|ignores (his|its) armour|send a Black Mage/i);
   });

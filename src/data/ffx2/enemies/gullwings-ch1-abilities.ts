@@ -6,7 +6,7 @@
  * the rows on these abilities by id, so the charge, the recovery, the target flags, the hit rule and the statuses are the rows' own; the fields here are the ability's own reading, kept consistent with them. The FFX
  * Sanctuary Keeper (which the guides say the Flame Dragon recalls) is a different monster of a different game and **no number of it is used**; every id here is `x2-` prefixed.
  *
- * - **Boris** (`m132`): **Spider Attack** (0x40c7: two hits of power 16, accuracy formula 1 on the byte 95, crit 10), **Sticky End** (0x40c8: formula 8, power 1, all three, cast 10; Stop at 40 with a counter of 20) and
+ * - **Boris** (`m132`): **Spider Attack** (0x40c7: two hits of power 16, accuracy formula 1 on the byte 95, crit 10), **Sticky End** (0x40c8: formula 8, power 1, all three, cast 10; Stop with a base of 40 and a counter of 20) and
  *   **Spider Bite** (0x40ca: formula 1 so no Defense term, power 32, cast 180: the Aranea's row).
  * - **Flame Dragon** (`m122`): the plain **Attack** (0x41da, the monster record's row) and **Flame Breath** (0x40d8: formula 9, power 32, Fire, all three, cast 140, MP 30). Its Tail Smash (0x40d9) is in the source inside a
  *   commented-out block and in no worker: it is not built.
@@ -68,7 +68,7 @@ export const GULLWINGS_DC = {
 export const FLAME_BREATH_MP = 30;
 export const DAMOCLES_PHOTON_MP = 28;
 
-/** Stop's chance byte and counter on Sticky End (the row: 40 and 20). */
+/** Stop's base chance and counter on Sticky End (the row: 40 and 20). The status roll is `draw % 101 < base + 5 * (lvA - lvT) - resist`, so the base is a percent-scale number, lowered for a girl above Boris's level. */
 export const STICKY_END_STOP_CHANCE = 40;
 export const STICKY_END_STOP_COUNTER = 20;
 
@@ -87,9 +87,9 @@ function announcement(id: string, name: string, line: string): AbilityDef {
   };
 }
 
-/** The sixteen rows of the four bosses and the shared block. */
+/** The seventeen rows of the four bosses and the shared block. */
 export const x2GullwingsCh1Abilities: AbilityDef[] = [
-  // ---- Boris (floor 20's cousin: the spider-fiend of the Floating Ruins) ----------------------------------------------------------
+  // ---- Boris (the spider-fiend of the Floating Ruins) ----------------------------------------------------------
   {
     ...base,
     id: BORIS_SPIDER_ATTACK_ID,

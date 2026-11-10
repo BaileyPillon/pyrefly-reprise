@@ -173,7 +173,7 @@ describe('Sticky End and the Stop', () => {
     expect(Math.max(...seen)).toBeLessThanOrEqual(52);
   });
 
-  it("Stop lands on some girls and not others, with a counter of 20 and the web's source on the instance; the rate over 100 seeds is measured: the row's byte is 40 of 255 (about one girl in six), not the note's 40 percent", () => {
+  it("Stop lands on some girls and not others, with a counter of 20 and the web's source on the instance; the rate over 100 seeds is measured: the row's 40 is a base lowered 5 per level the girl is above Boris (Lv 8 against 12 to 14: 20, 15 and 10 in 101, about one girl in seven), not four in ten", () => {
     let stops = 0;
     let trials = 0;
     let counter = -1;

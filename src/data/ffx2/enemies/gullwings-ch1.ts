@@ -289,7 +289,7 @@ export const x2YslsZero: EnemyDef = {
   },
   abilityIds: [YSLS_ZERO_ATTACK_ID, YSLS_ZERO_ATTACK_NO_CANCEL_ID, YSLS_ZERO_HAYMAKER_ID, YSLS_ZERO_BLAST_PUNCH_ID, ...TOO_LONG],
   flags: { isBoss: true },
-  sensorText: 'Half your life in one punch, and a double blow that almost finishes you. Protect first, and keep a healer going every turn.',
+  sensorText: 'Half your life in one punch, and a double blow that almost finishes you. Keep a healer going every turn: neither Protect nor Shell blunts that punch.',
   scanText: 'A machine of the old war, set to guard. Its armour is thick, and its fists are thicker.',
 };
 

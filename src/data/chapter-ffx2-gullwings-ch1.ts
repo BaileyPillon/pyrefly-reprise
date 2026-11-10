@@ -33,11 +33,10 @@ export { GULLWINGS_CH1_ID } from './gullwings-ch1-ids.ts';
 /** The card's words (the chapter record and the pause metadata, `./chapter-meta-ffx2-gullwings-ch1.ts`, both read them). Our own words over the sourced beats. */
 export const GULLWINGS_CH1_TEXT = {
   title: 'Gullwings, Chapter 1',
-  subtitle: 'Four hotspots, four guardians, one very early start',
+  subtitle: 'Four hotspots, four guardians', // two lines on the prep card at 1600x900 (the longer one ran to three)
   location: 'The Floating Ruins, Besaid, Zanarkand and Kilika',
-  blurb:
-    'The Gullwings have only just learned that a sphere can be worth the trouble. A spider at the top of the world, ' +
-    'a dragon in a cave at home, a beast in the old ruins and a machine at a temple door: each guards a sphere, and each has a trick.',
+  // Short enough to read whole on the prep card at 1600x900 (the first draft was clipped mid-sentence; the card scrolls, but nobody should have to).
+  blurb: 'The Gullwings have only just learned that a sphere can be worth the trouble. A spider, a dragon, a beast and a machine each guard one, and each has a trick.',
 } as const;
 
 /** The Gullwings, Chapter 1 chapter record. */
@@ -61,6 +60,6 @@ export const FFX2_GULLWINGS_CH1: Chapter = {
     [X2_BORIS_ID]: 'Three claws, then a web that hits all three of you and may stop one, once. After that it is claws and the odd bite. Fire or Ice.',
     [X2_FLAME_DRAGON_ID]: 'The first thing it does is breathe fire on all three of you. After that it hits whoever is healthiest. Ice hurts it; Fire barely does.',
     [X2_GUARDIAN_BEAST_ID]: 'Three swipes, then a curse that keeps a girl from changing dress. When it is weak, half of everyone’s life at once. Any element hurts it.',
-    [X2_YSLS_ZERO_ID]: 'Half your life in one punch, and a double blow that almost finishes you. Protect first, and keep a healer going every turn.',
+    [X2_YSLS_ZERO_ID]: 'Half your life in one punch, and a double blow that almost finishes you. Keep a healer going every turn: neither Protect nor Shell blunts that punch.',
   },
 };

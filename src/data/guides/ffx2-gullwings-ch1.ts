@@ -6,7 +6,7 @@
  * so each hint explains the command the player is told to press. **Registered because the tactic is** (`tests/unit/strategy-guide.test.ts`: every boss id a tactic registers has a card).
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. ATB, dresspheres and the game's own four scripts. Sourced facts only (the rows and scripts, `research/re-ffx2-gullwings-chapter1.md` §0, §3 and §4): Boris's three claws, his one
- * Sticky End (all three girls, Stop at 40 percent) and the claws and bites after it; the Flame Dragon's opening breath (Fire, all three) and its blows at the girl with the most HP, weak to Ice and half Fire; the Guardian Beast's beat
+ * Sticky End (all three girls, a Stop that lands about one time in seven at these levels) and the claws and bites after it; the Flame Dragon's opening breath (Fire, all three) and its blows at the girl with the most HP, weak to Ice and half Fire; the Guardian Beast's beat
  * (three blows, then a Curse that stops a girl changing dress, then under a third of its HP Damocles Photon, half of each girl's maximum HP, which Shell halves); YSLS-Zero's Haymaker (two hits) and Blast Punch (half of one girl's
  * maximum HP, which neither Protect nor Shell reduces). **What the card advises is what the bench measured** (`tests/unit/chapters/gullwings-ch1-bench.test.ts`): a Black Mage and a White Mage against the Beast, the three starting
  * dresspheres against YSLS-Zero. **Not promised:** the party's level (no source gives one: the chapter's party is an estimate).
