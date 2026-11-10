@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { BattleEvent } from '../../src/battle/common/types.ts';
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
 import type { ActionMotionPort } from '../../src/engine/BattlePresenterMotion.ts';
-import { heldOffStage, partyOffStage } from '../../src/engine/SummonStaging.ts';
+import { heldOffAll, heldOffStage, idsOffStage, partyOffStage } from '../../src/engine/SummonStaging.ts';
 import { blowPose } from '../../src/engine/KeyPoses.ts';
 import { BANDS, frontClearance, type Profile, type Shape } from '../../src/engine/motion/Silhouette.ts';
 import type { StageMotionPort } from '../../src/engine/motion/StageMotionPort.ts';
@@ -538,6 +538,20 @@ describe('the lane in the presenter: depth decides who stands in the attacker\'s
     await attack(apart.stage, 'tidus', 'seymour-flux');
     expect(same.at('tidus').asked[0]!).toBeLessThan(apart.at('tidus').asked[0]!);
     expect(same.at('tidus').asked[0]!).toBeGreaterThanOrEqual(1.4);
+  });
+
+  it("does not count a girl a Special form has parked (idsOffStage: the second held-off map the strike reach reads through heldOffAll, FFX-2 only, plumbing)", async () => {
+    const f = lane(1.6);
+    const apart = lane(0.2);
+    const control = lane(1.6);
+    await idsOffStage(f.stage, ['yuna'], 0);
+    expect(heldOffStage(f.stage).has('yuna')).toBe(false); // not a summon's party: only heldOffAll names her
+    expect(heldOffAll(f.stage).has('yuna')).toBe(true);
+    await attack(f.stage, 'tidus', 'seymour-flux');
+    await attack(apart.stage, 'tidus', 'seymour-flux');
+    await attack(control.stage, 'tidus', 'seymour-flux');
+    expect(f.at('tidus').asked[0]!).toBeCloseTo(apart.at('tidus').asked[0]!, 9); // she is not an obstacle, as in the apart lane
+    expect(control.at('tidus').asked[0]!).toBeLessThan(f.at('tidus').asked[0]!); // while a girl who stays in the lane is
   });
 
   it('does not count a figure the summon has taken off the field, or one the stage reports as not shown', async () => {
