@@ -36,6 +36,8 @@ import { liftCommandArea } from '../../ffx/cutInLift.ts';
 
 export interface TurnCutInRequest {
   actorId: string;
+  /** FFX-2 Special look (D-32, review fix R3-5): the id whose portrait is drawn, when it is not `actorId`. A form's part has no portrait of its own (no new art), so its main's stands in, as on the pause; absent for everyone else. */
+  portraitId?: string;
   name: string;
   game: 'ffx' | 'ffx2';
   label: string;
@@ -101,7 +103,7 @@ export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): P
   try {
     const handle = showTurnCutIn(frame, {
       name: req.name,
-      portraitUrl: portraitFor(req.actorId, req.game, req.artNamespace),
+      portraitUrl: portraitFor(req.portraitId ?? req.actorId, req.game, req.artNamespace),
       ctbLabel: req.label,
       side: req.side,
       ...(req.move ? { headline: req.move.tag, title: req.move.title } : {}),

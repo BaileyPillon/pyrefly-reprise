@@ -46,6 +46,7 @@ import type { BattleState, CombatantId } from '../battle/common/types.ts';
 import type { MomentsPort, PlaybackSpeed } from './BattlePresenterPorts.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { portraitMode } from './CutInMode.ts';
+import { formMainOf } from './SpecialFormMembers.ts';
 
 /** How long the settled slab stays up, at normal speed. Not in the spec; see the header. */
 export const CUT_IN_HOLD_MS = 450;
@@ -151,9 +152,11 @@ export class TurnCutInBeat {
     if (!c) return;
     const ffx2 = state.game === 'ffx2';
     const slot = state.activeIds.indexOf(actorId) + 1;
+    const main = formMainOf(state, actorId); // FFX-2 Special look: a part names its own plate but borrows its main's portrait (no portrait file exists for a part id); null for everyone else
     try {
       await this.deps.moments!.turnCutIn!({
         actorId,
+        ...(main ? { portraitId: main } : {}),
         name: c.name,
         game: ffx2 ? 'ffx2' : 'ffx',
         label: `${ffx2 ? 'ATB' : 'CTB'} ${slot} OF ${state.activeIds.length}`,

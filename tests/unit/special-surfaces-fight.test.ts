@@ -24,6 +24,7 @@ import type { MomentsPort } from '../../src/engine/BattlePresenterPorts.ts';
 import { setPortraitMode } from '../../src/engine/CutInMode.ts';
 import { awayGirlIds } from '../../src/engine/SpecialFormMembers.ts';
 import { TurnCutInBeat } from '../../src/engine/TurnCutIn.ts';
+import { playTurnCutIn } from '../../src/ui/common/transitions/TurnCutInLayer.ts';
 import { buildAdvisorView, clearAdvisorCache } from '../../src/engine/tactics/advisor.ts';
 import { buildGuideView } from '../../src/engine/tactics/guide.ts';
 import { setAtbBarsSmooth } from '../../src/ui/ffx2/AtbLive.ts';
@@ -83,6 +84,27 @@ describe('the turn cut-in', () => {
       expect(calls.map((c) => c.label)).toEqual(['ATB 1 OF 3', 'ATB 2 OF 3', 'ATB 3 OF 3']);
       expect(calls.map((c) => c.name)).toEqual(PLATE_NAMES[girl]);
       expect(calls.map((c) => c.actorId)).toEqual(s.activeIds);
+      // D-32 (b) and AC-13: a part has no portrait of its own, so the portrait asked for is its main's, never one named for the part
+      expect(calls.map((c) => c.portraitId ?? c.actorId), 'the main\'s portrait on each of the three slabs').toEqual([girl, girl, girl]);
+      expect(calls[0]!.portraitId, 'the main asks for her own').toBeUndefined();
+    });
+
+    it(`${girl}: the slab draws the main's portrait file for a part, and the part's id is in no URL`, async () => {
+      const s = formUp(girl).state as BattleState;
+      const calls: Req[] = [];
+      const beat = new TurnCutInBeat({ moments: cutInPort(calls), speed: () => 'normal' });
+      for (const id of s.activeIds) await beat.play(s, id);
+      const host = document.createElement('div');
+      Object.defineProperty(host, 'clientWidth', { value: 1600 });
+      Object.defineProperty(host, 'clientHeight', { value: 900 });
+      document.body.append(host);
+      for (const req of calls) {
+        const played = playTurnCutIn(host, { ...req, holdMs: 5 });
+        const src = host.querySelector<HTMLImageElement>('[data-role="turn-cut-in"] img.ig-cutin__portrait')!.getAttribute('src')!;
+        await played;
+        expect(src, req.actorId).toContain(`art/portraits/${girl}-x2.png`);
+        for (const part of FORM_GIRLS.find((g) => g.girl === girl)!.parts) expect(src, req.actorId).not.toContain(part);
+      }
     });
   }
 
@@ -154,6 +176,20 @@ describe('the enemy-intent slab', () => {
       expect([...party!].sort()).toEqual([girl, ...FORM_GIRLS.find((g) => g.girl === girl)!.parts].sort());
     });
   }
+
+  it('OFF: the ordinary answer, the three girls (never a part)', () => {
+    const engine = openSpecial({ build: chapterIV(), group: bahamutGroup, seed: 1, specials: false, immortal: true });
+    for (const id of GIRL_IDS) delete unit(engine, id).statuses['invincible']; // the same rig as above: nobody is spared by it
+    let party: string[] | null = null;
+    for (let i = 0; i < 60 && party === null; i++) {
+      const intent = engine.intent();
+      if (intent?.moveName === 'Impulse') party = [...(intent.estimate?.perTarget ?? [])].map((r) => r.targetId);
+      if (nextInput(engine) === null) break;
+      engine.submit({ kind: 'defend', targets: [] });
+    }
+    expect(party, 'Bahamut reaches an Impulse, which hits the whole party').not.toBeNull();
+    expect([...party!].sort()).toEqual([...GIRL_IDS].sort());
+  });
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -196,6 +232,18 @@ describe('the move advisor', () => {
       expect(awayGirlIds(moment.state).sort()).toEqual(awayOf(girl).sort());
     });
   }
+
+  it('OFF: the card is for one of the ordinary three girls, and every aim is one of the three or the foe', () => {
+    const engine = openSpecial({ build: chapterIV(), group: bahamutGroup, seed: 1, specials: false });
+    const d = nextInput(engine)!;
+    const state = engine.state() as BattleState;
+    const { view, lines } = cardOf({ engine, state, snapshot: engine.gaugeSnapshot(), d });
+    expect(view).not.toBeNull();
+    expect(['Yuna', 'Rikku', 'Paine']).toContain(view!.actorName);
+    const legal = [...GIRL_IDS, ...state.enemyIds] as string[];
+    for (const x of view!.suggestions) for (const t of x.command.targets) expect(legal, `${x.label} -> ${t}`).toContain(t);
+    for (const line of lines) expect(String(line), 'no part is named').not.toMatch(/Pistil|Smasher|Crusher|Sinistral|Dextral/);
+  });
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------
