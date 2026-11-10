@@ -26,6 +26,7 @@ import { SEPARATE_BATTLE_GAUGES, type AtbSpeed } from '../../src/battle/ffx2/con
 import { ENEMY_GROUPS_BY_ID } from '../../src/data/ffx2/index.ts';
 import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
 import { LEBLANC_ACT_II, LEBLANC_ACT_III } from '../../src/data/ffx2/enemies/leblanc-syndicate.ts';
+import { ACT_2_GROUP_ID as FIEND_SUPERBOSSES_ACT_2 } from '../../src/data/fiend-superbosses-ids.ts';
 
 function inst(id: string, ticksRemaining: number | null): StatusInstance {
   return { id, turnsRemaining: null, ticksRemaining, charges: null, stacks: 0, permanent: ticksRemaining === null } as StatusInstance;
@@ -150,8 +151,10 @@ describe('PR-0107: Chapter VI Acts II and III open as separate battles, an OFF s
     expect(waits({ separateBattleGauges: false }).every((f) => f === 1)).toBe(true);
   });
 
-  it('Act I and every other chain are untouched: only the two Chateau links carry the flag', () => {
+  // Hidden chapter 53 (the word legion; FFX-2 only; fix pass of lane w53, the driver's call, his to overturn): the Fiend Arena Superbosses' act 2 opens as the game opens a fight, so its group carries the flag too.
+  // It is a third link, named here so that no other chain can pick the flag up unseen.
+  it('Act I and every other chain are untouched: only the two Chateau links and the Fiend Arena Superbosses\' act 2 carry the flag', () => {
     const flagged = Object.values(ENEMY_GROUPS_BY_ID).filter((g) => g?.opensAsSeparateBattle === true).map((g) => g!.id).sort();
-    expect(flagged).toEqual([LEBLANC_ACT_II, LEBLANC_ACT_III].sort());
+    expect(flagged).toEqual([LEBLANC_ACT_II, LEBLANC_ACT_III, FIEND_SUPERBOSSES_ACT_2].sort());
   });
 });
