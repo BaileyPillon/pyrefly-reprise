@@ -1,0 +1,542 @@
+{
+ "yuna/alchemist": {
+  "art": "yuna-alchemist",
+  "portraits": [
+   "yuna-alchemist",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/alchemist/exp-leblanc": {
+  "art": "exp-leblanc-yuna-alchemist",
+  "portraits": []
+ },
+ "yuna/berserker": {
+  "art": "yuna-berserker",
+  "portraits": [
+   "yuna-berserker",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/berserker/exp-leblanc": {
+  "art": "exp-leblanc-yuna-berserker",
+  "portraits": []
+ },
+ "yuna/black-mage": {
+  "art": "yuna-black-mage",
+  "portraits": [
+   "yuna-black-mage",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/black-mage/exp-leblanc": {
+  "art": "exp-leblanc-yuna-black-mage",
+  "portraits": []
+ },
+ "yuna/dark-knight": {
+  "art": "yuna-dark-knight",
+  "portraits": [
+   "yuna-dark-knight",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/dark-knight/exp-leblanc": {
+  "art": "exp-leblanc-yuna-dark-knight",
+  "portraits": []
+ },
+ "yuna/floral-fallal": {
+  "art": "yuna-floral-fallal",
+  "portraits": [
+   "yuna-floral-fallal",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/floral-fallal/exp-leblanc": {
+  "art": "exp-leblanc-yuna-floral-fallal",
+  "portraits": []
+ },
+ "yuna/gun-mage": {
+  "art": "yuna-gun-mage",
+  "portraits": [
+   "yuna-gun-mage",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/gun-mage/exp-leblanc": {
+  "art": "exp-leblanc-yuna-gun-mage",
+  "portraits": []
+ },
+ "yuna/gunner": {
+  "art": "yuna-gunner",
+  "portraits": [
+   "yuna-gunner",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/gunner/exp-leblanc": {
+  "art": "exp-leblanc-yuna-gunner",
+  "portraits": []
+ },
+ "yuna/lady-luck": {
+  "art": "yuna-lady-luck",
+  "portraits": [
+   "yuna-lady-luck",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/lady-luck/exp-leblanc": {
+  "art": "exp-leblanc-yuna-lady-luck",
+  "portraits": []
+ },
+ "yuna/mascot": {
+  "art": "yuna-mascot",
+  "portraits": [
+   "yuna-mascot",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/mascot/exp-leblanc": {
+  "art": "exp-leblanc-yuna-mascot",
+  "portraits": []
+ },
+ "yuna/samurai": {
+  "art": "yuna-samurai",
+  "portraits": [
+   "yuna-samurai",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/samurai/exp-leblanc": {
+  "art": "exp-leblanc-yuna-samurai",
+  "portraits": []
+ },
+ "yuna/songstress": {
+  "art": "yuna-songstress",
+  "portraits": [
+   "yuna-songstress",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/songstress/exp-leblanc": {
+  "art": "exp-leblanc-yuna-songstress",
+  "portraits": []
+ },
+ "yuna/thief": {
+  "art": "yuna-thief",
+  "portraits": [
+   "yuna-thief",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/thief/exp-leblanc": {
+  "art": "exp-leblanc-yuna-thief",
+  "portraits": []
+ },
+ "yuna/trainer": {
+  "art": "yuna-trainer",
+  "portraits": [
+   "yuna-trainer",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/trainer/exp-leblanc": {
+  "art": "exp-leblanc-yuna-trainer",
+  "portraits": []
+ },
+ "yuna/warrior": {
+  "art": "yuna-warrior",
+  "portraits": [
+   "yuna-warrior",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/warrior/exp-leblanc": {
+  "art": "exp-leblanc-yuna-warrior",
+  "portraits": []
+ },
+ "yuna/white-mage": {
+  "art": "yuna-white-mage",
+  "portraits": [
+   "yuna-white-mage",
+   "yuna-x2",
+   "yuna"
+  ]
+ },
+ "yuna/white-mage/exp-leblanc": {
+  "art": "exp-leblanc-yuna-white-mage",
+  "portraits": []
+ },
+ "rikku/alchemist": {
+  "art": "rikku-alchemist",
+  "portraits": [
+   "rikku-alchemist",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/alchemist/exp-leblanc": {
+  "art": "exp-leblanc-rikku-alchemist",
+  "portraits": []
+ },
+ "rikku/berserker": {
+  "art": "rikku-berserker",
+  "portraits": [
+   "rikku-berserker",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/berserker/exp-leblanc": {
+  "art": "exp-leblanc-rikku-berserker",
+  "portraits": []
+ },
+ "rikku/black-mage": {
+  "art": "rikku-black-mage",
+  "portraits": [
+   "rikku-black-mage",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/black-mage/exp-leblanc": {
+  "art": "exp-leblanc-rikku-black-mage",
+  "portraits": []
+ },
+ "rikku/dark-knight": {
+  "art": "rikku-dark-knight",
+  "portraits": [
+   "rikku-dark-knight",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/dark-knight/exp-leblanc": {
+  "art": "exp-leblanc-rikku-dark-knight",
+  "portraits": []
+ },
+ "rikku/gun-mage": {
+  "art": "rikku-gun-mage",
+  "portraits": [
+   "rikku-gun-mage",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/gun-mage/exp-leblanc": {
+  "art": "exp-leblanc-rikku-gun-mage",
+  "portraits": []
+ },
+ "rikku/gunner": {
+  "art": "rikku-gunner",
+  "portraits": [
+   "rikku-gunner",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/gunner/exp-leblanc": {
+  "art": "exp-leblanc-rikku-gunner",
+  "portraits": []
+ },
+ "rikku/lady-luck": {
+  "art": "rikku-lady-luck",
+  "portraits": [
+   "rikku-lady-luck",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/lady-luck/exp-leblanc": {
+  "art": "exp-leblanc-rikku-lady-luck",
+  "portraits": []
+ },
+ "rikku/machina-maw": {
+  "art": "rikku-machina-maw",
+  "portraits": [
+   "rikku-machina-maw",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/machina-maw/exp-leblanc": {
+  "art": "exp-leblanc-rikku-machina-maw",
+  "portraits": []
+ },
+ "rikku/mascot": {
+  "art": "rikku-mascot",
+  "portraits": [
+   "rikku-mascot",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/mascot/exp-leblanc": {
+  "art": "exp-leblanc-rikku-mascot",
+  "portraits": []
+ },
+ "rikku/samurai": {
+  "art": "rikku-samurai",
+  "portraits": [
+   "rikku-samurai",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/samurai/exp-leblanc": {
+  "art": "exp-leblanc-rikku-samurai",
+  "portraits": []
+ },
+ "rikku/songstress": {
+  "art": "rikku-songstress",
+  "portraits": [
+   "rikku-songstress",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/songstress/exp-leblanc": {
+  "art": "exp-leblanc-rikku-songstress",
+  "portraits": []
+ },
+ "rikku/thief": {
+  "art": "rikku-thief",
+  "portraits": [
+   "rikku-thief",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/thief/exp-leblanc": {
+  "art": "exp-leblanc-rikku-thief",
+  "portraits": []
+ },
+ "rikku/trainer": {
+  "art": "rikku-trainer",
+  "portraits": [
+   "rikku-trainer",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/trainer/exp-leblanc": {
+  "art": "exp-leblanc-rikku-trainer",
+  "portraits": []
+ },
+ "rikku/warrior": {
+  "art": "rikku-warrior",
+  "portraits": [
+   "rikku-warrior",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/warrior/exp-leblanc": {
+  "art": "exp-leblanc-rikku-warrior",
+  "portraits": []
+ },
+ "rikku/white-mage": {
+  "art": "rikku-white-mage",
+  "portraits": [
+   "rikku-white-mage",
+   "rikku-x2",
+   "rikku"
+  ]
+ },
+ "rikku/white-mage/exp-leblanc": {
+  "art": "exp-leblanc-rikku-white-mage",
+  "portraits": []
+ },
+ "paine/alchemist": {
+  "art": "paine-alchemist",
+  "portraits": [
+   "paine-alchemist",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/alchemist/exp-leblanc": {
+  "art": "exp-leblanc-paine-alchemist",
+  "portraits": []
+ },
+ "paine/berserker": {
+  "art": "paine-berserker",
+  "portraits": [
+   "paine-berserker",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/berserker/exp-leblanc": {
+  "art": "exp-leblanc-paine-berserker",
+  "portraits": []
+ },
+ "paine/black-mage": {
+  "art": "paine-black-mage",
+  "portraits": [
+   "paine-black-mage",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/black-mage/exp-leblanc": {
+  "art": "exp-leblanc-paine-black-mage",
+  "portraits": []
+ },
+ "paine/dark-knight": {
+  "art": "paine-dark-knight",
+  "portraits": [
+   "paine-dark-knight",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/dark-knight/exp-leblanc": {
+  "art": "exp-leblanc-paine-dark-knight",
+  "portraits": []
+ },
+ "paine/full-throttle": {
+  "art": "paine-full-throttle",
+  "portraits": [
+   "paine-full-throttle",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/full-throttle/exp-leblanc": {
+  "art": "exp-leblanc-paine-full-throttle",
+  "portraits": []
+ },
+ "paine/gun-mage": {
+  "art": "paine-gun-mage",
+  "portraits": [
+   "paine-gun-mage",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/gun-mage/exp-leblanc": {
+  "art": "exp-leblanc-paine-gun-mage",
+  "portraits": []
+ },
+ "paine/gunner": {
+  "art": "paine-gunner",
+  "portraits": [
+   "paine-gunner",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/gunner/exp-leblanc": {
+  "art": "exp-leblanc-paine-gunner",
+  "portraits": []
+ },
+ "paine/lady-luck": {
+  "art": "paine-lady-luck",
+  "portraits": [
+   "paine-lady-luck",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/lady-luck/exp-leblanc": {
+  "art": "exp-leblanc-paine-lady-luck",
+  "portraits": []
+ },
+ "paine/mascot": {
+  "art": "paine-mascot",
+  "portraits": [
+   "paine-mascot",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/mascot/exp-leblanc": {
+  "art": "exp-leblanc-paine-mascot",
+  "portraits": []
+ },
+ "paine/samurai": {
+  "art": "paine-samurai",
+  "portraits": [
+   "paine-samurai",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/samurai/exp-leblanc": {
+  "art": "exp-leblanc-paine-samurai",
+  "portraits": []
+ },
+ "paine/songstress": {
+  "art": "paine-songstress",
+  "portraits": [
+   "paine-songstress",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/songstress/exp-leblanc": {
+  "art": "exp-leblanc-paine-songstress",
+  "portraits": []
+ },
+ "paine/thief": {
+  "art": "paine-thief",
+  "portraits": [
+   "paine-thief",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/thief/exp-leblanc": {
+  "art": "exp-leblanc-paine-thief",
+  "portraits": []
+ },
+ "paine/trainer": {
+  "art": "paine-trainer",
+  "portraits": [
+   "paine-trainer",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/trainer/exp-leblanc": {
+  "art": "exp-leblanc-paine-trainer",
+  "portraits": []
+ },
+ "paine/warrior": {
+  "art": "paine-warrior",
+  "portraits": [
+   "paine-warrior",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/warrior/exp-leblanc": {
+  "art": "exp-leblanc-paine-warrior",
+  "portraits": []
+ },
+ "paine/white-mage": {
+  "art": "paine-white-mage",
+  "portraits": [
+   "paine-white-mage",
+   "paine-x2",
+   "paine"
+  ]
+ },
+ "paine/white-mage/exp-leblanc": {
+  "art": "exp-leblanc-paine-white-mage",
+  "portraits": []
+ }
+}

@@ -1,0 +1,108 @@
+{
+ "html[data-phone-battle='ffx2'] .ffx2hud .ig-stat-list": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2hud .ig-stat-list"
+   ],
+   "body": "left: var(--phud-side); right: var(--phud-side); top: auto; bottom: var(--phud-chips); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; opacity: 1; transform: none;"
+  }
+ ],
+ "html[data-phone-battle='ffx2'] .ffx2hud .ig-stat": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2hud .ig-stat"
+   ],
+   "body": "position: relative; width: auto; height: 62px; margin: 0 !important; padding: 6px 7px; transform: none; display: grid; grid-template-columns: 34px minmax(0, 1fr); grid-template-rows: 17px 17px auto; column-gap: 7px; row-gap: 2px; align-items: center; background: rgba(11, 10, 18, 0.88); border: 1px solid rgba(244, 241, 232, 0.16);"
+  },
+  {
+   "at": "@media (max-width: 374px)",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2hud .ig-stat"
+   ],
+   "body": "grid-template-columns: 28px minmax(0, 1fr); column-gap: 5px; padding: 6px 5px;"
+  }
+ ],
+ "html[data-phone-battle='ffx2'] .ffx2hud .ig-stat--acting": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2hud .ig-stat--acting"
+   ],
+   "body": "border-color: var(--ig-accent);"
+  }
+ ],
+ "html[data-phone-battle='ffx2'] .ffx2stat__body": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2stat__body",
+    "html[data-phone-battle='ffx2'] .ffx2stat__top"
+   ],
+   "body": "display: contents;"
+  }
+ ],
+ "html[data-phone-battle='ffx2'] .ffx2stat__top": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2stat__body",
+    "html[data-phone-battle='ffx2'] .ffx2stat__top"
+   ],
+   "body": "display: contents;"
+  }
+ ],
+ "html[data-phone-battle='ffx2'] .ffx2stat__face": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2stat__face"
+   ],
+   "body": "grid-column: 1; grid-row: 1 / 3; width: 34px; height: 34px; margin: 0;"
+  },
+  {
+   "at": "@media (max-width: 374px)",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2stat__face"
+   ],
+   "body": "width: 28px; height: 28px;"
+  }
+ ],
+ "html[data-phone-battle='ffx2'] .ffx2stat__mono": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2stat__mono"
+   ],
+   "body": "font-size: 14px;"
+  }
+ ],
+ "html[data-phone-battle='ffx2'] .ffx2stat__job": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2stat__job"
+   ],
+   "body": "display: none;"
+  }
+ ],
+ "html[data-phone-battle='ffx2'] .ffx2party__status": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2party__status"
+   ],
+   "body": "position: absolute; right: 6px; top: -11px; margin: 0;"
+  }
+ ],
+ "html[data-phone-battle='ffx2'] .ffx2hud--targeting-enemy .ffx2hud__party": [
+  {
+   "at": "",
+   "selectors": [
+    "html[data-phone-battle='ffx2'] .ffx2hud--targeting-enemy .ffx2hud__party"
+   ],
+   "body": "opacity: 1; transform: none;"
+  }
+ ]
+}

@@ -1,0 +1,119 @@
+{
+ ".ffx2hud .ig-stat-list": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud .ig-stat-list"
+   ],
+   "body": "left: auto; right: 10px; bottom: 10px; align-items: flex-end; gap: 3px; --ig-stat-step: 4px;"
+  }
+ ],
+ ".ffx2hud .ig-stat": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud .ig-stat"
+   ],
+   "body": "width: 158px; height: 28px; gap: 4px; padding-right: 6px; align-items: center;"
+  }
+ ],
+ ".ffx2stat__face": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2stat__face"
+   ],
+   "body": "position: relative; flex: none; width: 20px; height: 20px; margin-left: 2px; overflow: hidden; background: #1a1526; border: 0.75px solid color-mix(in srgb, var(--ffx2-job, var(--ig-accent)) 70%, transparent); border-radius: 1.5px;"
+  }
+ ],
+ ".ig-stat--acting .ffx2stat__face": [
+  {
+   "at": "",
+   "selectors": [
+    ".ig-stat--acting .ffx2stat__face"
+   ],
+   "body": "border-color: var(--ig-accent); box-shadow: 0 0 4px color-mix(in srgb, var(--ig-accent) 55%, transparent);"
+  }
+ ],
+ ".ffx2stat__face-img": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2stat__face-img"
+   ],
+   "body": "display: block; image-rendering: auto;"
+  }
+ ],
+ ".ffx2stat__mono": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2stat__mono"
+   ],
+   "body": "position: absolute; inset: 0; z-index: 0; display: flex; align-items: center; justify-content: center; font-family: var(--ig-font-display); font-weight: 700; font-size: 7.5px; letter-spacing: 0.04em; color: var(--ffx2-job, var(--ig-accent));"
+  }
+ ],
+ ".ffx2stat__job": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2stat__job"
+   ],
+   "body": "position: absolute; z-index: 3; left: 0; bottom: 0; padding: 0 1.5px; font-family: var(--ig-font-display); font-style: normal; font-weight: 700; font-size: 5.5px; line-height: 8px; color: #12101c; background: var(--ffx2-job, var(--ig-accent)); border-radius: 0 1.5px 0 0;"
+  }
+ ],
+ ".ffx2stat__body": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2stat__body"
+   ],
+   "body": "flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2.5px;"
+  }
+ ],
+ ".ffx2stat__top": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2stat__top"
+   ],
+   "body": "display: flex; align-items: baseline; gap: 4px; min-width: 0;"
+  }
+ ],
+ ".ffx2party__status": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2party__status"
+   ],
+   "body": "display: flex; gap: 1.5px; margin-left: auto; overflow: hidden;"
+  }
+ ],
+ ".ffx2atb--haste .ffx2atb__fill": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2atb--haste .ffx2atb__fill"
+   ],
+   "body": "background: var(--ig-blood) !important;"
+  }
+ ],
+ ".ffx2hud--targeting-enemy .ffx2hud__party": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud--targeting-enemy .ffx2hud__party"
+   ],
+   "body": "opacity: 0.34; transform: translateX(-6%);"
+  }
+ ],
+ ".ffx2hud .ffx2hud__party": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud .ffx2hud__party"
+   ],
+   "body": "transition: opacity 0.16s ease, transform 0.16s ease;"
+  }
+ ]
+}

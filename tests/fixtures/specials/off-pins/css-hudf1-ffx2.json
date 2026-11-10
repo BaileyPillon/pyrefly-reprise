@@ -1,0 +1,74 @@
+{
+ ".ffx2hud.hud-f1 .ig-stat-list": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud.hud-f1 .ig-stat-list"
+   ],
+   "body": "left: 417px; right: auto; bottom: 18px; gap: 3.5px; align-items: flex-start; --ig-stat-step: 0px;"
+  }
+ ],
+ ".ffx2hud.hud-f1 .ig-stat": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud.hud-f1 .ig-stat"
+   ],
+   "body": "width: 194px; height: 28px; padding: 0 9.5px 0 0; gap: 0 4px; border-left-width: 0; border-right-width: 2.5px; align-items: center; background: linear-gradient(180deg, var(--f1-ink-a) 0%, var(--f1-ink-b) 55%, var(--f1-ink-c) 100%);"
+  }
+ ],
+ ".ffx2hud.hud-f1 .ig-stat--acting": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud.hud-f1 .ig-stat--acting"
+   ],
+   "body": "margin-left: -7px; width: 201px; background: linear-gradient(180deg, #1d2350 0%, #10143a 55%, #0a0b20 100%);"
+  }
+ ],
+ ".ffx2hud.hud-f1 .ffx2stat__face": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud.hud-f1 .ffx2stat__face"
+   ],
+   "body": "width: 22.5px; height: 22.5px; margin-left: 7.5px; box-shadow: 0 0 0 0.75px var(--f1-paper), 0.5px 1px 2px rgba(0, 0, 0, 0.5);"
+  }
+ ],
+ ".ffx2hud.hud-f1 .ffx2stat__job": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud.hud-f1 .ffx2stat__job"
+   ],
+   "body": "font: 700 var(--f1-floor)/1 var(--ig-font-display);"
+  }
+ ],
+ ".ffx2hud.hud-f1 .ffx2stat__body": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud.hud-f1 .ffx2stat__body"
+   ],
+   "body": "display: grid; grid-template-columns: 24px 1fr; grid-template-rows: auto auto; gap: 1.5px 0; align-content: center;"
+  }
+ ],
+ ".ffx2hud.hud-f1 .ffx2stat__top": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud.hud-f1 .ffx2stat__top"
+   ],
+   "body": "display: grid; grid-column: 1 / 3; grid-row: 1; grid-template-columns: 38px 62px 1fr auto; align-items: baseline; gap: 0 3px;"
+  }
+ ],
+ ".ffx2hud.hud-f1 .ffx2party__status": [
+  {
+   "at": "",
+   "selectors": [
+    ".ffx2hud.hud-f1 .ffx2party__status"
+   ],
+   "body": "display: flex; grid-column: 4; margin: 0 0 0 2px;"
+  }
+ ]
+}
