@@ -20,6 +20,7 @@ import { PerspectiveCamera } from 'three';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { FFX2Engine, abilityRegistryFrom, dressphereRegistryFrom, garmentGridRegistryFrom, itemRegistryFrom } from '../../src/battle/ffx2/index.ts';
+import { isSpecialDress } from '../../src/battle/ffx2/special/forms.ts';
 import type { AnyCombatant } from '../../src/battle/common/types.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
@@ -112,8 +113,11 @@ function girlIn(memberId: string, dressphere: string): AnyCombatant {
   return { id: m.id, name: m.name, side: 'party', spriteKey: m.spriteKey, dresspheres: { current: dressphere } } as unknown as AnyCombatant;
 }
 
+// The Special dresses are left out on purpose: a girl wears one only with the `specialDressUp` switch ON (OFF in every build), through the Special Dress Up row and nothing else (the engine's gate,
+// `ffx2-change-gate.test.ts`, and the switch-off proof, `special-switch-off.test.ts`), and a girl in her Special asks for her Special's painting only, never her stale sprite key
+// (`engine/SpecialArt.ts`); that rule is pinned in `special-art-namespace.test.ts`. What the two cases below walk is every ordinary dressphere a girl can wear.
 const girlsInEveryDressphere = (): AnyCombatant[] =>
-  chateauBuild.members.flatMap((m) => [...new Set([m.currentDressphere, ...m.owned])].map((d) => girlIn(m.id, d)));
+  chateauBuild.members.flatMap((m) => [...new Set([m.currentDressphere, ...m.owned])].filter((d) => !isSpecialDress(d)).map((d) => girlIn(m.id, d)));
 
 /** What `resolveArt` picks from a manifest: the first candidate that has an idle painting, else the first. */
 function resolved(candidates: readonly string[], manifest: ArtManifest): string {

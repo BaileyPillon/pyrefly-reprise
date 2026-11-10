@@ -502,3 +502,29 @@ describe('step D2: the Special form readers and the pause plate member, with the
     expect(read('src/ui/common/ProFieldMarks.ts').match(/isFormPartId\(/g)).toHaveLength(2);
   });
 });
+
+describe('the command API, with the switch off: no forged Change puts a Special on a girl (the engine gate; every chapter in ffx2-change-gate.test.ts)', () => {
+  it('a spherechange that names her own Special (flag true, false or absent), another girl\'s Special or an unknown dress, at each node linked to hers, leaves her in the dress she wore', () => {
+    const forged = (to: string, node: number, flag: boolean | undefined): Command => ({ kind: 'spherechange', targets: [], extra: { toDressphere: to, toNode: node, gatesCrossed: [], ...(flag === undefined ? {} : { specialDressUp: flag }) } }) as unknown as Command;
+    let refused = 0;
+    for (const [girl, own, other] of [['yuna', 'floral-fallal', 'machina-maw'], ['rikku', 'machina-maw', 'full-throttle'], ['paine', 'full-throttle', 'floral-fallal']] as const) {
+      for (const [to, flag] of [[own, true], [own, false], [own, undefined], [other, undefined], ['no-such-dress', false]] as const) {
+        for (const node of [1, 2, 3, 4, 5]) {
+          const engine = openSpecial({ build: chapterIV(), group: bahamutGroup, seed: 1, specials: false });
+          for (let i = 0; i < 200; i++) {
+            const d = nextInput(engine);
+            if (d === null || d.actorId === girl) break;
+            engine.submit({ kind: 'defend', targets: [] });
+          }
+          const sphere = (engine.state().combatants[girl] as unknown as { dresspheres: { current: string; garmentGrid: { nodePosition: number } } }).dresspheres;
+          const wore = sphere.current;
+          engine.submit(forged(to, node, flag));
+          expect(sphere.current, `${girl}: ${to}, flag ${String(flag)}, node ${node}`).toBe(wore);
+          expect(sphere.garmentGrid.nodePosition).not.toBe(node);
+          refused += 1;
+        }
+      }
+    }
+    expect(refused).toBe(75);
+  });
+});
