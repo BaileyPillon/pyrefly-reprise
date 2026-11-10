@@ -143,7 +143,7 @@ Base list: 24 orphaned modules. After step A: 28, the base plus exactly `Special
 
 ### 9.5 Deviations from the step spec, each kept to its intent
 
-1. **`ActorHandle` has 29 members, not 28.** `noteStatus?` was added on 2026-11-09 (the Wendigo finish, after the spec was written). `HANDLE_MEMBERS` classes it `forward` (a status the event names reaches the figure for the MAIN; a status on a part never gets there, `reactionOf` answers `none`): **17 forward, 9 swallow, 3 source**. The `Record<keyof ActorHandle, ...>` type is the build-time count.
+1. **`ActorHandle` has 29 members, not 28.** `noteStatus?` was added on 2026-11-09 (the Wendigo finish, after the spec was written). `HANDLE_MEMBERS` classed it `forward` (a status the event names reaches the figure for the MAIN; a status on a part never gets there, `reactionOf` answers `none`): 17 forward, 9 swallow, 3 source. **Superseded by section 14 (R1-4): `swallow` for the part's handle, so 16 forward, 10 swallow, 3 source; the main's actor still forwards it.** The `Record<keyof ActorHandle, ...>` type is the build-time count.
 2. **The test preview build is a build MODE, not an environment variable.** `vite.config.ts` defines `__PYREFLY_SPECIALS__` as `command === 'serve' || mode === 'specials-test'`; the ON preview is `vite build --mode specials-test --outDir <its own folder>`. The spec read `process.env['PYREFLY_SPECIALS_TEST']`, but `tests/unit/release-build.test.ts` fails on any new variable `vite.config.ts` reads ("a new one must be pinned or listed on purpose"), and mending that means editing the test and `tools/release-build.mjs`; a mode needs neither and, unlike a variable left in a shell, cannot ship the word (the deploy passes no `--mode`). STAGE 2 builds its ON preview with the mode.
 3. `window.__pyrefly.specials` needs a line in the `PyreflyDebugApi` interface as well (api.ts +3, not +2).
 4. `NOW.md` and `CHANGELOG.md` are **not** edited by this step (the driver's records stage writes them, overriding the spec's "every step ends by updating NOW.md").
@@ -317,7 +317,7 @@ After a victory with the form up the figure and the faded parked girls stay on t
 
 ### 12.3 A finding for D2 and Stage 2: every plate-to-plate command of a form is a group heal today
 
-The real engine, driven through a form (all three girls' decisions, mastered and not), offers no single-target command that lists the plates: White Pollen, White Honey, Hard Leaves, Tough Nuts, Mirror Petals, Floral Rush and All-Life carry `targeting: 'all-allies'` and the menu aims them as a group at once; Barrier and Shield are self. So the plates' order hint and taps are reached by a group pick not at all and by a one-target pick only if the engine offers one (a Revival row for a fallen part is the candidate). `special-plate-tap.test.ts` therefore takes the real White Pollen row and drops its group `targeting`, an input to the menu and not game data; the e2e 24 that D2 writes and Stage 2 runs says whether a real one-target pick exists. Nothing was invented to make one.
+**Corrected by 13.5 and 14: this holds for YUNA's Floral Fallal parts only; Rikku's and Paine's parts do offer one-target ally rows (HP Repair, MP Repair, Stamina, Mettle), so AC-5 has a target on their side.** The real engine, driven through a form (all three girls' decisions, mastered and not), offers Yuna's form no single-target command that lists the plates: White Pollen, White Honey, Hard Leaves, Tough Nuts, Mirror Petals, Floral Rush and All-Life carry `targeting: 'all-allies'` and the menu aims them as a group at once; Barrier and Shield are self. So the plates' order hint and taps are reached by a group pick not at all and by a one-target pick only if the engine offers one (a Revival row for a fallen part is the candidate). `special-plate-tap.test.ts` therefore takes the real White Pollen row and drops its group `targeting`, an input to the menu and not game data; the e2e 24 that D2 writes and Stage 2 runs says whether a real one-target pick exists. Nothing was invented to make one.
 
 ### 12.4 The CSS starting values (the preflight's; judged on screenshots in Stage 2)
 
@@ -344,7 +344,7 @@ OP-13 (mode a/b of the part mark and the taps: the default draws no mark, leave 
 2. **`cursor.setOrder(order ?? null)`** in `renderTargets`, where the spec writes `if (order) cursor.setOrder(order)`: a hint an earlier target view left would otherwise stay. With the switch OFF the hint is `null` both ways.
 3. **A badge floor on the old HUD** (12.5), not in the spec's CSS list: the job chip has one in `hud-floor.css`.
 4. **Existing test edited: `special-switch-off.test.ts`**, as the spec says ("Append to ... test 10"): imports, three `vi.mock` pass-through spies (`specialRows`, `partCrop`, `specialLeave`), a `setAtbBarsSmooth(null)` in the existing `afterEach`, one new `describe`. No assertion was changed.
-5. **The plate-tap test drops the group `targeting` of one real row** (12.3).
+5. **The plate-tap test drops the group `targeting` of one real row** (12.3: Yuna's White Pollen, the one girl whose form has no one-target pick; see 13.5 for the other two).
 6. **`PlateTaps.dispose` is not called by the HUD's `unmount`** (the spec lists five call-in lines): the listener sits on an element the HUD drops with itself.
 7. **Process:** the first commit message was written with a shell heredoc (a rule of this build says to write files with the Write tool); it wrote only the message file.
 
@@ -422,3 +422,31 @@ D2: the pause tabs, `ProFieldMarks`, `phoneFraming`, the always-visible-surface 
 5. **Existing test edited: `special-switch-off.test.ts`**, as the spec says ("Append to ... test 10"): imports and one new `describe`; no assertion changed.
 6. **The cut-in, Guide, intent, advisor, framing, results and HUD cases are asserted on names, ids and weights, not on hint prose** (spec 3.3).
 7. **The intent case takes the girls' invincibility rig off** (a rig of the measurement, as `exposed` does elsewhere) so every plate is touched by Impulse.
+
+## 14. The review fix pass (2026-11-10; branch `ffx2-specials`; three independent reviews of `9ddb00cc8`)
+
+Game case: **FFX-2 only in what is seen** (the three Special dresspheres exist only in FFX-2); every source edit below is shared plumbing, additive or inert while the switch `specialDressUp` is OFF. `src/battle/**` is untouched. Each finding was checked against the code first; none was false. One commit per finding or group (`Specials review fix R...`).
+
+| Finding | Result |
+|---|---|
+| R1-1 `--sidecars` | `tools/special-part-anchors.mjs`: a sidecar counts only with its own width and height; with one, `baselineY` and `contentTop` come from it or from the figure's box scaled to its size, never from `meta.json`'s render scale; `provisional` clears per Special only when EVERY posed row matched a sidecar (Full Throttle stays provisional: its width is with the swords); unmatched poses are named on stderr. Four new cases. The committed table is byte for byte unchanged. |
+| R1-2 | `stand-reach.test.ts`: a form's parked girl (`idsOffStage`) is no obstacle in the lunge lane; fails when `StrikeReach` reads `heldOffStage` again. |
+| R1-3 | `special-stage.test.ts` asserts the seven stage hooks through a real `PaintedStage` (each asked, each answers undefined / empty / the same object); the presenter-only case in `special-switch-off.test.ts` is renamed to what it proves. |
+| R1-4 | `noteStatus` is `swallow` for the part's handle (**16 forward, 10 swallow, 3 source**; supersedes 9.5 (1)); the main's actor still forwards it. |
+| R1-5 | Two stale comments (`vite build --mode specials-test`; `anchor-ring-pin.txt`). |
+| R1-6 | `anchorSourceOf(stage, mainHeight?)`: the stage passes the parent actor's live height, so a mark-(b) ring follows the figure on a phone (it was 35 percent too big). Default mark (a) draws no ring. |
+| R2-1, R2-2 | `special-presenter-submit.test.ts` (new): `presenter.submit` on the real engine, the first hold set by `preSubmit` before the engine mutates `activeIds` and before any event, `run()` / victory / `abort()` releasing a form, a real `FFX2BattleHud` (held lists in order, a full sync after the swap and the cut, no `syncVitals` before the cut, the main's row text from the live state). Each call-in was deleted in turn to see its case fail. The dead spy and the tautology are gone from `special-presenter-sequence.test.ts`. |
+| R2-3 | `releaseSpecial` now calls `idsBack` for the parked girls (the form's list, else the tracker's for a release before the reveal): `heldOffAll` is empty again and they fade back in. |
+| R2-4 | `SpecialEntry.clockOf` reads `beatNow`, then `now`, then `Date.now` (kept for the wall-clock beats, whose sleep it matches). A test with a jumping wall clock and a control. |
+| R2-5 | The exit's `girl-stands` dissolves the old-dress girl back in (`dissolveTo(0)`, SPEC-C2 rule 9) instead of popping her in. The fall's `girl-lies` is unchanged (the spec leaves it open). |
+| R2-6 | Pin 1b: the FF7 chapters (hidden, in `UNLISTED_CHAPTERS`) keep the literal old `artCandidatesFor` body. |
+| R2-7 | `markedPartsOf` answers one shared frozen empty list. |
+| R3-1 | `phone-hud.css`: the phone's form row rule carries `width: auto` (the desktop's 250 px rule, specificity 0,4,0, beat the phone chip's 0,3,1); a css test reads both specificities. A Stage 2 390 x 844 screenshot still confirms it by eye. |
+| R3-2 | e2e 24 (written, not run): the enemy-aim block opens the part's own one-enemy skill (Howitzer; Venom Wing or Ma'at's Feather) because the engine offers a part no Attack row. |
+| R3-3, R3-4 | Pause body and CHAPTER tab with a real form; the OFF halves of the enemy-intent slab and the advisor. |
+| R3-5 | A part's turn cut-in (only under `?portraits=turns`) keeps the part's own name and ATB label and borrows its MAIN's portrait file: `portraitId?` on `TurnCutInRequest` and on `MomentsPort.turnCutIn`, set by `TurnCutIn.play` through `formMainOf`. This follows SPEC-D2's "no portrait file for a part; the main's stands in" (the pause already does). The tsc of the commit before the type follow-up was red for two lines of a test. |
+| R3-6 | 12.3 and 12.7 item 5 corrected (only Yuna's parts have no one-target pick). |
+
+**Found by the reader run, not by a reviewer:** `noteSpecial` and `preSubmit` read `state?.flags['specialDressUp']` and threw on a state double with no `flags` field (`portraits-big-moves.test.ts` failed at the head); now `flags?.`, with a case.
+
+**Left for the driver (an existing test that step C2's spec'd behaviour breaks; no test was edited):** `exp-leblanc.test.ts` "resolves every figure to the ids it always did" and "resolves each girl in each dressphere ... inside the namespace" fail at the head and before this pass. `girlsInEveryDressphere()` builds a girl wearing each OWNED dressphere of Chapter VI's build, the three Specials included, and C2's `specialArtCandidates` answers a girl wearing a Special with her Special's painting only (SPEC-C2 rule 12). Such a girl cannot exist with the switch OFF. The smallest fix is in the test: leave the three Special ids out of `girlsInEveryDressphere()`.

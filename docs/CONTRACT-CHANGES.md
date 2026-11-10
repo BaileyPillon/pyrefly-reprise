@@ -6,6 +6,10 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-10 — FFX-2 Special look, the review fix pass: `TurnCutInRequest.portraitId?`, `MomentsPort.turnCutIn`'s `portraitId?`, `anchorSourceOf`'s `mainHeight?`, `releaseSpecial` calls `idsBack`; no contract file changed (FFX-2 only in what is seen; plumbing both games, every addition optional and absent or inert while the switch is OFF)
+
+Handoff section 14. Additions: the optional `portraitId` on the turn cut-in request (set only for a form's part, to its main's id; the layer draws `portraitId ?? actorId`) and on `MomentsPort.turnCutIn`; the optional second argument of `SpecialStaging.anchorSourceOf` (the main's live world height, used by the mark-(b) ring only); `releaseSpecial` (`BattlePresenterSpecial.ts`) now also fades the parked girls back and clears them from the held-off map; the part handle swallows `noteStatus` (`SpecialReactions.ts`, 16 forward / 10 swallow / 3 source); `state?.flags?.[...]` in the two OFF guards. Nothing in `src/battle/**`.
+
 ## 2026-11-09 — r79 art install: the paintings of hidden chapters 42, 45, 46, 47 and 48 (additive; no contract file changed; art, registration, ledger and key wiring only)
 
 Authority: Bailey 2026-11-06 ~00:30 EST "implement all unimplemented chapters please", ~00:55 EST "yes on all these too"; 2026-11-07 "ok keep going we have full usage here"; 2026-10-31 "you make the executive decisions for the next few days. i'll go with all of your recommendations." (the pictures and every pick are the driver's, his to overturn). Game cases: the Youth League (42), Ifrit at Kilika (46), Garik Ronso with his Youths (47) **FFX-2 only**; Belgemine (45) and Shinryu (48) **FFX only**; the registration tables and the pose ledger are shared plumbing (additions only).
