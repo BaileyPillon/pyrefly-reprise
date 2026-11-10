@@ -86,9 +86,9 @@ describe('the door', () => {
     for (const other of words.filter((w) => w !== GAUNTLET_DOOR_WORD)) expect(overlaps(GAUNTLET_DOOR_WORD, other), `${GAUNTLET_DOOR_WORD} against ${other}`).toBeNull();
   });
 
-  it("FINDING: the alternative the preflight names (GA1), `catastrophe`, would have failed the table (its end `phe`... and its `a` start `angra`: the plan's check found two clashes)", () => {
+  it("FINDING: the alternative the preflight names (GA1), `catastrophe`, would have failed the table (it clashes with `leblanc`, whose last letter starts it, and with `experiment`, whose first letter ends it)", () => {
     const failing = [...CHAPTER_DOORS, ...RUN_DOORS].map((d) => d.word).filter((w) => overlaps('catastrophe', w) !== null);
-    expect(failing.length).toBeGreaterThanOrEqual(1);
+    expect(failing).toEqual(expect.arrayContaining(['leblanc', 'experiment']));
   });
 });
 

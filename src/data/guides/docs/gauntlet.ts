@@ -208,7 +208,7 @@ export const GAUNTLET_DOC: GuideDoc = {
       t: 'p',
       text: 'Below half it hides: physical blows do nothing, it regenerates, and it casts Curaga on itself until it is above three quarters. Below a quarter the shell breaks and it speeds up.',
     },
-    { t: 'p', text: 'Magic and Overdrives go through the shell. Nothing in the menus of Tidus, Yuna and Auron is magic, so the party needs Lulu.' },
+    { t: 'p', text: 'Magic and Overdrives go through the shell. Tidus, Yuna and Auron have no attack spell of their own, so Lulu is the best way in; the spells of an aeon and an Overdrive get through too.' },
     { t: 'lead', text: 'The strategy:' },
     {
       t: 'ol',

@@ -24,7 +24,8 @@
  * The `onHit` returns at once if its HP is 0 (the blow that killed it asks for nothing) or the action did no HP damage (a miss, a heal, a status). **It never tests `isCounterattackAllowed()`** (Cactuar King's and the
  * Greater Sphere's scripts do), so this file queues its answers itself instead of through `./hit-gates.ts#react`: the owner must be able to act (`canQueue`) and must not already have a reaction waiting (the game's queue
  * refuses a second), and nothing more. A reaction is a free action (no CTB). The two Megaton Punches of a turn are the other use of the queue here: nothing in the preset hits it from inside a reaction, so the difference
- * between the two readings does not show in this chapter.
+ * between the two readings does not show in this chapter. **One engine guard on top of the bytes (review fix F1, 2026-11-10):** a hit Earth Eater deals to **itself** (its own Flare once Yuna's Dispel has taken its Reflect) joins the running total but is not
+ * answered, so the answer cannot feed itself (without it one blow cost it about 556,000 HP in 64 self-Flares and three inputs killed it). Whether the game chains there is not in the sources; the cut is ours, and it touches no hit by the party.
  *
  * ## What the engine sees
  *
@@ -104,7 +105,7 @@ function answer(ctx: Ctx, self: FFXCombatant, aimId: string, command: Command): 
 }
 
 /** Earth Eater hears it was hit, after the damage and before the death check (RE n 3.4). */
-export function earthEaterOnHit(ctx: Ctx, self: FFXCombatant, _used: UsedCommand, report: HitReport): void {
+export function earthEaterOnHit(ctx: Ctx, self: FFXCombatant, used: UsedCommand, report: HitReport): void {
   if (self.hp <= 0) return; // HP 0: nothing
   const damage = report.lastDamage;
   if (damage <= 0) return; // a miss, a heal or a status: nothing
@@ -118,6 +119,9 @@ export function earthEaterOnHit(ctx: Ctx, self: FFXCombatant, _used: UsedCommand
   }
   const ai = aiContextFor(ctx, self);
   if (down) {
+    // Engine guard, not game data: its own Flare lands on itself once the Reflect is gone (Dispel), and that hit would be answered by the next Flare, 64 in a row to the drain's valve. The bytes have no gate (see the header)
+    // and the sources do not say whether the game chains; a hit it dealt to itself is therefore the one hit that asks for nothing. Every hit by anyone else, inside a reaction or not, is answered as the bytes do.
+    if (used.user.id === self.id) return;
     answer(ctx, self, self.id, use(ai, ROW.flare, [self.id])); // its own Reflect bounces it onto the party
     return;
   }

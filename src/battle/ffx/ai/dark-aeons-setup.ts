@@ -30,8 +30,8 @@ const OVERDRIVE_OF: Readonly<Record<string, string>> = {
 export const DARK_GAUGE_RULES = 'dark-aeons';
 
 export function applyDarkAeonsSetup(ctx: Ctx, group: EnemyGroupDef): void {
+  applyBelgemineSetup(ctx, group); // the hidden Belgemine's Challenge chapter's eight formations (FFX only, 2026-11-09): the gauges, Belgemine and the dog without turns, the start hook's counters; a no-op for every other group
   applyGauntletSetup(ctx, group); // the hidden Gauntlet chapter's Earth Eater (Reflect) and Greater Sphere (its first element) (FFX only, 2026-11-10); a no-op for every other group
-  applyBelgemineSetup(ctx, group);// the hidden Belgemine's Challenge chapter's eight formations (FFX only, 2026-11-09): the gauges, Belgemine and the dog without turns, the start hook's counters; a no-op for every other group
   applyDarkAeonsSixSetup(ctx, group); // the hidden Dark Aeons chapter's seven formations (FFX only, 2026-11-06): the gauges, and Dark Ixion's second fight's HP; a no-op for every other group
   const formation = DARK_FORMATIONS[group.id];
   if (formation === undefined) return;

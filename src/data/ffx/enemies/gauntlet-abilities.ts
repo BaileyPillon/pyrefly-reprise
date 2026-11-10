@@ -29,7 +29,7 @@
  * **Targets the fixture does not give** (the four Don Tonberry rows and the relay come from the kernel fixtures, which carry no target byte): the script's own use decides (RE n 3): Attack, Voodoo and Karma
  * aim at one party member, Waddle at itself, Special 1 at the body. Marked `[inferred]` on each row.
  *
- * **Rule 5 (AGENTS.md): a row with accuracy formula 0 never misses** (`canMiss: false`); the three physical Attacks with accuracy formula 2 (0x40BA, 0x6000) leave `canMiss` unset and carry their byte in `accuracy`.
+ * **Rule 5 (AGENTS.md): a row with accuracy formula 0 never misses** (`canMiss: false`); the two physical Attacks with accuracy formula 2 (Jormungand's 0x40BA, Neslug's 0x6000) leave `canMiss` unset and carry their byte in `accuracy`.
  * The cap bit (99,999), the crit bits and the shatter byte are each row's own; the rank is the record's (3 on all). Delay Buster (record bit 0x4000), the cleanse rows' removals and the Curse extra bit live in the
  * record, as in the Dark Aeons' rows. The rows' animations, sounds and MP (the monsters pay none) are not modelled.
  */

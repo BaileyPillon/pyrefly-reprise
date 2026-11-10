@@ -136,6 +136,9 @@ describe('what it answers a hit with (RE n 3.6): read off the command\'s own rec
     expect(hit(ctx.content.ability('firaga') as AbilityDef)).toEqual([`${ROW.condemn}->${front}`]);
     expect(hit(ctx.content.ability('slow') as AbilityDef)).toEqual([`${ROW.haste}->${TH}`]);
     expect(hit(ctx.content.ability('haste') as AbilityDef)).toEqual([`${ROW.haste}->${TH}`]);
+    // The Delay moves carry the HP bit alone in their records (the delay lives in the other flag word), so they are answered by Condemn, not Haste (review fix F2).
+    expect(hit(ctx.content.ability('delay-attack') as AbilityDef)).toEqual([`${ROW.condemn}->${front}`]);
+    expect(hit(ctx.content.ability('delay-buster') as AbilityDef)).toEqual([`${ROW.condemn}->${front}`]);
   });
 
   it('a command that changes neither HP nor CTB (a buff, Scan) is answered by nothing; a miss counts: the script tests no damage', () => {
@@ -143,7 +146,7 @@ describe('what it answers a hit with (RE n 3.6): read off the command\'s own rec
     expect(hit(ctx.content.ability('attack') as AbilityDef, { lastDamage: 0, lostHp: false })).toEqual([`${ROW.condemn}->tidus+yuna+auron`]);
   });
 
-  it('a command that does both is answered by Haste alone: the game\'s queue drops a second command of the same owner (no party command has both bits; the record is overridden)', () => {
+  it('a command that does both (a SYNTHETIC record: no shipped command has both bits) is answered by Haste alone: the game\'s queue drops a second command of the same owner', () => {
     expect(hit(withClass('attack', THUBAN_AFFECTS_HP | THUBAN_AFFECTS_CTB))).toEqual([`${ROW.haste}->${TH}`]);
     expect(hit(withClass('attack', THUBAN_AFFECTS_CTB))).toEqual([`${ROW.haste}->${TH}`]);
   });

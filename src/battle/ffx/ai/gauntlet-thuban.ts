@@ -23,7 +23,7 @@
  * the command **changes the CTB** (Slow, Haste on others, the Delay moves: `damageClass` bit 4) -> **Haste on itself**; the command **changes HP** (`damageClass` bit 1) -> **Condemn on the front line** (it strips Shell, Protect, Reflect,
  * the four Nuls, Regen and Haste from everyone it hits, the party's Auto-Protect and Auto-Haste included if the engine lets a cleanse take them: the tests say).
  *
- * **One answer a hit.** The game's queue drops a second `performCommand` while the owner already has one waiting (`./hit-gates.ts#react`), so a command that does both (Delay Attack) is answered by Haste alone. And the
+ * **One answer a hit.** The game's queue drops a second `performCommand` while the owner already has one waiting (`./hit-gates.ts#react`), so a command that did both bits would be answered by Haste alone (none of the party's does: Slow and Haste carry the CTB bit alone, Delay Attack and Delay Buster the HP bit alone, so the Delay moves are answered by Condemn; the both-bits case is pinned on a synthetic record). And the
  * engine's one rule that **a counter never triggers another counter** (`./hit-script.ts#queueCounter`) applies: the Haste it casts on itself is a CTB command that hit it, which the bytes would answer with another Haste for
  * ever; the engine's reaction queue refuses it. Nothing else of the party's hits it from inside a reaction, so this is the only place the rule shows. The blow that kills it (HP 0) is answered by nothing: its owner cannot act.
  */
