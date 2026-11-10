@@ -160,6 +160,42 @@ describe('the phone block', () => {
   });
 });
 
+/** A selector's specificity as [ids, classes + attributes + pseudo-classes, types]; `:has()` and `:not()` count as their argument. */
+function specificity(selector: string): [number, number, number] {
+  const flat = selector.replace(/:(has|not|is)\(([^)]*)\)/g, ' $2 ');
+  const ids = (flat.match(/#[\w-]+/g) ?? []).length;
+  const classes = (flat.match(/\.[\w-]+/g) ?? []).length + (flat.match(/\[[^\]]+\]/g) ?? []).length + (flat.match(/(?<!:):(?!:)[\w-]+/g) ?? []).length;
+  const types = (flat.replace(/\[[^\]]*\]/g, '').match(/(^|[\s>+~])[a-z][\w-]*/gi) ?? []).length;
+  return [ids, classes, types];
+}
+const beats = (a: [number, number, number], b: [number, number, number]): boolean => {
+  for (let i = 0; i < 3; i++) if (a[i] !== b[i]) return a[i]! > b[i]!;
+  return false;
+};
+
+describe('the desktop form width does not leak onto the phone', () => {
+  const hud = added('src/ui/ffx2/ffx2-hud.css');
+  const phone = added('src/ui/ffx2/phone-hud.css');
+  const widthRules = hud.filter((r) => /(^|;)\s*width:/.test(r.body) && r.selectors.some((s) => s.includes(':has(.ig-stat--form-part)') && /\.ig-stat/.test(s)));
+  const row = "html[data-phone-battle='ffx2'] .ffx2hud .ffx2hud__party:has(.ig-stat--form-part) .ig-stat";
+
+  it('the desktop sheet sets the form width on the rows and the acting row (the two rules the phone must beat)', () => {
+    expect(widthRules.map((r) => r.selectors[0]).sort()).toEqual(['.ffx2hud .ffx2hud__party:has(.ig-stat--form-part) .ig-stat', '.ffx2hud .ffx2hud__party:has(.ig-stat--form-part) .ig-stat--acting']);
+  });
+
+  it('the phone\'s row rule resets the width to auto and has more specificity than each of them, so the stacked rows are full width (the acting row is an .ig-stat too)', () => {
+    const body = phone.find((r) => r.selectors.includes(row))?.body ?? '';
+    expect(body, 'the phone block resets the width').toMatch(/(^|;|\s)width: auto;/);
+    for (const rule of widthRules) expect(beats(specificity(row), specificity(rule.selectors[0]!)), `${row} beats ${rule.selectors[0]}`).toBe(true);
+  });
+
+  it('the specificity helper reads :has() as its argument (0,4,0 for the desktop row rule, 0,5,1 for the phone one)', () => {
+    expect(specificity('.ffx2hud .ffx2hud__party:has(.ig-stat--form-part) .ig-stat')).toEqual([0, 4, 0]);
+    expect(specificity(row)).toEqual([0, 5, 1]);
+    expect(specificity("html[data-phone-battle='ffx2'] .ffx2hud .ig-stat")).toEqual([0, 3, 1]);
+  });
+});
+
 describe('the existing sheets are only added to', () => {
   it('the step\'s block is the tail of each file: nothing before it was edited (step A\'s CSS pin proves the named rules)', () => {
     for (const file of FILES) {
