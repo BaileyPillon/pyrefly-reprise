@@ -9,6 +9,6 @@ highest drawn row at full size (`baselineY`, `contentTop`) and its full-size box
 
 Poses and frames (the preflight's picks): `idle` = idle-1, `attack` = attack-2, `cast` = cast-3, `hurt` = hurt-2. `victory` is not here: its render is owed. No pose of the four was missing.
 
-Cut from the mask lane's full-size masks (1536 x 1536): each 4 x 4 block goes to the layer that owns most of its pixels when at least half of the block is drawn, so the three part
+Cut from the mask lane's full-size masks (1536 x 1536): each 4 x 4 block with any drawn pixel goes to the layer that owns most of its pixels (so a thin tip survives and the box stays within a block of the full-size one), so the three part
 masks partition `whole`. `tools/special-part-anchors.mjs` reads this folder (`--masks`) and writes `src/data/art/specialParts.ts`; at stage 2 the painting's own masks and sidecars replace
 these (`--sidecars`) and the table is regenerated.
