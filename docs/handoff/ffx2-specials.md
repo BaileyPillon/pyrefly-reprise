@@ -174,3 +174,57 @@ The shared bundles gain `SpecialArtIds.ts` (three string literals and one functi
 ### 9.9 For the next steps
 
 C1 and C2 import `tests/unit/helpers/specialFormState.ts` (`chapterIV`, `FORM_GIRLS`, `formUp`, `captureBursts`, the logs) and never copy it; `tests/unit/special-switch-off.test.ts` grows with each step (it already proves the presenter plays an ordinary Change burst without a call to `holdRows` or `showAtbChip`). `specialsLookWord()` is how C1's `setSpecialLook` and C2's `entryKind(..., hold)` read the look words. The pins must pass at every step.
+
+## 10. The look, step C1 (2026-11-10; branch `ffx2-specials`; plan `docs/plans/ffx2-specials-look-review.md`)
+
+**Game case: FFX-2 only in what is seen** (the three Special dresspheres exist only in FFX-2); the shared plumbing (the anchor types, `StageFigureRequest`, `PartyStature`, `SummonStaging`, `StrikeReach`, the pose tooling) is **both games, additive, inert while the switch `specialDressUp` is OFF**. Nothing in an FFX or FF7 chapter changes; `git diff <start> HEAD -- src/battle` is empty. The step builds the stage-side machinery, pure and testable without a canvas; the stage call-ins (`BattlePresenterStage.ts`, the presenter, the preload) are C2's.
+
+### 10.1 What landed (seven commits, in this order, then the records)
+
+| Commit | What | Tests |
+|---|---|---|
+| `761c77a4e` | **The pins, alone, before any source edit**: the PartRings/StageAnchors/figure-request snapshot of every anchor in the scene tables, the literal old bodies of `sceneOwnHeight` and `formPlanScale`, the source text of the three summon functions, `subjectKind`/`gameOf`/`sideOf` of every subject | `special-anchor-ring`, `special-fit`, `summon-staging`, `pose-kinds-special` |
+| `b31a29fd5` | `OnParentAnchor.box?`, `ring.hidden?/mark?/colour?`, `PartRings.setMark/setAnchor`, `StageAnchors.anchoredQuad` (box) and `anchorNow` | `special-anchor-ring` |
+| `524e5fcdb` | `tools/special-part-anchors.mjs`, the generated `src/data/art/specialParts.ts`, the quarter-size mask fixtures | `special-part-anchors-tool` |
+| `00638fe48` | `SpecialStaging.ts` and `FormActorHandle.ts` (the spec's steps 3 and 4 in one commit: the staging imports the handle) | `special-staging`, `form-actor-handle` |
+| `e7c36d5c6` | `sceneOwnHeight`'s fit, `FigureEnv.specialFit?`, the hidden turn ring, `SummonStaging.idsOffStage/idsBack/heldOffAll`, `StrikeReach` | `special-fit`, `summon-staging`, `special-switch-off` (grown) |
+| `536f815a5` | the fixtures keep a thin tip (box within a block of the full-size one); the table regenerated | `special-part-anchors-tool` |
+| `1ed60c1ac` | the pose kind `special-ffx2` | `pose-kinds-special` |
+
+### 10.2 The table is generated and provisional
+
+`src/data/art/specialParts.ts` is written by `node tools/special-part-anchors.mjs` (`--check` exits 1 when it is stale; `--masks <dir>` and `--sidecars <dir>` override the inputs; `--out <file>`). Its inputs are the 48 quarter-size masks under `tests/fixtures/specials/masks/<special>/<pose>/{whole,main,right,left}.png` plus a `meta.json` each (the full-size render's size, feet row, top row and box). They are alpha silhouettes of the model renders (poses `idle`, `attack`, `cast`, `hurt`; frames idle-1, attack-2, cast-3, hurt-2); `victory` is owed, its render is not made. Every Special is `provisional: true`. **Regenerate the table whenever the art changes**: at stage 2 the painting's own masks and sidecars replace the fixtures. Right and left come from the file name, never from x (Full Throttle's attack has the right wing on the screen-right).
+
+### 10.3 The four switches, as built (defaults; Bailey has not answered)
+
+`setSpecialLook({ fit, mark, hold })` (null = defaults; C2 calls it with `specialsLookWord()`): `fit` `trial` (1.55 / 1.45 / 1.55 girls desktop, 1.15 / 1.0 / 1.15 phone, enemy share 0.9, width caps 35 and 60 percent), `larger`, `true` (the wider camera is NOT built); `mark` `a` (nothing on the figure, a whole-figure row with a hidden ring) or `b` (a gold target ring on the part); `hold` `per-save` or `short-always` (read by C2's `entryKind`). `STAND_POINT` is `own` for the three girls; `'middle'` is not implemented. The pose class of the Special kind is `standing` (D-36: class `part` needs Bailey's quoted words).
+
+### 10.4 Moved to stage 2 or later, as the spec says
+
+The Special rows of `src/data/art/poseRegistrationFoes.ts` and the three rows of `tools/posescale/subjects.json` are generated from the paintings and their sidecars (`measure.py`, python): no painting exists. `src/scenes/types.ts` is not edited (no `formGirlsPhone` field: the per-surface cap is `FIT_ROWS[row].formGirls`, the surface from `surfaceOf`). `upright: true` for Machina Maw's attack and hurt rows is stage 2's; `pose-kinds-special.test.ts` already proves from the fixtures that exactly those two are prone (771x636, 659x538).
+
+### 10.5 Transient orphans (`node tools/orphans.mjs`)
+
+After step A: 28. After C1: 31 = those 28 plus exactly `src/engine/SpecialStaging.ts`, `src/engine/FormActorHandle.ts` and `src/data/art/specialParts.ts` (their importers are C2's stage call-ins and D1's `partCrop.ts`, a second importer of `specialParts.ts`). Step A's four (`SpecialFormTracker`, `SpecialBeatPlans`, `SpecialReactions`, `SpecialPartyHold`) stay until C2. Any other new name is a defect. `FormActorHandle` imports `SpecialReactions` (so C2's presenter import of A's four is unaffected).
+
+### 10.6 Deviations from the step spec, each kept to its intent
+
+1. **Steps 3 and 4 are one commit** (`SpecialStaging` imports `FormActorHandle`). 2. The mask fixtures are cut by a **block rule** (a 4 x 4 block with any drawn pixel goes to the layer that owns most of it) so the quarter-size box is within one block of the full-size one; `meta.json` also carries `wholeBbox`, `baselineY` and `contentTop` at full size, because the prone test (Machina Maw's idle is 1.146 against the 1.15 line) cannot be decided from a quarter-size mask: `pose-kinds-special.test.ts` runs the real rule on the full-size box and checks the mask agrees to 8 px. 3. The mask reader takes the **alpha when the file has one, else the grey value** (the lane's masks are grey RGB); the committed fixtures are RGBA, so the spec's alpha rule holds for them. 4. `formSlots(stage, slots, pose = 'idle')` and `anchorRowFor(..., look, refHeight?)` take an optional trailing argument (the spec gives no pose to `formSlots`). 5. `PartAnchors.ts` is +22 lines (budget +20); `sync` leaves a mark ring's lit state alone (else the stage's per-frame `sync` would put every mark out), and a mark ring is not visible while unlit. 6. `heldOffAll` with no ids returns `heldOffStage`'s own set (equal, not identical: `heldOffStage` builds a new empty set each call). 7. `NOW.md` and `CHANGELOG.md` are not edited (the driver's records stage). 8. The spec's "spies on all of them" is done with pass-through `vi.mock` spies on the six stage hooks in `special-switch-off.test.ts`; nothing calls them in C1, so the case proves an ordinary Change burst through the real presenter never does.
+
+### 10.7 `[ours]` rows (table values and rules the preflight does not give; none is a game number)
+
+| Value or rule | Where | Why |
+|---|---|---|
+| Ring radius = 0.5 x the longer side of the part's box, capped at 0.35 of the figure's width | `tools/special-part-anchors.mjs` | the preflight says "ring radii", not how |
+| Plate tile (`crop`) = the part's box grown to a square of 1.15 x its longer side round its centre, slid to stay inside the painting | the same | "the crop box" |
+| Number point = the box's centre x, 0.30 of its height below the top (`NUMBER_POINT_Y`) | the same | "over the figure's upper middle" |
+| `widthCapGirls` = trial girls x the window-share cap / the paper share (24 / 33 / 33 desktop, 42 / 55 / 59 phone; Full Throttle's provisional) = 2.26 / 1.54 / 1.64 and 1.64 / 1.09 / 1.17 | the same | the width term's unit (OPEN 3) |
+| The `larger` row: 2.0 girls each on the desktop, the trial values on the phone; the `true` row: the silhouettes, no enemy term, no width term | the same | Q-3 (b) and (c) |
+| The mode-(a) whole-figure row: the number point as `px` and `chestPx`, the figure's box, a hidden ring of radius 0.15 (`WHOLE_ROW_RADIUS`) | `SpecialStaging.ts` | "radius: small" |
+| The mode-(b) ring's world radius = `radiusPx` over the feet-to-top span x the trial desktop height | `SpecialStaging.ts` | the table is in pixels, the ring in world units |
+| The surface test: the shared phone test (`w < 600 && h > w`) | `SpecialStaging.surfaceOf` | OPEN 2 |
+| The hit gate's reset events, set by C2: `action-start`, `action-end` and `turn-start` (a later poison tick is a first blow again) | the spec, rule 8 | code-fit F-21 |
+
+### 10.8 For the next steps
+
+C2 imports `SpecialStaging.ts` (`setStageForm`, `formHandleOf`, `partViewOf`, `specialFitOf`, `anchorSourceOf`, `formSlots`, `formKeepIds`, `partRoleOf`, `setSpecialLook`, `specialLook`, `FALL_GRADE`) and calls `StageAnchors.anchorNow` each frame, `idsOffStage`/`idsBack` for the parked girls, and reads `heldOffAll` at `BattlePresenterStage.ts:622`; it creates `StageForm.gate` with the form and flips `blocked` once per event. D1 imports `SPECIAL_PARTS` (`crop`, the plate tile) and reads the plates' order hint in both modes. `special-switch-off.test.ts` has the six hook spies (`vi.mock` at the top of the file): C2 keeps them. Stage 2 runs `node tools/special-part-anchors.mjs --sidecars <dir> --masks <dir>` and builds the ON preview with `vite build --mode specials-test`.
