@@ -222,13 +222,15 @@ describe('the chapter is registered hidden, FFX only, number 50', () => {
     expect(entry?.slots.enemy).toHaveLength(2);
   });
 
-  it('its door is the word blitz, the last row of the table, not gated', () => {
+  it('its door is the word blitz, the row directly after wendigo, not gated', () => {
     expect(BLITZ_DOOR_WORD).toBe('blitz');
     expect(BLITZ_DOOR_CHAPTER).toBe('oblitzerator');
     const row = CHAPTER_DOORS.find((d) => d.word === BLITZ_DOOR_WORD);
     expect(row).toMatchObject({ word: 'blitz', chapter: 'oblitzerator' });
     expect(row?.gate).toBeUndefined();
-    expect(CHAPTER_DOORS.at(-1)?.word).toBe('blitz');
+    // Not `.at(-1)`: the Gullwings and Luca branches appended `dragon` and `debut` behind it (the r80 integration), so the pin is the neighbour it was written beside.
+    const at = CHAPTER_DOORS.findIndex((d) => d.word === BLITZ_DOOR_WORD);
+    expect(CHAPTER_DOORS[at - 1]?.word).toBe('wendigo');
   });
 
   it('the music is the coast bed, the ordinary FFX battle cue (a stand-in) and the FFX fanfare', () => {
