@@ -20,11 +20,17 @@ describe('the portrait before the field', () => {
     const { log, event } = entry();
     const marks: string[] = [];
     let r!: ReturnType<typeof rig>;
-    const turnCutIn = vi.fn(async () => {
-      marks.push(`slab@${r.clock.t}`);
-      r.clock.t += 700; // the slab runs 700 ms of the recording clock
-      marks.push(`slab-done@${r.clock.t}`);
-    });
+    const turnCutIn = vi.fn(
+      () =>
+        new Promise<void>((done) => {
+          marks.push(`slab@${r.clock.t}`);
+          setTimeout(() => { // the slab really takes time (a macrotask), and runs 700 ms of the recording clock
+            r.clock.t += 700;
+            marks.push(`slab-done@${r.clock.t}`);
+            done();
+          }, 5);
+        }),
+    );
     r = rig(log, { moments: { turnCutIn } as never });
     const original = r.stage.vfx.special!.bind(r.stage.vfx);
     r.stage.vfx.special = async (c) => {
@@ -37,6 +43,7 @@ describe('the portrait before the field', () => {
     const slabEnd = marks.find((m) => m.startsWith('slab-done@'))!;
     const field = marks.find((m) => m.startsWith('light-column@'))!;
     expect(Number(field.split('@')[1]), 'field starts after the slab').toBeGreaterThanOrEqual(Number(slabEnd.split('@')[1]));
+    expect(marks.indexOf(slabEnd), 'and in call order').toBeLessThan(marks.indexOf(field));
     expect(r.presenter.moments.portraitWait(), 'the promise is handed back once').toBeNull();
     // the cut is at the plan's absolute time: the sleeps plus the slab's own 700 make up the plan
     expect(r.sleeps.reduce((a, b) => a + b, 0) + 700).toBe(fullPlan('yuna').totalMs - 600);

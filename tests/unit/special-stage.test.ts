@@ -98,13 +98,13 @@ const SLOTS: SceneSlots = {
   enemyHeight: 4.1,
 };
 
-function stageFor(w: number, h: number, slots: SceneSlots = SLOTS) {
-  const cam = new PerspectiveCamera(28, w / h, 0.1, 100);
-  cam.position.set(0, 3, 12);
-  cam.lookAt(0, 1.5, 0);
+function stageFor(w: number, h: number, slots: SceneSlots = SLOTS, rig: { position: number[]; lookAt: number[]; fov: number } = { position: [0, 3, 12], lookAt: [0, 1.5, 0], fov: 28 }) {
+  const cam = new PerspectiveCamera(rig.fov, w / h, 0.1, 100);
+  cam.position.set(rig.position[0]!, rig.position[1]!, rig.position[2]!);
+  cam.lookAt(rig.lookAt[0]!, rig.lookAt[1]!, rig.lookAt[2]!);
   cam.updateMatrixWorld();
   const canvas = { clientWidth: w, clientHeight: h, getBoundingClientRect: () => ({ left: 0, top: 0, width: w, height: h }) } as unknown as HTMLCanvasElement;
-  return new PaintedStage({ scene: new Scene(), camera: cam, battleCamera: new BattleCamera(cam, { rigs: { idle: { position: [0, 3, 12], lookAt: [0, 1.5, 0] } } }), slots, canvas });
+  return new PaintedStage({ scene: new Scene(), camera: cam, battleCamera: new BattleCamera(cam, { rigs: { idle: { position: rig.position as [number, number, number], lookAt: rig.lookAt as [number, number, number] } } }), slots, canvas });
 }
 type Stage = ReturnType<typeof stageFor>;
 
@@ -286,5 +286,41 @@ describe('the part mark (b)', () => {
 
   it('the anchor table is the rows the stage reads: the idle row of the table is the figure\'s box', () => {
     for (const g of GIRLS) expect(SPECIAL_PARTS[g.special].poses['idle']!.whole.box).toHaveLength(4);
+  });
+});
+
+// ---------------------------------------------------------------- test 14: the framing, at each girl's own slot
+
+const { BEVELLE_UNDERGROUND_RIGS, BEVELLE_UNDERGROUND_SLOTS } = await import('../../src/scenes/bevelle-underground.ts');
+const { FARPLANE_SLOTS } = await import('../../src/scenes/farplane.ts');
+
+describe.each([
+  { name: 'Chapter IV (the Bevelle underground)', slots: BEVELLE_UNDERGROUND_SLOTS, rig: BEVELLE_UNDERGROUND_RIGS.idle },
+  { name: 'Chapter V (the Farplane)', slots: FARPLANE_SLOTS as unknown as SceneSlots, rig: { position: [0, 3, 9.6], lookAt: [0.5, 1.45, -1.4], fov: 32 } },
+])('the framing on the idle camera of ', ({ slots, rig }) => {
+  it.each(GIRLS)(' at her own slot: the head and the whole width inside the frame, the width under the desktop cap (35 percent of the window), the camera untouched', async (g) => {
+    const stage = stageFor(1600, 900, slots, rig);
+    await stage.stage(stateOf());
+    const camBefore = (stage as unknown as { opts: { camera: PerspectiveCamera } }).opts.camera.position.toArray();
+    await enter(stage, g);
+    const r = stage.projectRect(g.id)!;
+    expect(r.y, 'the head is inside the frame').toBeGreaterThanOrEqual(0);
+    expect(r.x).toBeGreaterThanOrEqual(0);
+    expect(r.x + r.w).toBeLessThanOrEqual(1600);
+    expect(r.w, 'under the width cap').toBeLessThanOrEqual(0.35 * 1600 * 1.0001);
+    expect((stage as unknown as { opts: { camera: PerspectiveCamera } }).opts.camera.position.toArray()).toEqual(camBefore);
+    expect(stage.actor(g.id)).toBeDefined();
+  });
+});
+
+describe('the alternative semantic: a scene that names the form height (formHeights) plans the camera on the shared height', () => {
+  it('records the stature for the framing plan and stands at the named height, the camera planned as before', async () => {
+    const g = GIRLS[0]!;
+    const slots = { ...SLOTS, formHeights: { [g.art]: 2.9 } } as SceneSlots;
+    const stage = stageFor(1600, 900, slots);
+    await stage.stage(stateOf());
+    await enter(stage, g);
+    expect(figureOf(g.id)['worldHeight']).toBeCloseTo(2.9, 6);
+    expect(figureOf(g.id).userData[STATURE_KEY]).toBeCloseTo(2.9 / 1.82, 6);
   });
 });
