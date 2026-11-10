@@ -1,0 +1,42 @@
+{
+ "fiends": {
+  "start": "pagoda-c",
+  "steps": [
+   "aeon",
+   "pagoda-b",
+   "pagoda-c",
+   "aeon"
+  ],
+  "back": "pagoda-c"
+ },
+ "girls": {
+  "start": "c",
+  "steps": [
+   "b",
+   "a",
+   "c",
+   "b"
+  ],
+  "back": "c"
+ },
+ "ties": {
+  "start": "t3",
+  "steps": [
+   "t1",
+   "t2",
+   "t4",
+   "t3"
+  ],
+  "back": "t4"
+ },
+ "unprojected": {
+  "start": "u1",
+  "steps": [
+   "u4",
+   "u3",
+   "u2",
+   "u1"
+  ],
+  "back": "u2"
+ }
+}
