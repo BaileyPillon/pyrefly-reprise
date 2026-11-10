@@ -30,6 +30,7 @@ import { SPHERIMORPH_SCENE } from '../ffx/spherimorph-ids.ts';
 import { OMEGA_RUINS_PLATE, OMEGA_RUINS_SCENE } from '../ffx/omega-ruins-ids.ts';
 import { BELGEMINE_SCENE, BELG_PLATE } from '../ffx/belgemine-ids.ts';
 import { GARIK_RONSO_PLATE, GARIK_RONSO_SCENE } from '../garik-ronso-ids.ts';
+import { OBLITZERATOR_SCENE } from '../ffx/oblitzerator-ids.ts';
 import { EXP_YRP_SCENE } from '../yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../windwaker-ids.ts';
 import { EXP_ANIME_SCENE } from '../anime-ids.ts';
@@ -70,6 +71,7 @@ export const SCENE_BACKDROP_FILE: Readonly<Record<string, string>> = {
   [SPHERIMORPH_SCENE]: 'macalania-temple', // the hidden Spherimorph's stage is the Macalania Temple's plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into
   [OMEGA_RUINS_SCENE]: OMEGA_RUINS_PLATE, // the hidden Omega Ruins chapter's stage is the Cavern of the Stolen Fayth's plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into
   [GARIK_RONSO_SCENE]: GARIK_RONSO_PLATE, // the hidden Garik Ronso's stage is Chapter I's Mt. Gagazet plate under the FFX-2 camera (2026-11-08, FFX-2 only): no file of its own (the summit has no plate), and the art mirror is not written into
+  [OBLITZERATOR_SCENE]: 'mushroom-rock-road', // the hidden Oblitzerator chapter's stage is the Mushroom Rock Road's plate standing in for the Luca dock (2026-11-09, FFX only): no plate of its own, and the art mirror is not written into
   [EXP_YRP_SCENE]: 'bevelle-underground', // the hidden 3D Bahamut (FFX-2): Chapter IV's chamber is drawn over Chapter IV's own plate
   [EXP_WINDWAKER_SCENE]: DJOSE_CHAMBER_PLATE, // the hidden Wind Waker chapter (FFX-2): the stage is 3D and has no plate; the board, the prep wash and the cutscenes show hidden chapter 24's (the Djose chamber's) plate, as chapter 24 does
   [EXP_ANIME_SCENE]: DJOSE_CHAMBER_PLATE, // the hidden anime chapter (FFX-2): the stage is 3D and has no plate; the board, the prep wash and the cutscenes show hidden chapter 24's (the Djose chamber's) plate, as the Wind Waker chapter does

@@ -67,6 +67,7 @@ import { OMEGA_RUINS_BOSS_IDS, omegaRuins } from './omega-ruins.ts';
 import { WENDIGO_BOSS_IDS, wendigoLine } from './wendigo.ts';
 import { BELGEMINE_CHAPTER_BOSS_IDS, belgemineLine } from './belgemine.ts';
 import { SHINRYU_BOSS_IDS, shinryu } from './shinryu.ts';
+import { OBLITZERATOR_BOSS_IDS, oblitzeratorLine } from './oblitzerator.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -122,6 +123,7 @@ export { omegaRuins, OMEGA_RUINS_BOSS_IDS } from './omega-ruins.ts'; // the hidd
 export { wendigoLine, WENDIGO_BOSS_IDS } from './wendigo.ts'; // the hidden Wendigo chapter (FFX only)
 export { belgemineLine, BELGEMINE_CHAPTER_BOSS_IDS } from './belgemine.ts'; // the hidden Belgemine's Challenge chapter (FFX only)
 export { shinryu, SHINRYU_BOSS_IDS } from './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07)
+export { oblitzeratorLine, OBLITZERATOR_BOSS_IDS } from './oblitzerator.ts'; // the hidden Oblitzerator chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -224,6 +226,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...BELGEMINE_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'belgemine', bossId, tactic: belgemineLine })),
   // The hidden Shinryu chapter (FFX only): the Monster Arena's deep-water dragon; the line is a Phoenix Down or a potion first, then Tidus's Quick Hit and the plain Celestial blow (the shipped party wins every battle; the line is the fastest).
   ...SHINRYU_BOSS_IDS.map((bossId) => ({ chapterId: 'shinryu', bossId, tactic: shinryu })),
+  // The hidden Oblitzerator chapter (FFX only): the blitzball machine at the Luca dock; the line is Thunder at the crane three times, Use crane, then a swing (a blow or a spell at the machine draws a ball back).
+  ...OBLITZERATOR_BOSS_IDS.map((bossId) => ({ chapterId: 'oblitzerator', bossId, tactic: oblitzeratorLine })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

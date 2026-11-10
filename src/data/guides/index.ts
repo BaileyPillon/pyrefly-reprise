@@ -38,6 +38,7 @@ import { FFX2_ANGRA_MAINYU_GUIDE } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_GUIDE } from './sanctuary-keeper.ts';
 import { WENDIGO_GUIDE } from './wendigo.ts';
 import { BELGEMINE_GUIDE } from './belgemine.ts';
+import { OBLITZERATOR_GUIDE } from './oblitzerator.ts';
 import { PENANCE_GUIDE } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_GUIDE } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_GUIDE } from './spherimorph.ts';
@@ -158,6 +159,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   SHINRYU_GUIDE,
   // The hidden Wendigo chapter (FFX only, Wendigo and its two Guado Guardians on frozen Lake Macalania; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   WENDIGO_GUIDE,
+  // The hidden Oblitzerator chapter (FFX only, the blitzball machine and the dock crane at Luca; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  OBLITZERATOR_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

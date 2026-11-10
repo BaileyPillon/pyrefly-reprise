@@ -60,6 +60,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   wendigo: 'ffx', // the hidden Wendigo chapter (FFX only, 2026-11-06)
   belgemine: 'ffx', // the hidden Belgemine's Challenge chapter (FFX only, 2026-11-09)
   shinryu: 'ffx', // the hidden Shinryu chapter (FFX only, 2026-11-07)
+  oblitzerator: 'ffx', // the hidden Oblitzerator chapter (FFX only, 2026-11-09)
   'ffx2-yunas-ballad': 'ffx2', // the hidden Yuna's Ballad chapter (FFX-2 only, 2026-11-06)
   spherimorph: 'ffx', // the hidden Spherimorph chapter (FFX only, 2026-11-06)
   'ffx2-youth-league': 'ffx2', // the hidden Youth League Tournament chapter (FFX-2 only, 2026-11-07)

@@ -69,6 +69,8 @@ export interface Counter {
   /** The combatant it is aimed at: the `counter` event's target, and the one the game's queue refuses it for if it is gone. */
   targetId: CombatantId;
   command: Command;
+  /** Run it after the triggering action's end-of-turn tick, as the game does (`Reaction.afterTick`, `./hooks.ts`). Absent: before the tick, the engine's older order. */
+  afterTick?: boolean;
 }
 
 /**
@@ -82,6 +84,7 @@ export function queueCounter(ctx: Ctx, counter: Counter): void {
     keepsControl: true,
     byId: counter.targetId,
     requiresAlive: counter.targetId,
+    ...(counter.afterTick === true ? { afterTick: true } : {}),
   });
 }
 

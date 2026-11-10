@@ -39,6 +39,7 @@ import { FFX2_ANGRA_MAINYU_DOC } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_DOC } from './sanctuary-keeper.ts';
 import { WENDIGO_DOC } from './wendigo.ts';
 import { BELGEMINE_DOC } from './belgemine.ts';
+import { OBLITZERATOR_DOC } from './oblitzerator.ts';
 import { PENANCE_DOC } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_DOC } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_DOC } from './spherimorph.ts';
@@ -90,6 +91,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   FFX2_GARIK_RONSO_DOC, // the hidden Garik Ronso (FFX-2 only)
   SHINRYU_DOC, // the hidden Shinryu (FFX only)
   WENDIGO_DOC, // the hidden Wendigo (FFX only)
+  OBLITZERATOR_DOC, // the hidden Oblitzerator (FFX only)
 ];
 
 /** The document for one chapter id, if it has one. */

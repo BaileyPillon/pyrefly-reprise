@@ -65,6 +65,8 @@ const ROWS: ReadonlyArray<readonly [string, number]> = [
   ['spherimorph', 0x6000], // m121
   // The hidden Wendigo chapter (2026-11-06): Wendigo (m212) carries the Attack word 0x4000 (its default punch, x3/2 under Berserk) and the Guado Guardians (m213) the Thundara word 0x3047 (`research/re-ffx-wendigo-lake-macalania.md` 1.1, 1.3; the Guardians are Berserk- and Confuse-immune, and a Provoked one throws the engine's generic Attack, not Thundara).
   ['wendigo', 0x4000], ['lake-guardian-a', 0x3047], ['lake-guardian-b', 0x3047], // m212, m213 twice
+  // The hidden Oblitzerator chapter (2026-11-09): the forced-action word of m110 and m133 is not in the note (RE 1 gives the command list, not the word), and it can never be used: both records are immune (255) to Berserk, Confuse and Provoke, the three statuses that queue it. 0 is the table's default for a boss (172 of the 361 records), `[unsourced]`.
+  ['oblitzerator', 0x0000], ['luca-crane', 0x0000], // m110, m133
   ...[1, 2, 3, 4, 5, 6, 7].map((n): readonly [string, number] => [`spectral-circle-${n}`, 0x0000]), // m146
   // The hidden Penance chapter (2026-11-06): Penance (m344) and its two arms (m345, m346) carry no forced action (`research/re-ffx-penance.md` 3: "none"), so Berserk, Confuse and Provoke drop their turns (all three are immune anyway).
   ['penance', 0x0000], // m344

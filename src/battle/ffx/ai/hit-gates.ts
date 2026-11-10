@@ -28,13 +28,14 @@ export function counterAllowed(ctx: Ctx, owner: FFXCombatant): boolean {
  * The game's `performCommand` from inside `onHit`: queue `command` for `owner` as a free action that runs once the triggering
  * action is done, on the engine's one reaction queue (`ai/hooks.ts`, through `./hit-script.ts#queueCounter`, which also refuses
  * to queue while a reaction is itself resolving and drops the reaction at drain time if `aimId` is no longer alive). `aimId` is
- * the `counter` event's target. Returns whether it was queued.
+ * the `counter` event's target. `afterTick`: run it after the triggering action's end-of-turn tick, as the game's `pp_BtlActionDone` order has it
+ * (the Oblitzerator's balls only; absent, the engine's older order). Returns whether it was queued.
  */
-export function react(ctx: Ctx, owner: FFXCombatant, aimId: CombatantId, command: Command): boolean {
+export function react(ctx: Ctx, owner: FFXCombatant, aimId: CombatantId, command: Command, afterTick = false): boolean {
   if (!canQueue(owner)) return false;
   const waiting = peekReactions(ctx);
   if (waiting.some((r) => r.kind === 'command' && r.ownerId === owner.id)) return false;
-  queueCounter(ctx, { actorId: owner.id, targetId: aimId, command });
+  queueCounter(ctx, { actorId: owner.id, targetId: aimId, command, ...(afterTick ? { afterTick: true } : {}) });
   return peekReactions(ctx).length > waiting.length;
 }
 
