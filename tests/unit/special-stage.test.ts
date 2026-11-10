@@ -74,10 +74,25 @@ vi.mock('../../src/engine/BattlePresenterArt.ts', async (orig) => ({
   resolvePoseMap: vi.fn(async () => ({})),
 }));
 
+// The stage hooks are wrapped in pass-through spies, so the 'with no form up' cases can read what the REAL stage asked of each and what each answered (special-switch-off.test.ts has the same six over a stage double).
+vi.mock('../../src/engine/SpecialStaging.ts', async (importOriginal) => {
+  const real = await importOriginal<typeof import('../../src/engine/SpecialStaging.ts')>();
+  return {
+    ...real,
+    formHandleOf: vi.fn(real.formHandleOf),
+    partViewOf: vi.fn(real.partViewOf),
+    specialFitOf: vi.fn(real.specialFitOf),
+    anchorSourceOf: vi.fn(real.anchorSourceOf),
+    formKeepIds: vi.fn(real.formKeepIds),
+    formSlots: vi.fn(real.formSlots),
+    markedPartsOf: vi.fn(real.markedPartsOf),
+  };
+});
+
 const { PaintedStage } = await import('../../src/engine/BattlePresenterStage.ts');
 const { BattleCamera } = await import('../../src/engine/BattleCamera.ts');
 const { STATURE_KEY } = await import('../../src/engine/PartyStature.ts');
-const { setSpecialLook, specialFitGirls } = await import('../../src/engine/SpecialStaging.ts');
+const { setSpecialLook, specialFitGirls, formHandleOf, partViewOf, specialFitOf, anchorSourceOf, formKeepIds, formSlots, markedPartsOf } = await import('../../src/engine/SpecialStaging.ts');
 const { SPECIAL_PARTS } = await import('../../src/data/art/specialParts.ts');
 
 import type { BattleState } from '../../src/battle/common/types.ts';
@@ -154,6 +169,30 @@ describe('with no form up (every shipped chapter)', () => {
     await stage.stage(stateOf());
     for (const g of GIRLS) expect(stage.actor(g.id)).toBe(figureOf(g.id));
     expect((stage as unknown as { figureEnv(): { slots: SceneSlots } }).figureEnv().slots).toBe(SLOTS);
+  });
+
+  it('the real stage does call every stage hook, and each answers "no form": undefined, an empty list or the very object it was given', async () => {
+    const hooks = { formHandleOf, partViewOf, specialFitOf, anchorSourceOf, formKeepIds, formSlots, markedPartsOf };
+    for (const hook of Object.values(hooks)) vi.mocked(hook).mockClear();
+    // a Bulwark-like anchored part is in the scene, so placeAnchored reaches its row source (the only caller of anchorSourceOf)
+    const anchor = { mode: 'onParent' as const, px: [100, 100] as [number, number], chestPx: [100, 90] as [number, number], paint: { width: 200, height: 200, baselineY: 190, contentTop: 10 }, ring: { radius: 0.5, ground: false } };
+    const stage = stageFor(1600, 900, { ...SLOTS, partAnchors: { wing: anchor } } as unknown as SceneSlots);
+    const state = stateOf();
+    (state.combatants['wing'] as unknown as { flags: Record<string, unknown> }).flags = { isPart: true, partOf: 'bahamut' };
+    await stage.stage(state);
+    await stage.stage(state); // a re-stage reads formKeepIds again
+    for (const g of GIRLS) stage.actor(g.id);
+    (stage as unknown as { figureEnv(): unknown }).figureEnv();
+    place(stage);
+    stage.markParts(['bahamut']);
+    for (const [name, hook] of Object.entries(hooks)) expect(vi.mocked(hook).mock.calls.length, `${name} was asked (the control: this method sees the real stage's calls)`).toBeGreaterThan(0);
+    const answers = (hook: unknown): Array<{ args: unknown[]; value: unknown }> => {
+      const m = (hook as { mock: { calls: unknown[][]; results: Array<{ value: unknown }> } }).mock;
+      return m.calls.map((args, i) => ({ args, value: m.results[i]!.value }));
+    };
+    for (const name of ['formHandleOf', 'specialFitOf', 'anchorSourceOf'] as const) for (const a of answers(hooks[name])) expect(a.value, `${name} answers undefined`).toBeUndefined();
+    for (const name of ['formKeepIds', 'markedPartsOf'] as const) for (const a of answers(hooks[name])) expect(a.value, `${name} answers an empty list`).toEqual([]);
+    for (const name of ['partViewOf', 'formSlots'] as const) for (const a of answers(hooks[name])) expect(a.value, `${name} hands back the very object`).toBe(a.args[1]);
   });
 
   it('placeAnchored runs nothing: a Bulwark-like anchored part keeps its anchor object', async () => {

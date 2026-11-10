@@ -233,7 +233,9 @@ describe('the test word, with the production define (`__PYREFLY_SPECIALS__` fals
 const hooks = [formHandleOf, partViewOf, specialFitOf, anchorSourceOf, formKeepIds, formSlots] as const;
 
 describe('step C1: the stage hooks of the Special look, with no form registered (every shipped chapter)', () => {
-  it('an ordinary Change burst through the real presenter calls none of them', async () => {
+  // What this proves: the PRESENTER itself (BattlePresenter over a FakeStage, which never imports SpecialStaging) calls no stage hook. The hooks are called only from PaintedStage, so the real stage's
+  // half (each hook IS asked, and answers undefined, an empty list or the very object) is the first case of special-stage.test.ts 'with no form up'.
+  it('an ordinary Change burst through the real presenter over a stage double: the presenter itself calls none of them', async () => {
     for (const hook of hooks) vi.mocked(hook).mockClear();
     await playAnOrdinaryChange();
     for (const hook of hooks) expect(hook, hook.name).not.toHaveBeenCalled();
