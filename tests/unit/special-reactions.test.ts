@@ -21,11 +21,11 @@ describe('the handle members', () => {
     expect(Object.keys(HANDLE_MEMBERS)).toHaveLength(29);
   });
 
-  it('are 17 forward, 9 swallow and 3 source (the plan counted 16, 9 and 3 for the 28 members it knew; noteStatus, added on 2026-11-09, is the 17th forward)', () => {
+  it('are 16 forward, 10 swallow and 3 source (the plan counted 16, 9 and 3 for the 28 members it knew; noteStatus, added on 2026-11-09, is the 10th swallowed: a status on a part never touches the figure)', () => {
     expect(names('forward')).toEqual(
-      ['flash', 'hitReact', 'hop', 'leap', 'liftRelease', 'liftTo', 'lunge', 'moveTo', 'noteStatus', 'recoil', 'setFacing', 'setPose', 'shake', 'squash', 'strike', 'strikeHeft', 'waitMs'].sort(),
+      ['flash', 'hitReact', 'hop', 'leap', 'liftRelease', 'liftTo', 'lunge', 'moveTo', 'recoil', 'setFacing', 'setPose', 'shake', 'squash', 'strike', 'strikeHeft', 'waitMs'].sort(),
     );
-    expect(names('swallow')).toEqual(['dissolveTo', 'fadeTo', 'lieDown', 'ramp', 'setAlpha', 'setBrightness', 'setDissolve', 'setStone', 'standDown'].sort());
+    expect(names('swallow')).toEqual(['dissolveTo', 'fadeTo', 'lieDown', 'noteStatus', 'ramp', 'setAlpha', 'setBrightness', 'setDissolve', 'setStone', 'standDown'].sort());
     expect(names('source')).toEqual(['centerPoint', 'headPoint', 'position']);
     expect(names('forward').length + names('swallow').length + names('source').length).toBe(29);
   });

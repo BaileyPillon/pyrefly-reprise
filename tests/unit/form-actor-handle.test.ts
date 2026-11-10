@@ -52,11 +52,11 @@ const as = (f: Fake): PaintedActor => f as unknown as PaintedActor;
 const names = (f: Fake): string[] => f.calls.map(([n]) => n);
 
 describe('the member table', () => {
-  it('has 29 members: 17 forward, 9 swallow, 3 source', () => {
+  it('has 29 members: 16 forward, 10 swallow, 3 source', () => {
     const rules = Object.values(HANDLE_MEMBERS);
     expect(rules.length).toBe(29);
-    expect(rules.filter((r) => r === 'forward').length).toBe(17);
-    expect(rules.filter((r) => r === 'swallow').length).toBe(9);
+    expect(rules.filter((r) => r === 'forward').length).toBe(16);
+    expect(rules.filter((r) => r === 'swallow').length).toBe(10);
     expect(rules.filter((r) => r === 'source').length).toBe(3);
   });
 
@@ -81,8 +81,7 @@ describe('a part\'s handle', () => {
     h.moveTo(new Vector3(1, 2, 3), 200);
     h.leap(1, 400);
     h.strikeHeft();
-    h.noteStatus('poison', true);
-    expect(figure.calls.map(([n]) => n)).toEqual(['setPose', 'setPose', 'hop', 'setFacing', 'waitMs', 'moveTo', 'leap', 'strikeHeft', 'noteStatus']);
+    expect(figure.calls.map(([n]) => n)).toEqual(['setPose', 'setPose', 'hop', 'setFacing', 'waitMs', 'moveTo', 'leap', 'strikeHeft']);
     expect(figure.calls[0]).toEqual(['setPose', ['cast']]);
     expect(figure.calls[1]).toEqual(['setPose', ['idle', { immediate: true }]]);
     expect(stub.calls).toEqual([]);
@@ -100,6 +99,7 @@ describe('a part\'s handle', () => {
     expect(h.setStone!(1)).toBeUndefined();
     expect(h.setBrightness(2)).toBeUndefined();
     expect(h.standDown!()).toBeUndefined();
+    expect(h.noteStatus!('poison', true)).toBeUndefined(); // a status on a part never shows on the figure (reactionOf: none), even if a call site forgets the guard
     expect(figure.calls).toEqual([]);
   });
 
@@ -199,7 +199,8 @@ describe('the hit gate (D-9): the figure hurts once per enemy action', () => {
     await main.lieDown!(520);
     main.setAlpha(0.5);
     main.setStone!(1);
-    expect(names(figure)).toEqual(['fadeTo', 'lieDown', 'setAlpha', 'setStone']);
+    main.noteStatus!('poison', true);
+    expect(names(figure)).toEqual(['fadeTo', 'lieDown', 'setAlpha', 'setStone', 'noteStatus']);
     expect(main instanceof PaintedActor).toBe(true);
     expect(main.position).toBe(figure.position);
   });

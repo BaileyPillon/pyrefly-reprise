@@ -20,8 +20,9 @@ export type MemberRule = 'forward' | 'swallow' | 'source';
 
 /**
  * Every member of {@link ActorHandle}, by rule. A `Record` over `keyof ActorHandle` is the type-level count: a member added to the handle breaks the build here until it is classed,
- * and a name that is not a member is an error. 17 forward, 9 swallow, 3 source = 29. `noteStatus` (added to the handle on 2026-11-09, after this table was specified at 28) is
- * `forward`: a status the event names reaches the figure for the MAIN; a status on a part never gets here, because `reactionOf` answers `none` for it.
+ * and a name that is not a member is an error. 16 forward, 10 swallow, 3 source = 29. `noteStatus` (added to the handle on 2026-11-09, after this table was specified at 28) is
+ * `swallow`: it shows a status on the figure like `setStone` and `setBrightness`, and a status on a PART never touches the figure (`reactionOf` answers `none` for it), so the part's handle
+ * holds it even if a call site forgets the guard; the MAIN's actor (`createHitGatedActor`, an empty swallow set) still forwards it to the figure.
  */
 export const HANDLE_MEMBERS: Readonly<Record<keyof ActorHandle, MemberRule>> = {
   setPose: 'forward',
@@ -40,7 +41,6 @@ export const HANDLE_MEMBERS: Readonly<Record<keyof ActorHandle, MemberRule>> = {
   leap: 'forward',
   strike: 'forward',
   setFacing: 'forward',
-  noteStatus: 'forward',
   fadeTo: 'swallow',
   setAlpha: 'swallow',
   dissolveTo: 'swallow',
@@ -50,6 +50,7 @@ export const HANDLE_MEMBERS: Readonly<Record<keyof ActorHandle, MemberRule>> = {
   lieDown: 'swallow',
   ramp: 'swallow',
   standDown: 'swallow',
+  noteStatus: 'swallow',
   position: 'source',
   centerPoint: 'source',
   headPoint: 'source',
