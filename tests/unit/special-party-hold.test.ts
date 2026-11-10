@@ -205,6 +205,18 @@ describe('the mounted FFX2BattleHud under a held list', () => {
     expect(ids(), "the flourish's closing redraw").toEqual(GIRLS);
   });
 
+  it('in the smooth bar look (the default) the held list is drawn and released the same way: a changed list is a changed structure, never skipped as "only a bar moved"', () => {
+    setAtbBarsSmooth(true);
+    const { up, hud, parts } = mounted();
+    expect(ids()).toEqual(parts);
+    hud.holdRows(GIRLS);
+    expect(ids()).toEqual(GIRLS);
+    hud.syncGauges(up.snapshot); // a bar-only update keeps the held rows
+    expect(ids()).toEqual(GIRLS);
+    hud.holdRows(null);
+    expect(ids()).toEqual(parts);
+  });
+
   it('syncQueued draws nothing of the party: the held rows already on the DOM are left untouched', () => {
     const { up, hud } = mounted();
     hud.holdRows(GIRLS);
