@@ -37,7 +37,9 @@ import type { EventDraft } from '../../src/battle/ffx2/index.ts';
 const deps = {
   grids: defaultGarmentGrids,
   dresspheres: defaultDresspheres,
-  gridNodes: {} as Record<string, Array<string | null>>,
+  // The node contents of the girl `girl()` builds (the engine hands `performSpherechange` this array for every girl; an ordinary Change is accepted only to the dress that sits on its node, `ordinaryChangeAllowed`):
+  // the tests below change into Warrior at node 1 and White Mage at node 3 (setup only; no assertion reads this).
+  gridNodes: { yuna: ['gunner', 'warrior', null, 'white-mage'] } as Record<string, Array<string | null>>,
 };
 
 function girl(gridId: string, dressphere = 'gunner', level = 24): Ffx2Unit {
