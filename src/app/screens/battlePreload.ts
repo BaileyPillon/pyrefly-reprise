@@ -41,6 +41,7 @@
 
 import type { Chapter } from '../../data/encounters.ts';
 import { artCandidatesFor, backdropUrl, portraitUrl, resolveArt } from '../../engine/BattlePresenterArt.ts';
+import { ownedSpecialArtIds } from '../../engine/SpecialArt.ts'; // FFX-2 Special look (step C2): with the switch on, each Special a girl owns is warmed too
 import { loadArtManifest, manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
 import { artUrl, prewarmPainted } from '../../engine/PaintedArt.ts';
 import { figureState, pixelUrlFor } from '../../engine/ArtTier.ts';
@@ -261,6 +262,24 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
       if (idle && (await manifestKnowsAsset(idle)) !== false) {
         if (await prewarmPainted(idle, STAGE_MATTE, STAGE_FIT)) paintings++;
         await yieldFrame();
+      }
+    }
+    // FFX-2 Special look (step C2): with the switch on, the paintings of the Specials each girl owns are warmed like any figure's (never a part: a part has no painting)
+    if (state.flags['specialDressUp'] === true) {
+      for (const c of party) {
+        for (const specialArt of ownedSpecialArtIds(c, ns)) {
+          if (stopped()) return report();
+          const art = await resolveArt([specialArt], 'party');
+          const idle = art.poses['idle'];
+          for (const u of new Set(Object.values(art.poses))) {
+            if ((await manifestKnowsAsset(u)) === false) continue;
+            if (u !== idle) later.push(u);
+          }
+          if (idle && (await manifestKnowsAsset(idle)) !== false) {
+            if (await prewarmPainted(idle, STAGE_MATTE, STAGE_FIT)) paintings++;
+            await yieldFrame();
+          }
+        }
       }
     }
     portraits += (await facesWarm).filter(Boolean).length;

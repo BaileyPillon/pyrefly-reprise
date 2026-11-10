@@ -66,6 +66,9 @@ import { setCurvesChapter } from '../../engine/motion/CurvesSwitch.ts'; // motio
 import { onSceneScale } from '../../engine/crisp/sceneScale.ts';
 import { SETTLE_WINDOW_MS } from './BattleScreenTypes.ts';
 import { BattleScreenCard } from './BattleScreenCard.ts';
+import { hasSeen, markSeen } from '../../ui/coach/coachState.ts'; // FFX-2 Special look (step C2): the first-time answer for a girl's Special
+import { setSpecialLook } from '../../engine/SpecialStaging.ts';
+import { specialsLookWord } from '../specialsWord.ts';
 
 export abstract class BattleScreenEncounter extends BattleScreenCard {
   // ------------------------------------------------------------------- enter
@@ -183,10 +186,10 @@ export abstract class BattleScreenEncounter extends BattleScreenCard {
       // because they share this one port (see `HudPort.TargetingPort`).
       this.hud.setTargetingPort?.({
         rect: (id) => this.stage?.projectRect(id) ?? null,
-        select: (sel) =>
-          sel
-            ? this.stage?.highlight.apply({ ...sel, side: null })
-            : this.stage?.highlight.clear(),
+        select: (sel) => {
+          this.stage?.markParts(sel ? sel.ids : []); // FFX-2 Special look, part mark (b): a no-op under the default (a) and with no form
+          return sel ? this.stage?.highlight.apply({ ...sel, side: null }) : this.stage?.highlight.clear();
+        },
         xray: (id) => this.stage?.xray(id),
         visibility: (id) => this.stage?.visibility().get(id) ?? 1,
         setPanels: (panels) => this.stage?.setPanels(panels),
@@ -231,6 +234,7 @@ export abstract class BattleScreenEncounter extends BattleScreenCard {
     const ownsBanner = registered.messageBar || this.hud === null;
 
     setPaceGame(chapter.game); // the pacing option's presets are per game (`pace.ts`); inert at 'current'
+    setSpecialLook(specialsLookWord()); // FFX-2 Special look: the defaults in production (the word is null there)
     this.presenter = new BattlePresenter({
       stage: this.stage,
       hud: this.hud,
@@ -251,6 +255,7 @@ export abstract class BattleScreenEncounter extends BattleScreenCard {
       // attack painting (iter2 attack-pose, `EnemyActionPose.ts`); FF7 adds its melee run.
       ...presenterGameDeps(chapter.game, chapter.buildRef, () => this.engine?.state() ?? null),
       victoryPose: getChapterMeta(chapter.id)?.victoryPose ?? 'pose', // A-4: II, IV, V, XIII hold the battle stance
+      specialSeen: { has: hasSeen, mark: markSeen }, // FFX-2 Special look: full the first time a girl wears her Special, short after (the coach state, one save)
     });
     if (this.opts.speed) this.presenter.setSpeed(this.opts.speed);
     if (this.opts.auto) this.presenter.setAutoPlay(this.opts.auto);

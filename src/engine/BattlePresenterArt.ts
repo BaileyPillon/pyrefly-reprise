@@ -21,6 +21,7 @@ import type { AnyCombatant, FFX2Combatant, FFXCombatant } from '../battle/common
 import { ART_INDEX_CACHE, artStatesFor } from './ArtManifest.ts';
 import { artUrl } from './PaintedArt.ts';
 import { baseArtId, inArtNamespace } from '../data/art/artNamespace.ts';
+import { specialArtCandidates } from './SpecialArt.ts'; // FFX-2 Special look (step C2): a part asks for no art, a girl in her Special asks for hers only
 
 /** Poses a party member is painted in. */
 export const PARTY_POSES = [
@@ -128,6 +129,8 @@ export function summonArtId(c: AnyCombatant | undefined, aeonId: string): string
  * are exactly the ids Chapter VI and every other chapter have always used. The stage and the preload both ask this.
  */
 export function artCandidatesFor(c: AnyCombatant, namespace?: string): string[] {
+  const special = specialArtCandidates(c, artIdFor(c), namespace);
+  if (special) return special;
   return [artIdFor(c), c.spriteKey, c.id].map((id) => (id ? inArtNamespace(namespace, id) : id));
 }
 
