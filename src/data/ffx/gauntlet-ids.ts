@@ -221,7 +221,7 @@ export const GAUNTLET_ACTS: readonly GauntletAct[] = GAUNTLET_TIERS.flatMap((t) 
 
 /**
  * **How many tiers have their rules built** (preflight GA3: three tiers, each a releasable cut). The chain runs acts 1 to `3 x GAUNTLET_TIERS_BUILT` and ends there (the last built act has no next link and pays every act's
- * spoils); the formations of an act whose tier is not built are not registered, so nothing can reach a creature whose script is not written. **2** after stage 3 (tier 1: Cactuar King, Don Tonberry, Jormungand; tier 2:
- * Earth Eater, Greater Sphere, Catastrophe); stage 4 makes it 3.
+ * spoils); the formations of an act whose tier is not built are not registered, so nothing can reach a creature whose script is not written. **3** after stage 4: tier 1 (Cactuar King, Don Tonberry, Jormungand), tier 2
+ * (Earth Eater, Greater Sphere, Catastrophe) and tier 3 (Th'uban, Neslug, the Ultima Buster) all have their rules, so the chain is the nine acts.
  */
-export const GAUNTLET_TIERS_BUILT: 1 | 2 | 3 = 2;
+export const GAUNTLET_TIERS_BUILT: 1 | 2 | 3 = 3;

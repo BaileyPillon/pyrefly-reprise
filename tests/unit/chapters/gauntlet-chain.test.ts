@@ -27,13 +27,25 @@ import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts'
 import { actor, careless, content, newEngine, setup } from '../helpers/gauntletDrive.ts';
 
 describe("the battle layer's copies of the ids equal the data's (the battle layer imports no src/data)", () => {
-  it('the six combatant ids, script ids, formation ids, move rows (the chapter\'s own and the party\'s) and the second form\'s painting of tiers 1 and 2', () => {
+  it('the combatant ids (nine creatures, the Head and the two Arms), script ids, formation ids, move rows (the chapter\'s own and the party\'s) and the second form\'s painting', () => {
     expect(GAUNTLET_IDS.cactuarKing).toBe('cactuar-king');
     expect(GAUNTLET_IDS.donTonberry).toBe('don-tonberry');
     expect(GAUNTLET_IDS.jormungand).toBe('jormungand');
     expect(GAUNTLET_IDS.earthEater).toBe('earth-eater');
     expect(GAUNTLET_IDS.greaterSphere).toBe('greater-sphere');
     expect(GAUNTLET_IDS.catastrophe).toBe('catastrophe');
+    expect(GAUNTLET_IDS.thuban).toBe('thuban');
+    expect(GAUNTLET_IDS.neslug).toBe('neslug');
+    expect(GAUNTLET_IDS.ultimaBuster).toBe('ultima-buster');
+    expect([GAUNTLET_IDS.ultimaBusterHead, GAUNTLET_IDS.ultimaBusterArmLeft, GAUNTLET_IDS.ultimaBusterArmRight]).toEqual(ids.ULTIMA_BUSTER_PARTS);
+    expect(GAUNTLET_SCRIPTS.thuban).toBe(ids.GAUNTLET_SCRIPT['thuban']);
+    expect(GAUNTLET_SCRIPTS.neslug).toBe(ids.GAUNTLET_SCRIPT['neslug']);
+    expect(GAUNTLET_SCRIPTS.ultimaBuster).toBe(ids.GAUNTLET_SCRIPT['ultima-buster']);
+    expect(GAUNTLET_SCRIPTS.ultimaBusterHead).toBe(ids.GAUNTLET_SCRIPT['ultima-buster-head']);
+    expect(GAUNTLET_SCRIPTS.ultimaBusterArm).toBe(ids.GAUNTLET_SCRIPT['ultima-buster-arm-left']);
+    expect(ids.GAUNTLET_SCRIPT['ultima-buster-arm-right']).toBe(GAUNTLET_SCRIPTS.ultimaBusterArm);
+    expect(GAUNTLET_GROUP_IDS.neslug).toBe(ids.gauntletGroupId('neslug'));
+    expect(GAUNTLET_GROUP_IDS.ultimaBuster).toBe(ids.gauntletGroupId('ultima-buster'));
     expect(GAUNTLET_SCRIPTS.cactuarKing).toBe(ids.GAUNTLET_SCRIPT['cactuar-king']);
     expect(GAUNTLET_SCRIPTS.donTonberry).toBe(ids.GAUNTLET_SCRIPT['don-tonberry']);
     expect(GAUNTLET_SCRIPTS.jormungand).toBe(ids.GAUNTLET_SCRIPT['jormungand']);
@@ -81,22 +93,25 @@ describe('the act table', () => {
 });
 
 describe('the formations', () => {
-  it('only the tiers built are registered: acts 1 to 6 in the data layer (tiers 1 and 2), none of the other three', () => {
-    expect(ids.GAUNTLET_TIERS_BUILT).toBe(2);
-    expect(GAUNTLET_ACTS_BUILT).toBe(6);
-    expect(GAUNTLET_GROUPS.map((g) => g.id)).toEqual(['gauntlet-cactuar-king', 'gauntlet-don-tonberry', 'gauntlet-jormungand', 'gauntlet-earth-eater', 'gauntlet-greater-sphere', 'gauntlet-catastrophe']);
-    for (const a of ids.GAUNTLET_ACTS) expect(ENEMY_GROUPS_BY_ID[a.groupId] !== undefined, a.groupId).toBe(a.act <= 6);
+  it('every tier is built: acts 1 to 9 are registered in the data layer (the switch is GAUNTLET_TIERS_BUILT, 3 after stage 4)', () => {
+    expect(ids.GAUNTLET_TIERS_BUILT).toBe(3);
+    expect(GAUNTLET_ACTS_BUILT).toBe(9);
+    expect(GAUNTLET_GROUPS.map((g) => g.id)).toEqual(ids.GAUNTLET_ACTS.map((a) => a.groupId));
+    expect(GAUNTLET_GROUPS.map((g) => g.id)).toEqual([
+      'gauntlet-cactuar-king', 'gauntlet-don-tonberry', 'gauntlet-jormungand', 'gauntlet-earth-eater', 'gauntlet-greater-sphere', 'gauntlet-catastrophe', 'gauntlet-thuban', 'gauntlet-neslug', 'gauntlet-ultima-buster',
+    ]);
+    for (const a of ids.GAUNTLET_ACTS) expect(ENEMY_GROUPS_BY_ID[a.groupId] !== undefined, a.groupId).toBe(true);
     for (const g of GAUNTLET_GROUPS) expect(ENEMY_GROUPS_BY_ID[g.id], g.id).toBe(g);
   });
 
-  it('the chain of the tiers built: act 1 plain, acts 2 to 6 fresh fights with a retry checkpoint and no Save Sphere card, act 6 pools every act\'s spoils and names no next link', () => {
+  it('the chain: act 1 plain, acts 2 to 9 fresh fights with a retry checkpoint and no Save Sphere card, act 9 pools every act\'s spoils and names no next link', () => {
     const next = GAUNTLET_GROUPS.map((g) => g.nextGroupId);
-    expect(next).toEqual(['gauntlet-don-tonberry', 'gauntlet-jormungand', 'gauntlet-earth-eater', 'gauntlet-greater-sphere', 'gauntlet-catastrophe', undefined]);
+    expect(next).toEqual(['gauntlet-don-tonberry', 'gauntlet-jormungand', 'gauntlet-earth-eater', 'gauntlet-greater-sphere', 'gauntlet-catastrophe', 'gauntlet-thuban', 'gauntlet-neslug', 'gauntlet-ultima-buster', undefined]);
     const fresh = { checkpointOnEntry: true, restoresPartyOnEntry: true, restoresAeonsOnEntry: true, noSaveSphereCard: true };
     expect(GAUNTLET_GROUPS[0]).not.toHaveProperty('checkpointOnEntry');
     expect(GAUNTLET_GROUPS[0]).not.toHaveProperty('restoresPartyOnEntry');
     for (const g of GAUNTLET_GROUPS.slice(1)) expect(g, g.id).toMatchObject(fresh);
-    expect(GAUNTLET_GROUPS.map((g) => g.poolsChainSpoils)).toEqual([undefined, undefined, undefined, undefined, undefined, true]);
+    expect(GAUNTLET_GROUPS.map((g) => g.poolsChainSpoils)).toEqual([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true]);
   });
 
   it('the full nine-act chain (built here, not registered): each act names the next, the last pays the pooled spoils', () => {

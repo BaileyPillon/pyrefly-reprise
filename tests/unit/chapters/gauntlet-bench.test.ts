@@ -21,11 +21,11 @@ import {
 const SEEDS = 12;
 
 describe('the harness', () => {
-  it('the acts built are the six of tiers 1 and 2; a tier is its three; every named ablation builds a line; an unknown one is refused', () => {
-    expect(BUILT).toEqual(['cactuar-king', 'don-tonberry', 'jormungand', 'earth-eater', 'greater-sphere', 'catastrophe']);
+  it('the acts built are the nine of the three tiers; a tier is its three; every named ablation builds a line; an unknown one is refused', () => {
+    expect(BUILT).toEqual(['cactuar-king', 'don-tonberry', 'jormungand', 'earth-eater', 'greater-sphere', 'catastrophe', 'thuban', 'neslug', 'ultima-buster']);
     expect(tierActs(1)).toEqual(['cactuar-king', 'don-tonberry', 'jormungand']);
     expect(tierActs(2)).toEqual(['earth-eater', 'greater-sphere', 'catastrophe']);
-    expect(tierActs(3)).toEqual([]); // not built
+    expect(tierActs(3)).toEqual(['thuban', 'neslug', 'ultima-buster']);
     for (const name of Object.keys(ABLATIONS)) expect(typeof ablatedLine(name)).toBe('function');
     expect(typeof ablatedLine('no-zanmato', 'no-fodder')).toBe('function');
     expect(() => ablatedLine('nonsense')).toThrow(/no ablation/);
@@ -76,7 +76,7 @@ describe('tier 2 at the shipped preset: Earth Eater, the Greater Sphere and Cata
   it('the chain of the three: the advisor\'s line wins every seed (100 of 100 measured; the Overdrive bar is what keeps the Greater Sphere from a Hydraulic Press the carried gauges would draw)', () => {
     const r = chainRate(SEEDS, advisorLine, gauntletBuild, 1, tierActs(2));
     expect([r.wins, r.lostAt]).toEqual([SEEDS, [0, 0, 0, 0]]);
-    expect(playChain(1, advisorLine).fights.map((f) => f.outcome)).toEqual(Array(6).fill('victory'));
+    expect(playChain(1, advisorLine).fights.map((f) => f.outcome)).toEqual(Array(9).fill('victory')); // the whole chapter, the nine acts, on one seed
   });
 });
 

@@ -16,7 +16,8 @@
  *   --acts           the acts to play alone, each from the fresh preset (default: every act whose rules are built)
  *   --lines          `advisor` (the shipped line), `careless` (the plain Attack on the foe, no aeon, no potion), or any ablation of the harness joined with `+`: no-zanmato, zanmato-all (Yojimbo against every act), no-fodder, no-wait, no-overdrives,
  *                    no-quick-hit, pay-10k, pay-1m, heal-45, heal-75, and the tier-2 rules: zanmato-t1, zanmato-t2, sphere-fodder (an aeon as the shield against the Greater Sphere), eater-fodder, sphere-od (Overdrives allowed against the Greater Sphere),
- *                    no-eater-focus (everyone strikes the standing Earth Eater), eater-wait (nobody strikes it while it lies down)
+ *                    no-eater-focus (everyone strikes the standing Earth Eater), eater-wait (nobody strikes it while it lies down), and the tier-3 rules: zanmato-t3, no-magic (Lulu is never switched in), shell-only (Lulu only
+ *                    once Neslug is in its shell), magic-ub-only (Lulu against the Ultima Buster alone), no-arms-first (the strikers hit the Ultima Buster's body while an Arm lives)
  *   --chain          also play the whole chapter (the acts built, chained, the carry between them) for each line, with the act the first loss came at tallied
  *   --phoenix, --luck, --evasion, --stat, --gil, --kills, --yojimbo-gauge, --lineup   the party levers (the chapter ships 17, 60, 255, 1, 1,500,000, 500, 0 and tidus+yuna+auron)
  *

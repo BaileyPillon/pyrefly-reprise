@@ -31,10 +31,12 @@ export interface FakeOptions {
   inReaction?: boolean;
   /** The boss's HP (default 1000). */
   bossHp?: number;
+  /** More enemy combatants beside the boss (the Ultima Buster's Head and Arms), id to "standing"; the dead are KO'd. */
+  extras?: Readonly<Record<string, boolean>>;
 }
 
 const dummy = (id: string, side: 'party' | 'enemy' | 'aeon', hp = 1000): FFXCombatant =>
-  ({ id, side, alive: true, hp, removed: false, statuses: {}, flags: {}, stats: { maxHp: 1000, agi: 100 } }) as unknown as FFXCombatant;
+  ({ id, side, alive: true, hp, mp: 999, removed: false, statuses: {}, flags: {}, immunityFlags: [], stats: { maxHp: 1000, agi: 100, def: 50, mdef: 50 } }) as unknown as FFXCombatant;
 
 /** A battle with `living` party members (`m0`...) and one enemy; every stream-2 draw answered `raw`, every stream-4 draw `pick`. */
 export function fakeArena(opts: FakeOptions): Fake {
@@ -54,10 +56,18 @@ export function fakeArena(opts: FakeOptions): Fake {
   });
   const combatants: Record<string, FFXCombatant> = Object.fromEntries(party.map((c) => [c.id, c]));
   combatants[opts.boss] = dummy(opts.boss, 'enemy', opts.bossHp ?? 1000);
+  for (const [id, standing] of Object.entries(opts.extras ?? {})) {
+    const extra = dummy(id, 'enemy', standing ? 1000 : 0);
+    if (!standing) {
+      extra.alive = false;
+      (extra.statuses as Record<string, unknown>)['ko'] = { id: 'ko' };
+    }
+    combatants[id] = extra;
+  }
   if (opts.aeon === true) combatants['valefor'] = dummy('valefor', 'aeon');
   const queue = typeof opts.raw === 'number' || opts.raw === undefined ? undefined : [...opts.raw];
   const ctx = {
-    state: { flags: {}, combatants, activeIds: party.map((c) => c.id), aeonId: opts.aeon === true ? 'valefor' : null, enemyIds: [opts.boss], reserveIds: [] },
+    state: { flags: {}, combatants, activeIds: party.map((c) => c.id), aeonId: opts.aeon === true ? 'valefor' : null, enemyIds: [opts.boss, ...Object.keys(opts.extras ?? {})], reserveIds: [] },
     rt: { actors: new Map(), inReaction: opts.inReaction === true },
     rng: {
       on: (stream: number) => ({

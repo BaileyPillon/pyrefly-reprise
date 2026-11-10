@@ -85,7 +85,8 @@ export const gauntletContamination = row({
   id: ROW.contamination, name: 'Contamination', power: 75, formula: 'magic', damageType: 'other', targeting: single, hits: 1, flags: [CAP], shatterChance: 100,
   statusEffects: [apply(1, 255), apply(3, 255), ...BREAKS.map((n) => apply(n, 254)), apply(8, 254), apply(24, 254)],
 });
-export const gauntletSpecial1 = state(ROW.special1, 'Special 1'); // [inferred] aimed at the body (RE n 3.1)
+/** The Head's relay (RE n 3.1): no formula, no damage; it names the body (from the Head's side, the one other thing on its own side: `single-ally`, as Sinspawn Gui's head's row), and the body's `onTargeted` answers it. A tell, not a banner. */
+export const gauntletSpecial1: AbilityDef = { ...row({ id: ROW.special1, name: 'Special 1', power: 0, formula: 'none', damageType: 'other', targeting: 'single-ally', hits: 0 }), messageTemplate: '' };
 export const gauntletNeslugAttack = row({ id: ROW.neslugAttack, name: 'Attack', power: 16, formula: 'strength', damageType: 'physical', targeting: single, hits: 1, flags: ['affected-by-darkness'], accuracy: 90 });
 export const gauntletMegaton = row({ id: ROW.megaton, name: 'Megaton', power: 32, formula: 'strength', damageType: 'physical', targeting: single, hits: 1, flags: [CAP], shatterChance: 100, statusEffects: [apply(8, 254)] });
 export const gauntletSlime = row({

@@ -1,7 +1,8 @@
 /**
  * **The hidden Gauntlet chapter's ids and the rules every creature's script shares** (FFX only; chapter 54; `research/re-ffx-monster-arena-creations.md`, "RE n"). The battle layer imports no `src/data`, so the combatant,
  * script and move-row ids the scripts name are **copies** of `data/ffx/gauntlet-ids.ts`; `tests/unit/chapters/gauntlet-data.test.ts` pins that the copies agree. Each creature's own numbers (a draw's modulo, a threshold,
- * a cycle) live at the top of its own file with their source, one file a creature (`./gauntlet-cactuar-king.ts`, `./gauntlet-don-tonberry.ts`, `./gauntlet-jormungand.ts`; the later tiers add theirs).
+ * a cycle) live at the top of its own file with their source, one file a creature (`./gauntlet-cactuar-king.ts`, `./gauntlet-don-tonberry.ts`, `./gauntlet-jormungand.ts`, `./gauntlet-earth-eater.ts`, `./gauntlet-greater-sphere.ts`,
+ * `./gauntlet-catastrophe.ts`, `./gauntlet-thuban.ts`, `./gauntlet-neslug.ts`, `./gauntlet-ultima-buster.ts`, which holds the Ultima Buster's body, Head and Arms).
  *
  * **How the scripts read the game's own words** (the earlier AI lanes' conventions, `./game-rolls.ts` and `./hit-gates.ts`):
  *
@@ -11,12 +12,17 @@
  *   drops a second reaction of the same owner in one action. A monster whose HP the hit took to 0 queues nothing.
  */
 
-import type { FFXCombatant } from '../../common/types.ts';
+import type { FFXCombatant, ImmunityFlag } from '../../common/types.ts';
 
-/** Armored on or off (a script's write of the property; the record's flag byte starts it on: Earth Eater's and Catastrophe's). */
+/** An immunity flag on or off (a script's write of a property of the special word; the record's flag byte starts Armored on for Earth Eater, Catastrophe and the Ultima Buster's parts). */
+export function setImmunityFlag(self: FFXCombatant, flag: ImmunityFlag, on: boolean): void {
+  const rest = self.immunityFlags.filter((f) => f !== flag);
+  self.immunityFlags = on ? [...rest, flag] : rest;
+}
+
+/** Armored on or off (the property 32 the scripts write). */
 export function setArmored(self: FFXCombatant, on: boolean): void {
-  const rest = self.immunityFlags.filter((f) => f !== 'armored');
-  self.immunityFlags = on ? [...rest, 'armored'] : rest;
+  setImmunityFlag(self, 'armored', on);
 }
 
 /** The combatant ids (copies of `GauntletCreatureId` and the parts in `data/ffx/gauntlet-ids.ts`). */
@@ -27,6 +33,12 @@ export const GAUNTLET_IDS = {
   earthEater: 'earth-eater',
   greaterSphere: 'greater-sphere',
   catastrophe: 'catastrophe',
+  thuban: 'thuban',
+  neslug: 'neslug',
+  ultimaBuster: 'ultima-buster',
+  ultimaBusterHead: 'ultima-buster-head',
+  ultimaBusterArmLeft: 'ultima-buster-arm-left',
+  ultimaBusterArmRight: 'ultima-buster-arm-right',
 } as const;
 
 /** The AI script ids (copies of `GAUNTLET_SCRIPT`). */
@@ -37,12 +49,19 @@ export const GAUNTLET_SCRIPTS = {
   earthEater: 'gauntlet-earth-eater',
   greaterSphere: 'gauntlet-greater-sphere',
   catastrophe: 'gauntlet-catastrophe',
+  thuban: 'gauntlet-thuban',
+  neslug: 'gauntlet-neslug',
+  ultimaBuster: 'gauntlet-ultima-buster',
+  ultimaBusterHead: 'gauntlet-ultima-buster-head',
+  ultimaBusterArm: 'gauntlet-ultima-buster-arm',
 } as const;
 
-/** The formation ids of the tier-2 acts the set-up hook keys on (copies of `gauntletGroupId`). */
+/** The formation ids the set-up hook keys on (copies of `gauntletGroupId`): the creatures whose opening state is written at the start. */
 export const GAUNTLET_GROUP_IDS = {
   earthEater: 'gauntlet-earth-eater',
   greaterSphere: 'gauntlet-greater-sphere',
+  neslug: 'gauntlet-neslug',
+  ultimaBuster: 'gauntlet-ultima-buster',
 } as const;
 
 /** The move rows the scripts name (copies of `GAUNTLET_ROWS` and `GAUNTLET_PLAYER_ROWS`; the comment gives the game's command id). */
@@ -73,6 +92,22 @@ export const GAUNTLET_ROWS = {
   jormungandAttack: 'gauntlet-jormungand-attack', // 0x40BA
   coldStare: 'gauntlet-cold-stare', // 0x40BB
   vorpal: 'gauntlet-space-time-vorpal', // 0x40E2
+  rainbow: 'gauntlet-rainbow', // 0x40FA
+  convergence: 'gauntlet-convergence', // 0x40FB
+  condemn: 'gauntlet-condemn', // 0x40FC
+  haste: 'haste', // 0x3036, the party's own row
+  protect: 'protect', // 0x303B
+  shell: 'shell', // 0x303A
+  regen: 'regen', // 0x303E
+  curaga: 'curaga', // 0x302D
+  contamination: 'gauntlet-contamination', // 0x40FE
+  special1: 'gauntlet-special-1', // 0x6001, the Head's relay
+  neslugAttack: 'gauntlet-neslug-attack', // 0x6000
+  megaton: 'gauntlet-megaton', // 0x60BE
+  slime: 'gauntlet-slime', // 0x60BF
+  brokenShell: 'gauntlet-broken-shell', // 0x60C0
+  hidesInShell: 'gauntlet-hides-in-shell', // 0x60C1
+  emergesFromShell: 'gauntlet-emerges-from-shell', // 0x60C2
 } as const;
 
 /**
@@ -95,3 +130,9 @@ export const SPHERE_SHIFTS_FLAG = 'gauntlet.sphere.shifts';
 export const CATASTROPHE_FORM_FLAG = 'gauntlet.catastrophe.form';
 /** The painting of Catastrophe's second form (a copy of `GAUNTLET_CATASTROPHE_FORM2_SPRITE` in `data/ffx/gauntlet-ids.ts`; a stand-in until the art lane's lands: the same painting as the first form). */
 export const CATASTROPHE_FORM2_SPRITE = 'spectral-keeper';
+/** `state.flags` key: Neslug's state, 0 (out), 1 (in its shell: physical blows do nothing, Regen on, Curaga each turn) or 2 (the shell broken, Agility 120): the game's `v1`, published for the advisor and the scene. */
+export const NESLUG_STATE_FLAG = 'gauntlet.neslug.state';
+/** `state.flags` key: the Head's relay selector (the game's shared `[04]`: 0 none, 1 the body Attacks, 2 the body casts Contamination); the Head writes it, the body reads it and clears it. */
+export const UB_RELAY_FLAG = 'gauntlet.ultimaBuster.relay';
+/** `state.flags` key: the Head's cycle state 1, 2 or 3 (3: it has shaken and the Contamination is next; a damaging hit on it now cancels that), published for the scene and the advisor. */
+export const UB_HEAD_STATE_FLAG = 'gauntlet.ultimaBuster.headState';

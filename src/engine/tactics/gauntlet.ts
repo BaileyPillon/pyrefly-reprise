@@ -30,13 +30,34 @@
  *    blows are about three times larger) and each blow is answered by a Flare it casts at itself (2,355 to 2,660 on a member), which is cheap: waiting out its two turns instead costs 372 inputs a fight against 26.
  * 10. **No Overdrive on the Greater Sphere** (`odBarredAt`): an Overdrive is a special with no element, which the Sphere answers with Hydraulic Press, 15/16 of everyone's maximum HP (4,687 each with Auto-Protect), lethal
  *    to anyone already wounded. The gauges carry from act to act, so in the chain they are full when the Sphere comes (97 of 100 without the rule, 100 of 100 with it).
+ *
+ * Tier 3 (stage 4: Th'uban, Neslug, the Ultima Buster) adds three rules, again each measured by an ablation (`docs/handoff/ch-gauntlet.md`); Th'uban needs none (the party is faster than it and empties it in 31 hits):
+ *
+ * 11. **Neslug in its shell: Lulu's magic** (`magicShell`). In the shell (the script publishes `gauntlet.neslug.state` = 1) every physical blow does 0, it regenerates and casts Curaga on itself; nothing in the menus of Tidus, Yuna
+ *    and Auron is magic or a special. Tidus gives his turn to Lulu (a Switch), who casts Doublecast (two blows of 99,999 for 4 MP: the weapon has One MP Cost). Without it the shell is never broken: 0 of 100, the engine ends
+ *    the stalemate.
+ * 12. **Lulu from the first turn against Neslug and the Ultima Buster** (`magicAt`). Her Doublecast is 199,998 an action against the 99,999 of the best physical blow, and the Ultima Buster's Arms gate physical blows only,
+ *    never a spell. Against both it is the better line on every count the bench keeps (Neslug 50 inputs and no member lost a fight against 61 and 0.4 with her only in the shell; the Ultima Buster 42 inputs and no member
+ *    lost against 60 and 1.0), though both are won every time either way.
+ * 13. **The Ultima Buster: the Arms first** (`armsFirst`), for the members who still strike. Against the body a physical blow is 2,000 to 4,000 while an Arm lives (Defense 255, Armored, Defend) and 99,999 once both are down;
+ *    each Arm is 80,000 HP and dies in a couple of blows. The strikers hit an Arm while one stands, the body after (the formation's scene regrows the Arms on the body's third or fourth turn after both fell: the line goes back
+ *    to them then). Without Lulu: 60 inputs a fight, against 250 for blows at the body alone.
  */
 
 import type { AvailableCommand, BattleEngine, CombatantId, Command, FFXCombatant } from '../../battle/common/types.ts';
 import { type Tactic, aim, hpFraction, revive, row } from './common.ts';
 
-/** The creatures' ids (`src/data/ffx/gauntlet-ids.ts`; later tiers add theirs). */
-export const GAUNTLET_BOSS_IDS: readonly CombatantId[] = ['cactuar-king', 'don-tonberry', 'jormungand', 'earth-eater', 'greater-sphere', 'catastrophe'];
+/** The creatures' ids (`src/data/ffx/gauntlet-ids.ts`). */
+export const GAUNTLET_BOSS_IDS: readonly CombatantId[] = ['cactuar-king', 'don-tonberry', 'jormungand', 'earth-eater', 'greater-sphere', 'catastrophe', 'thuban', 'neslug', 'ultima-buster'];
+
+/** Neslug's state as its script publishes it (restated here, the tactics keep out of the battle layer's graph; pinned by `tests/unit/chapters/gauntlet-neslug.test.ts`): 0 out, 1 in its shell, 2 the shell broken. */
+export const NESLUG_STATE_FLAG = 'gauntlet.neslug.state';
+export const NESLUG_IN_SHELL = 1;
+/** The Ultima Buster's Arms (restated, pinned by `tests/unit/chapters/gauntlet-ultima-buster.test.ts`). */
+export const ULTIMA_BUSTER_ARM_IDS: readonly CombatantId[] = ['ultima-buster-arm-left', 'ultima-buster-arm-right'];
+/** Lulu's Doublecast (two spells in one action: two blows of 99,999 on the preset, 2 MP each: the weapon has One MP Cost) and, failing it, the spells she casts, strongest first. */
+export const LULU_DOUBLECAST = 'Doublecast';
+export const LULU_SPELLS: readonly string[] = ['Ultima', 'Flare', 'Firaga'];
 
 /** The flags Earth Eater's script publishes (restated here, the tactics keep out of the battle layer's graph; pinned by `tests/unit/chapters/gauntlet-earth-eater.test.ts`): down, and the HP damage taken since it last stood. */
 export const EATER_DOWN_FLAG = 'gauntlet.earthEater.down';
@@ -83,6 +104,12 @@ export interface LineOptions {
   readonly useOverdrives: boolean;
   /** The creatures (ids) nobody spends an Overdrive on (rule 10): an Overdrive is a special with no element, which the Greater Sphere answers with Hydraulic Press, 15/16 of everyone's maximum HP. */
   readonly odBarredAt: readonly CombatantId[];
+  /** Against Neslug while it is in its shell (rule 11: every physical blow does nothing, it regenerates and casts Curaga on itself) Lulu is switched in for Tidus and casts magic. */
+  readonly magicShell: boolean;
+  /** The creatures (ids) Lulu is switched in against from the first turn, to cast magic throughout (rule 12: the Ultima Buster's Arms gate physical blows only, never a spell). */
+  readonly magicAt: readonly CombatantId[];
+  /** Against the Ultima Buster the physical strikers hit an Arm while one lives and the body only when both are down (rule 13: the formation's scene regrows them on the body's third or fourth turn after). */
+  readonly armsFirst: boolean;
   /** Quick Hit before the plain Attack for Tidus (rule 7). */
   readonly quickHit: boolean;
 }
@@ -100,6 +127,9 @@ export const SHIPPED_LINE: LineOptions = {
   itemHealUnder: ITEM_HEAL_UNDER,
   useOverdrives: true,
   odBarredAt: ['greater-sphere'],
+  magicShell: true,
+  magicAt: ['neslug', 'ultima-buster'],
+  armsFirst: true,
   quickHit: true,
 };
 
@@ -205,19 +235,37 @@ export const lineWith = (line: LineOptions): Tactic => (actorId, commands, engin
     }
   }
 
+  // Rules 11 and 12: Lulu's magic. She is switched in for Tidus (his turn is the swap), then casts; she drinks an Ether when her MP runs low.
+  const inShell = boss.id === 'neslug' && line.magicShell && state.flags[NESLUG_STATE_FLAG] === NESLUG_IN_SHELL;
+  if (!aeonOut && (inShell || line.magicAt.includes(boss.id))) {
+    const luluOn = party.some((c) => c.id === 'lulu' && c.alive);
+    if (!luluOn && me.id === 'tidus') {
+      const swap = commands.find((c) => c.enabled && c.command.kind === 'switch' && c.label === 'Lulu');
+      if (swap) return { ...swap.command, targets: [] } as Command;
+    }
+    if (me.id === 'lulu') {
+      const cast = row(commands, [LULU_DOUBLECAST], me.id) ?? row(commands, LULU_SPELLS, boss.id);
+      if (cast) return aim(cast, cast.command.kind === 'ability' && cast.label === LULU_DOUBLECAST ? me.id : boss.id);
+    }
+  }
+
   // Rule 9, standing: the others wait while Auron stands to strike.
   if (eater?.down === false && line.eaterAuronOnly && me.id !== 'auron' && party.some((c) => c.id === 'auron' && c.alive)) {
     const defend = pickKind(commands, 'defend');
     return defend ? aim(defend) : null;
   }
 
+  // Rule 13: against the Ultima Buster a physical blow goes to an Arm while one lives (the body is gated: Defense 255, Armored and Defend); the body when both are down.
+  const arm = boss.id === 'ultima-buster' && line.armsFirst ? ULTIMA_BUSTER_ARM_IDS.map((id) => living(engine, id)).find((c) => c !== undefined) : undefined;
+  const mark = arm?.id ?? boss.id;
+
   // Rule 7: Quick Hit (Tidus) or the plain Attack at the creature.
   if (line.quickHit && me.id === 'tidus') {
-    const quick = row(commands, ['Quick Hit'], boss.id);
-    if (quick) return aim(quick, boss.id);
+    const quick = row(commands, ['Quick Hit'], mark);
+    if (quick) return aim(quick, mark);
   }
-  const swing = pickKind(commands, 'attack', boss.id);
-  return swing ? aim(swing, boss.id) : null;
+  const swing = pickKind(commands, 'attack', mark);
+  return swing ? aim(swing, mark) : null;
 };
 
 /** The shipped line, for the registry the integration stage adds. */

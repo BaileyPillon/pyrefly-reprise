@@ -323,7 +323,8 @@ describe('the 31 move rows: each ability and each command record equals the game
       expect(a.rank).toBe(r.rank);
       expect(a.element).toEqual(['none']);
       // The target: a state row is aimed at its user; any other row's target byte decides single or the whole side.
-      if (state) expect(a.targeting).toBe('self');
+      if (a.id === ids.GAUNTLET_ROWS.special1) expect(a.targeting, "the Head's relay names the body: the one other thing on its own side").toBe('single-ally'); // stage 4: it was 'self', which would have aimed the relay at the Head
+      else if (state) expect(a.targeting).toBe('self');
       else if (r.targetByte !== null) expect(a.targeting).toBe(((r.targetByte >> 2) & 3) === 0 ? 'single-enemy' : 'all-enemies');
       else expect(a.targeting).toBe('single-enemy'); // [inferred] Don Tonberry's Attack, Voodoo and Karma: one party member
       if (r.targetByte !== null) expect(r.targetByte & 2, 'the default aim is the opposite side').toBe(2);
