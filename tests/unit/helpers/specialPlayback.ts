@@ -9,7 +9,7 @@
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import type { BattleEvent, BattleState, CombatantId } from '../../../src/battle/common/types.ts';
+import type { BattleEvent, BattleState, Command, CombatantId } from '../../../src/battle/common/types.ts';
 import { BattlePresenter } from '../../../src/engine/BattlePresenter.ts';
 import type { PresenterDeps } from '../../../src/engine/BattlePresenterPorts.ts';
 import { FakeHud, FakeStage } from './FakeStage.ts';
@@ -50,7 +50,12 @@ export class ScriptedFfx2Engine {
   gaugeSnapshot(): { elapsedMs: number; bars: never[] } { return { elapsedMs: 0, bars: [] }; }
   atbMode(): 'wait' | 'active' { return 'wait'; }
   tick(): never { throw new Error('ScriptedFfx2Engine: tick'); }
-  submit(): never { throw new Error('ScriptedFfx2Engine: submit'); }
+  /** What `submit` answers: set it to hand out a burst for a command (the presenter's submit-side path); unset, `submit` throws as it always did. */
+  onSubmit: ((command: Command) => BattleEvent[]) | null = null;
+  submit(command: Command): BattleEvent[] {
+    if (!this.onSubmit) throw new Error('ScriptedFfx2Engine: submit');
+    return this.onSubmit(command);
+  }
 }
 
 export interface Rig {

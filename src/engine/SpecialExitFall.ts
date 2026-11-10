@@ -57,8 +57,8 @@ export async function runExit(ctx: EventCtx, rt: SpecialRuntime, event: Change):
         case 'girl-stands': {
           await ctx.stage.setArt(girl, `${girl}-${event.to}`); // her old dress, at the shared height again (`fitFormHeight`)
           const a = ctx.stage.actor(girl);
-          a?.setDissolve(0);
           a?.setAlpha(1);
+          detach(a?.dissolveTo(0, (step.endMs - step.atMs) * k, PYREFLY_GREEN)); // she dissolves back in over the rest of the step (the figure went out dissolved to 1)
           dropForm(ctx, rt);
           break;
         }

@@ -30,7 +30,11 @@ type Change = Extract<BattleEvent, { type: 'spherechange' }>;
  */
 export const SPECIAL_SHOTS: Readonly<Partial<Record<NonNullable<PlanStep['camera']>, string>>> = {};
 
-const clockOf = (ctx: EventCtx): number => ctx.deps.now?.() ?? Date.now();
+/**
+ * The clock a step's own wait is measured on: the one the plan's sleeps count in. In the game that is the frame clock (`beatNow`: a pause stops it); a test injects `now`; with neither the beats run on the wall
+ * clock (`BattleScreen` `beatsWall()`), whose sleep `Date.now` matches. Measuring a wait on the wrong clock would let a pause inflate it and shorten the later sleeps, and the cut would arrive early.
+ */
+const clockOf = (ctx: EventCtx): number => (ctx.deps.beatNow ?? ctx.deps.now)?.() ?? Date.now();
 
 /** A forwarded call whose promise nobody awaits must not become an unhandled rejection. */
 export function detach(p: Promise<unknown> | void | undefined): void {

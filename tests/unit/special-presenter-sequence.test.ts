@@ -12,7 +12,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { BattleEvent } from '../../src/battle/common/types.ts';
 import { exitPlan, fallPlan, fullPlan, shortPlan, type Girl } from '../../src/engine/SpecialBeatPlans.ts';
-import { loadLog, partsOf, rig, stateOf, type LogFile } from './helpers/specialPlayback.ts';
+import { loadLog, partsOf, rig, type LogFile, type Rig } from './helpers/specialPlayback.ts';
 
 const GIRLS = [
   { girl: 'yuna', special: 'floral-fallal', log: 'entry-yuna', total: 22000 },
@@ -112,6 +112,30 @@ describe('the short entry', () => {
   });
 });
 
+describe("the plan counts a step's own wait on the beat clock the sleeps run on", () => {
+  /** A wall clock that jumps 5 s at every reading (a pause, a slow frame inside a step) beside a beat clock that is the recording sleep's. */
+  function jumpy(beat: boolean) {
+    let wall = 0;
+    let rigRef: Rig | undefined;
+    const r = rig(loadLog('entry-yuna'), { specialSeen: seen(), now: () => (wall += 5000), ...(beat ? { beatNow: () => rigRef?.clock.t ?? 0 } : {}) });
+    rigRef = r;
+    r.sleeps.length = 0;
+    return r;
+  }
+
+  it('a jump in the wall clock inside a step does not shorten the later sleeps: the whole plan is still consumed', async () => {
+    const r = jumpy(true);
+    await r.play([change(loadLog('entry-yuna'))]);
+    expect(r.sleeps.reduce((a, b) => a + b, 0)).toBe(22000 - 600);
+  });
+
+  it('the control: read on that jumping clock the same plan is cut short (this method can see the difference)', async () => {
+    const r = jumpy(false);
+    await r.play([change(loadLog('entry-yuna'))]);
+    expect(r.sleeps.reduce((a, b) => a + b, 0)).toBeLessThan(22000 - 600);
+  });
+});
+
 describe('the exit', () => {
   async function inForm() {
     const entry = loadLog('entry-yuna');
@@ -135,6 +159,11 @@ describe('the exit', () => {
     expect(r.stage.calls).toContain(`setArt:yuna=yuna-${out.to}`);
     expect(r.stage.calls.slice(r.stage.calls.indexOf(`setArt:yuna=yuna-${out.to}`))).toEqual(expect.arrayContaining([`remove:${right}`, `remove:${left}`, 'setForm:null', 'fade=1:rikku', 'fade=1:paine']));
     expect(r.stage.form).toBeNull();
+    // the figure went out dissolved (1) before the swap and the old-dress girl dissolves back in (0) after it, rather than popping in
+    const swap = r.stage.calls.indexOf(`setArt:yuna=yuna-${out.to}`);
+    expect(r.stage.calls.indexOf('dissolve=1:yuna'), 'out before the swap').toBeGreaterThan(-1);
+    expect(r.stage.calls.indexOf('dissolve=1:yuna')).toBeLessThan(swap);
+    expect(r.stage.calls.indexOf('dissolve=0:yuna'), 'back in after the swap').toBeGreaterThan(swap);
     expect(r.sleeps.reduce((a, b) => a + b, 0)).toBe(exitPlan().totalMs - 600);
   });
 });
@@ -222,15 +251,17 @@ describe('an abort, skip speed and reduce motion', () => {
 });
 
 describe('the HUD sync at the beats is the full sync', () => {
-  it('syncs the full HUD (never syncVitals alone) right after the one-row hold and at the cut', async () => {
+  // The main's row text and the 'never syncVitals' claim are asserted against a REAL FFX2BattleHud in special-presenter-submit.test.ts (this double only counts calls).
+  it('syncs the full HUD right after the one-row hold and at the cut', async () => {
     const log = loadLog('entry-paine');
     const r = rig(log, { specialSeen: seen() });
-    const vitals = vi.fn();
-    (r.hud as unknown as { syncVitals: unknown }).syncVitals = vitals;
     r.hud.hudLog.length = 0;
     await r.play([change(log)]);
-    const syncs = r.hud.hudLog.filter((l) => l === 'sync').length;
-    expect(syncs).toBeGreaterThanOrEqual(2);
-    expect(stateOf(log.state).flags['specialDressUp']).toBe(true);
+    const swap = r.hud.hudLog.indexOf('hold:paine');
+    const cut = r.hud.hudLog.indexOf(`hold:${partsOf(log).join(',')}`);
+    expect(swap).toBeGreaterThan(-1);
+    expect(cut).toBeGreaterThan(swap);
+    expect(r.hud.hudLog[swap + 1]).toBe('sync');
+    expect(r.hud.hudLog.slice(cut).includes('sync'), 'and the cut').toBe(true);
   });
 });

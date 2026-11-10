@@ -22,6 +22,7 @@ import { createFormTracker, type FormBeat, type FormTracker } from './SpecialFor
 import { createPartyHold, type PartyHold } from './SpecialPartyHold.ts';
 import { PYREFLY_GREEN } from './SpecialReactions.ts';
 import { specialLook, type StageForm } from './SpecialStaging.ts';
+import { idsBack } from './SummonStaging.ts';
 
 /** What the presenter lends the runtime: the full HUD sync (never `syncVitals` while the hold is up), the Config's ATB mode, and whether playback was torn down. */
 export interface SpecialHost {
@@ -172,11 +173,23 @@ export async function formStatus(ctx: EventCtx, event: StatusEvent): Promise<voi
   return ctx.sleep(TIMING.status);
 }
 
-/** Let go of everything, once: the held list, the chip, the stage form, the tracker. Idempotent; safe from a `finally`, from `abort()` and from the start of a link. */
+/** The girls a form (up, or begun and not yet revealed) has parked off the field: the stage form's list, else the tracker's for the girls it knows. */
+function parkedOf(rt: SpecialRuntime): readonly CombatantId[] {
+  const ids = new Set<CombatantId>(rt.form?.parked ?? []);
+  for (const girl of rt.girls ?? []) for (const id of rt.tracker.form(girl)?.parked ?? []) ids.add(id);
+  return [...ids];
+}
+
+/**
+ * Let go of everything, once: the held list, the chip, the stage form, the girls it parked (back on the field at once, and out of the held-off map the x-ray and the strike reach read, even when the release
+ * comes before the reveal), the tracker. Idempotent; safe from a `finally`, from `abort()` and from the start of a link.
+ */
 export function releaseSpecial(ctx: EventCtx): void {
   const rt = runtimes.get(ctx);
   if (!rt) return;
+  const parked = parkedOf(rt);
   rt.hold.release(rt.host.atbMode(), () => rt.host.syncFullHud());
+  if (parked.length > 0) void idsBack(ctx.stage, parked, 0);
   if (rt.form) {
     rt.form = null;
     ctx.stage.setForm?.(null);
