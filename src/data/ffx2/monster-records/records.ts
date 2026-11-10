@@ -24,6 +24,7 @@ import { MONSTER_RECORDS_YUNAS_BALLAD } from './records-yunas-ballad.ts';
 import { MONSTER_RECORDS_YOUTH_LEAGUE } from './records-youth-league.ts';
 import { MONSTER_RECORDS_IFRIT } from './records-ifrit.ts';
 import { MONSTER_RECORDS_GARIK_RONSO } from './records-garik-ronso.ts';
+import { MONSTER_RECORDS_FIEND_SUPERBOSSES } from './records-fiend-superbosses.ts';
 
 export const MONSTER_RECORDS: Readonly<Record<string, FFX2MonsterRecord>> = {
   'ffx2-bahamut/bahamut': { row: 168, table: 1, acc: 95, resist1: { 0: 255, 1: 255, 2: 255, 3: 255, 4: 255, 5: 255, 6: 255, 7: 255, 8: 255, 10: 255, 17: 255, 18: 255 }, resist2: { 6: 255, 14: 255 }, special: 0x3c3, species: 0x0, zantetsu: 100, stealByte: 128, stealGil: 2200, steal: [0x903e, 0x1, 0x903e, 0x1], bribe: [0x0, 0x0, 0x0, 0x0], plainAttack: { id: 0x41da, costAtb: 100, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x60000052, flagsDamage: 0xd, damageClass: 1, formula: 0, critByte: 5, accuracy: 95, power: 16, hits: 1, shatter: 10, element: 0, killer: 0 } }, // Bahamut
@@ -67,6 +68,7 @@ export const MONSTER_RECORDS: Readonly<Record<string, FFX2MonsterRecord>> = {
   ...MONSTER_RECORDS_YOUTH_LEAGUE, // The eight fighter types of the hidden Youth League Tournament chapter, worn by all twenty of its fighters (monster.bin rows 183, 184, 279, 210, 211, 193, 214 and 215; RE note re-ffx2-youth-league-tournament, 2026-11-06)
   ...MONSTER_RECORDS_YUNAS_BALLAD, // The possessed Rikku and Paine of the hidden Yuna's Ballad chapter (monster.bin rows 254 and 256; RE note re-ffx2-yunas-ballad, 2026-11-06)
   ...MONSTER_RECORDS_GARIK_RONSO, // Garik Ronso and the Ronso Youth of the hidden Garik Ronso chapter (monster.bin rows 182 and 181; RE note re-ffx2-garik-ronso, 2026-11-07)
+  ...MONSTER_RECORDS_FIEND_SUPERBOSSES, // Almighty Shinra, the four heads and the three hidden parts of the Major Numerus, the hidden Fiend Arena Superbosses chapter (monster.bin rows 329 to 336; RE note re-ffx2-fiend-arena-superbosses, 2026-11-09)
   ...MONSTER_RECORDS_FALLEN_MAESTERS, // Aranea, Black Elemental, Concherer and Chac of the hidden Fallen Maesters chapter (monster.bin rows 221, 69, 232 and 239; RE note re-ffx2-fallen-maesters, 2026-10-19)
   ...MONSTER_RECORDS_BEVELLE_GUARDIANS, // Georapella, the Precepts Guard and Baralai of the hidden Bevelle guardians chapter (monster.bin rows 262, 263 and 175; RE note re-ffx2-bevelle-underground, 2026-11-06)
   'ffx2-djose-ixion/x2-ixion': { row: 166, table: 1, acc: 95, resist1: { 0: 255, 1: 255, 2: 255, 3: 255, 4: 255, 5: 255, 6: 255, 7: 255, 8: 255, 10: 255, 17: 255, 18: 255 }, resist2: { 6: 255, 14: 255 }, special: 0x3c3, species: 0x0, zantetsu: 80, stealByte: 128, stealGil: 3000, steal: [0x906e, 0x1, 0x906e, 0x1], bribe: [0x0, 0x0, 0x0, 0x0], plainAttack: { id: 0x41da, costAtb: 100, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x60000052, flagsDamage: 0xd, damageClass: 1, formula: 0, critByte: 5, accuracy: 95, power: 16, hits: 1, shatter: 10, element: 0, killer: 0 } }, // Ixion

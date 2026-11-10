@@ -78,5 +78,13 @@
   "ffx2-gagazet-garik-hostile/x2-ronso-youth-b": {"table":1,"row":181,"name":"Ronso Youth","exp":220,"ap":2,"gil":20,"dropByte":255,"drop":[8207,1,8207,2]},
   "ffx2-gagazet-garik-hostile/x2-garik-ronso": {"table":1,"row":182,"name":"Garik Ronso","exp":380,"ap":3,"gil":90,"dropByte":128,"drop":[36957,1,36957,1]},
   "ffx2-gagazet-garik-friendly/x2-ronso-youth-bout": {"table":1,"row":181,"name":"Ronso Youth","exp":220,"ap":2,"gil":20,"dropByte":255,"drop":[8207,1,8207,2]},
-  "ffx2-gagazet-garik-friendly/x2-garik-ronso-bout": {"table":1,"row":182,"name":"Garik Ronso","exp":380,"ap":3,"gil":90,"dropByte":128,"drop":[36957,1,36957,1]}
+  "ffx2-gagazet-garik-friendly/x2-garik-ronso-bout": {"table":1,"row":182,"name":"Garik Ronso","exp":380,"ap":3,"gil":90,"dropByte":128,"drop":[36957,1,36957,1]},
+  "ffx2-fiend-superbosses-1-shinra/x2-almighty-shinra": {"table":1,"row":329,"name":"Almighty Shinra","exp":3000,"ap":1,"gil":3000,"dropByte":255,"drop":[8238,2,0,0]},
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-unum": {"table":1,"row":330,"name":"Unum","exp":6000,"ap":1,"gil":5000,"dropByte":255,"drop":[0,0,0,0]},
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-duo": {"table":1,"row":331,"name":"Duo","exp":6000,"ap":1,"gil":5000,"dropByte":255,"drop":[0,0,0,0]},
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-tria": {"table":1,"row":332,"name":"Tria","exp":6000,"ap":1,"gil":5000,"dropByte":255,"drop":[0,0,0,0]},
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-quattour": {"table":1,"row":333,"name":"Quattour","exp":6000,"ap":1,"gil":5000,"dropByte":255,"drop":[0,0,0,0]},
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-body": {"table":1,"row":334,"name":"Body","exp":0,"ap":0,"gil":0,"dropByte":0,"drop":[0,0,0,0]},
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-pod": {"table":1,"row":335,"name":"Pod","exp":0,"ap":0,"gil":0,"dropByte":0,"drop":[0,0,0,0]},
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-tail": {"table":1,"row":336,"name":"Tail","exp":0,"ap":0,"gil":0,"dropByte":0,"drop":[0,0,0,0]}
 }

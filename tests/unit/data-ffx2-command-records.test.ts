@@ -109,6 +109,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Garik Ronso's nine rows (Garik's Attack 0x41da, Bane Lance 0x411c, Blind 0x406f, Mighty Guard 0x4084, Shell 0x30bb and Protect 0x30bc, the Youth's Attack 0x4000 and MP Blowout 0x411d, Time Up Meteor 0x4236) are the RE note's,
   // pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/garik_ronso_rows.json, tests/unit/chapters/garik-ronso-data.test.ts).
   if (label.startsWith('x2-garik-') || label.startsWith('x2-ronso-')) return;
+  // The hidden Fiend Arena Superbosses' thirteen new rows (Clione 0x4210, Fireworks 0x3076, Haste 0x3176, Sparkler 0x3075, the four Commands 0x421a to 0x421d, Dispel 0x30b8, Shell 0x30bb, Protect 0x30bc, Confuse 0x3083 and Silence 0x4071) are the RE note's,
+  // pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/fiend_superbosses_rows.json, tests/unit/chapters/fiend-superbosses-data.test.ts).
+  if (label.startsWith('x2-fs-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

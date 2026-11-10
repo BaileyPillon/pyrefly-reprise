@@ -118,4 +118,14 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   "ffx2-gagazet-garik-hostile/x2-garik-ronso": row(1, 182, 380, 3, 90, 128, [0x905d, 1, 0x905d, 1]), // Garik Ronso
   "ffx2-gagazet-garik-friendly/x2-ronso-youth-bout": row(1, 181, 220, 2, 20, 255, [0x200f, 1, 0x200f, 2]), // Ronso Youth
   "ffx2-gagazet-garik-friendly/x2-garik-ronso-bout": row(1, 182, 380, 3, 90, 128, [0x905d, 1, 0x905d, 1]), // Garik Ronso
+  // The hidden Fiend Arena Superbosses (Almighty Shinra and the Major Numerus: RE note re-ffx2-fiend-arena-superbosses §0): EXP, Gil, AP and the drop byte are the rows'. Shinra's common slot is Dark Matter x2; his rare slot (Ragnarok 0x907d) and both slots of each head
+  // (Enterprise 0x907e or Invincible 0x907f common, Iron Duke 0x907c x5 rare) have no item in this repo's tables, so they are 0 (rule 6; the raw ids are in fiend_superbosses_rows.json). The body, pod and tail pay nothing.
+  "ffx2-fiend-superbosses-1-shinra/x2-almighty-shinra": row(1, 329, 3000, 1, 3000, 255, [0x202e, 2, 0x0000, 0]), // Almighty Shinra
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-unum": row(1, 330, 6000, 1, 5000, 255, [0x0000, 0, 0x0000, 0]), // Unum
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-duo": row(1, 331, 6000, 1, 5000, 255, [0x0000, 0, 0x0000, 0]), // Duo
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-tria": row(1, 332, 6000, 1, 5000, 255, [0x0000, 0, 0x0000, 0]), // Tria
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-quattour": row(1, 333, 6000, 1, 5000, 255, [0x0000, 0, 0x0000, 0]), // Quattour
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-body": row(1, 334, 0, 0, 0, 0, [0x0000, 0, 0x0000, 0]), // Body
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-pod": row(1, 335, 0, 0, 0, 0, [0x0000, 0, 0x0000, 0]), // Pod
+  "ffx2-fiend-superbosses-2-numerus/x2-numerus-tail": row(1, 336, 0, 0, 0, 0, [0x0000, 0, 0x0000, 0]), // Tail
 };

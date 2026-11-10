@@ -74,6 +74,9 @@ import { x2IfritAbilities } from './ifrit-abilities.ts';
 // Garik Ronso and the Ronso Youths at the top of Mt. Gagazet (the hidden chapter "Garik Ronso", FFX-2 only): `./garik-ronso.ts`.
 import { garikRonsoGroups } from './garik-ronso.ts';
 import { x2GarikRonsoAbilities } from './garik-ronso-abilities.ts';
+// Almighty Shinra and the Major Numerus (seven actors), the two acts of the hidden chapter "The Fiend Arena Superbosses" (FFX-2 only): `./fiend-superbosses.ts`.
+import { fiendSuperbossesGroups } from './fiend-superbosses.ts';
+import { x2FiendSuperbossesAbilities } from './fiend-superbosses-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -100,6 +103,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...youthLeagueGroups,
   ...ifritGroups,
   ...garikRonsoGroups,
+  ...fiendSuperbossesGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -136,6 +140,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2YouthLeagueAbilities,
   ...x2IfritAbilities,
   ...x2GarikRonsoAbilities,
+  ...x2FiendSuperbossesAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };
