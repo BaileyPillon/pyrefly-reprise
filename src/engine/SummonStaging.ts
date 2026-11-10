@@ -50,6 +50,38 @@ export async function partyBack(stage: BattleStage, ms = PARTY_SWAP_MS): Promise
 }
 
 /**
+ * FFX-2 Specials (step C1): plumbing, both games, inert. The ids a Special form has taken off the field (the girls it parked), kept in a SECOND map and never merged into `held`:
+ * `partyOffStage` REPLACES the summon's set and `partyBack` DELETES it, so one shared map would let an aeon's `partyBack` bring a form's parked girls back. FFX-2 has no summons;
+ * the second map is what keeps the two readers (`heldOffAll`: the stage's x-ray and the strike reach) right whichever of them is up.
+ */
+const heldIds = new WeakMap<object, Set<CombatantId>>();
+
+/** Fade `ids` off the field and record them as held off, BEFORE the fades are awaited (like `partyOffStage`). Resolves when the fades do. */
+export async function idsOffStage(stage: BattleStage, ids: readonly CombatantId[], ms = PARTY_SWAP_MS): Promise<void> {
+  const set = heldIds.get(stage) ?? new Set<CombatantId>();
+  for (const id of ids) set.add(id);
+  heldIds.set(stage, set);
+  await Promise.all(ids.map((id) => stage.actor(id)?.fadeTo(0, ms)));
+}
+
+/** Forget `ids` as held off, then fade them back in. */
+export async function idsBack(stage: BattleStage, ids: readonly CombatantId[], ms = PARTY_SWAP_MS): Promise<void> {
+  const set = heldIds.get(stage);
+  if (set) {
+    for (const id of ids) set.delete(id);
+    if (set.size === 0) heldIds.delete(stage);
+  }
+  await Promise.all(ids.map((id) => stage.actor(id)?.fadeTo(1, ms)));
+}
+
+/** Everyone held off the field on `stage`, whichever way: a summon's party (`heldOffStage`) and a Special form's parked girls (`idsOffStage`). With no form it is `heldOffStage(stage)` itself. */
+export function heldOffAll(stage: object): ReadonlySet<CombatantId> {
+  const summoned = heldOffStage(stage);
+  const parked = heldIds.get(stage);
+  return parked && parked.size > 0 ? new Set([...summoned, ...parked]) : summoned;
+}
+
+/**
  * MF-15 (`?summon=leap`, the default since release 68, `motion/SummonBeat.ts`): the party's fade back in, started {@link CROSS_AT} of the way through the aeon's fade-out, so the player's side is never empty. The caller
  * awaits it after the aeon is removed. `?summon=today`, or the player's REDUCE MOTION on (`reduceMotion`), or an aeon with no clock of its own to count the lead on (`waitMs`: a test double, an aeon that was never staged;
  * the arrival asks the same of the leap): undefined, the party returns only after the aeon has gone (release 67's). Release 68 made the leap the default, so a double that has no clock must not start a real timer.

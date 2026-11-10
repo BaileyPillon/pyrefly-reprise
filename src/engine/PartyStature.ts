@@ -97,13 +97,16 @@ export function figureHeight(i: FigureHeightIn): FigureHeight {
 /**
  * The scene's own world height for the figure `id` drawing the painting `artId`, if it names one: the figure's per-combatant height (`SceneStaging.figureHeights`), else the height of the
  * **form** this painting is (`SceneStaging.formHeights`, keyed by the art id: Chapter II's Lady Yunalesca, first form), else undefined. Undefined is the stage's own rule, exactly as before.
+ * `fit` (FFX-2 Special look, step C1: shared plumbing, both games, inert; absent for every figure today) is asked last: the fitted height of a Special's one figure (`SpecialStaging.makeSpecialFit`),
+ * which answers undefined for every art id that is not a Special's. `formPlanScale` below is NOT given it: the planners see the real size.
  */
 export function sceneOwnHeight(
   slots: { readonly figureHeights?: Readonly<Record<string, number>> | undefined; readonly formHeights?: Readonly<Record<string, number>> | undefined },
   id: string,
   artId: string,
+  fit?: (artId: string) => number | undefined,
 ): number | undefined {
-  return slots.figureHeights?.[id] ?? slots.formHeights?.[artId];
+  return slots.figureHeights?.[id] ?? slots.formHeights?.[artId] ?? fit?.(artId);
 }
 
 /**

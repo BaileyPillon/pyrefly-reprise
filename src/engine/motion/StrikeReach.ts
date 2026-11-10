@@ -24,7 +24,7 @@ import type { CombatantId } from '../../battle/common/types.ts';
 import type { ActionMotionPort, ActionStartEvent } from '../BattlePresenterMotion.ts';
 import type { EventCtx } from '../BattlePresenterEvents.ts';
 import type { BattleStage } from '../BattlePresenterPorts.ts';
-import { heldOffStage } from '../SummonStaging.ts';
+import { heldOffAll } from '../SummonStaging.ts';
 import type { Shape } from './Silhouette.ts';
 import { LANE, reachAlong, type ReachWorld } from './StandReach.ts';
 
@@ -46,7 +46,7 @@ export function strikeReach(ctx: { readonly stage: BattleStage }, event: Pick<Ac
   const foes = (named.length ? named : staged).filter((t) => t !== id && stage.actor(t) !== undefined && (stage.sideOf(t) === 'enemy') !== fiend);
   const dir = ((from as { facing?: number }).facing ?? (fiend ? -1 : 1)) < 0 ? -1 : 1;
   const scale = Math.max(0.25, (world.view().w || 1600) / 1600);
-  const away = heldOffStage(stage);
+  const away = heldOffAll(stage); // a summon's party and a Special form's parked girls (FFX-2 Specials: plumbing, both games, inert)
   const have = stage.camera.rigNames;
   const cutRig = (target: CombatantId): string | undefined => (stage.sideOf(target) === 'enemy' ? ['enemy', 'action', 'idle'] : ['party', 'action', 'idle']).find((n) => have.includes(n));
   /**

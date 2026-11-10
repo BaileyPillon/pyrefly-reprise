@@ -6,7 +6,9 @@
  * the frame, the HUD lanes) are written by step C2.
  */
 import { describe, expect, it } from 'vitest';
-import { formPlanScale, sceneOwnHeight } from '../../src/engine/PartyStature.ts';
+import { figureHeight, formPlanScale, partyStature, sceneOwnHeight } from '../../src/engine/PartyStature.ts';
+import { figureSpec } from '../../src/engine/StageFigureRequest.ts';
+import { makeSpecialFit } from '../../src/engine/SpecialStaging.ts';
 
 type Slots = { readonly figureHeights?: Readonly<Record<string, number>> | undefined; readonly formHeights?: Readonly<Record<string, number>> | undefined };
 
@@ -62,5 +64,66 @@ describe('the old bodies, pinned (no `fit` given)', () => {
         }
       }
     }
+  });
+});
+
+// ------------------------------------------------------------------ with a fit (step C1)
+
+const TRIAL = { fit: 'trial', mark: 'a', hold: 'per-save' } as const;
+const desktopFit = makeSpecialFit({ partyHeight: 1.82, enemyHeight: 4.1, surface: 'desktop' }, TRIAL);
+const SPECIAL_ART = ['yuna-floral-fallal', 'rikku-machina-maw', 'paine-full-throttle'] as const;
+const TRIAL_GIRLS = [1.55, 1.45, 1.55];
+
+describe('with a fit (the Special look)', () => {
+  it('the figure\'s world height is girls x 1.82, for each of the three Specials, through sceneOwnHeight\'s fallback', () => {
+    SPECIAL_ART.forEach((art, i) => {
+      expect(sceneOwnHeight({}, art.split('-')[0]!, art, desktopFit)).toBeCloseTo(TRIAL_GIRLS[i]! * 1.82, 9);
+    });
+    expect(sceneOwnHeight({}, 'yuna', 'yuna-gunner', desktopFit)).toBeUndefined(); // an ordinary art id: the stage's own rule
+  });
+
+  it('is inert for 30 ordinary art ids, four slot shapes and eight combatant ids: the literal old body answers, with a fit or without', () => {
+    for (const [name, slots] of SLOTS) {
+      for (const artId of ORDINARY) {
+        for (const id of ['yuna', 'rikku', 'paine', 'tidus', 'bahamut', 'seymour-flux', 'vegnagun-body', 'nobody']) {
+          expect(sceneOwnHeight(slots, id, artId, desktopFit), `${name} / ${id} / ${artId}`).toBe(oldSceneOwnHeight(slots, id, artId));
+        }
+      }
+    }
+  });
+
+  it('the planners see the real size (D-34): formPlanScale stays 1 for a Special, the size carries no stature, and so no STATURE_KEY is written', () => {
+    const slots = {};
+    for (const art of SPECIAL_ART) {
+      expect(formPlanScale(slots, art.split('-')[0]!, art, 1.82)).toBe(1);
+      const own = sceneOwnHeight(slots, art.split('-')[0]!, art, desktopFit);
+      const size = figureHeight({ shared: 1.82, own, given: undefined, stature: partyStature('ffx2', 'party', art.split('-')[0]!) });
+      expect(size.stature).toBe(1); // the stage writes the key only when `size.stature !== 1` or `formPlanScale(...) !== 1`
+      expect(size.height).toBe(own);
+      expect(size.ringScale).toBeCloseTo(own! / 1.82, 9);
+    }
+  });
+
+  it('a scene\'s formHeights entry still wins over the fit (the ?? order), and then formPlanScale returns its own over the shared height (the alternative semantic, pinned)', () => {
+    const slots = { formHeights: { 'yuna-floral-fallal': 2.2 } };
+    expect(sceneOwnHeight(slots, 'yuna', 'yuna-floral-fallal', desktopFit)).toBe(2.2);
+    expect(formPlanScale(slots, 'yuna', 'yuna-floral-fallal', 1.82)).toBeCloseTo(2.2 / 1.82, 12);
+    const own = { figureHeights: { yuna: 3 }, formHeights: { 'yuna-floral-fallal': 2.2 } };
+    expect(sceneOwnHeight(own, 'yuna', 'yuna-floral-fallal', desktopFit)).toBe(3);
+    expect(formPlanScale(own, 'yuna', 'yuna-floral-fallal', 1.82)).toBe(1);
+  });
+
+  it('the stage\'s figure request takes the fit: the painting is drawn girls x 1.82 tall, an ordinary figure is as before, and no fit is today\'s request exactly', () => {
+    const c = (id: string): Parameters<typeof figureSpec>[1] => ({ id, side: 'party', slot: 0, alive: true, spriteKey: id, flags: {} }) as unknown as Parameters<typeof figureSpec>[1];
+    const env = { slots: { party: [], enemy: [] } as unknown as Parameters<typeof figureSpec>[0]['slots'], rim: undefined, rigs: undefined, groundLuma: 0.3, game: 'ffx2' as const };
+    const art = (artId: string) => ({ artId, poses: { idle: `/art/characters/${artId}/idle.png` } });
+    const withFit = figureSpec({ ...env, specialFit: desktopFit }, c('yuna'), art('yuna-floral-fallal'));
+    expect(withFit.request.opts.worldHeight).toBeCloseTo(1.55 * 1.82, 9);
+    expect(withFit.size.ringScale).toBeCloseTo(1.55, 9);
+    const plain = figureSpec({ ...env, specialFit: desktopFit }, c('yuna'), art('yuna-gunner'));
+    expect(plain.fingerprint).toBe(figureSpec(env, c('yuna'), art('yuna-gunner')).fingerprint);
+    expect(plain.request.opts.worldHeight).toBeCloseTo(1.82, 9);
+    const none = figureSpec(env, c('yuna'), art('yuna-floral-fallal'));
+    expect(none.request.opts.worldHeight).toBeCloseTo(1.82, 9); // no fit registered: the stage's own rule, OFF
   });
 });

@@ -248,4 +248,16 @@ describe('the optional fields: hidden, mark, colour, box', () => {
     expect(anchorNow(prev, () => undefined, 'right', 'attack')).toBe(prev);
     expect(seen).toEqual(['right:attack']);
   });
+
+  it('the stage\'s figure request draws no turn ring for a hidden whole-figure row, and the turn ring as before for a mark row and for a plain row', () => {
+    const turnRingOf = (anchor: PartAnchor): unknown => {
+      const table: PartAnchors = { part: anchor };
+      const c = { id: 'part', side: 'party', slot: 3, alive: true, spriteKey: 'part', flags: {} } as unknown as Parameters<typeof figureSpec>[1];
+      const env = { slots: { partAnchors: table } as unknown as Parameters<typeof figureSpec>[0]['slots'], rim: undefined, rigs: undefined, groundLuma: 0.3, game: 'ffx2' as const };
+      return (figureSpec(env, c, { artId: 'vegnagun-body', poses: { idle: '/art/characters/vegnagun-body/idle.png' } }).request.opts as { turnRing?: unknown }).turnRing;
+    };
+    expect(turnRingOf(whole())).toBe(false);
+    expect(turnRingOf(marked())).toMatchObject({ color: 0xf0cf92, radius: 0.4 });
+    expect(turnRingOf({ mode: 'onParent', px: [1, 1], paint: PAINT, ring: { radius: 0.5, ground: false } })).toMatchObject({ radius: 0.5 });
+  });
 });

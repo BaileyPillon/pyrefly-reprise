@@ -30,6 +30,8 @@ export interface FigureEnv {
   readonly groundLuma: number | null;
   /** `lastState?.game` of the stage (the party's stature is a FFX-only rule). */
   readonly game: GameId | undefined;
+  /** FFX-2 Special look (step C1; shared plumbing, inert): the fitted world height of a Special's figure by art id, from `SpecialStaging.specialFitOf`; absent for every stage today. */
+  readonly specialFit?: ((artId: string) => number | undefined) | undefined;
 }
 
 /** The resolved painting of a combatant (`BattlePresenterArt.resolveArt`). */
@@ -77,7 +79,7 @@ export function figureSpec(env: FigureEnv, c: AnyCombatant, art: ResolvedArt, wo
   const { artId } = art;
   const poses = departurePoses(c.id, art.poses); // D-031 Evrae
   const heights = { party: env.slots.partyHeight ?? 1.82, enemy: env.slots.enemyHeight ?? 4.1 };
-  const own = sceneOwnHeight(env.slots, c.id, artId); // a scene's per-combatant height, else the height of the form this painting is (`SceneStaging.formHeights`); ring and shadow follow it
+  const own = sceneOwnHeight(env.slots, c.id, artId, env.specialFit); // a scene's per-combatant height, else the height of the form this painting is (`SceneStaging.formHeights`); ring and shadow follow it
   const shared = worldHeightFor(c, heights);
   // r3941-heights (FFX only): a hero stands at his own height next to Tidus's (`PartyStature.ts`); the shadow and the ring follow it.
   const size = figureHeight({ shared, own, given: worldHeight, stature: partyStature(env.game, c.side, c.id) });
@@ -119,7 +121,7 @@ export function figureSpec(env: FigureEnv, c: AnyCombatant, art: ResolvedArt, wo
       // The turn highlight: gold under a party member, a cooler ring under a
       // fiend, so whose turn it is reads even in a screenshot.
       turnRing:
-        env.slots.turnRings === false
+        env.slots.turnRings === false || (anchor?.mode === 'onParent' && anchor.ring.hidden === true) // a whole-figure row (the Special look, mode (a)) draws no turn ring: the figure keeps its own
           ? false
           : {
               // FF7: no ring, its triangle marks the turn (scene switch)

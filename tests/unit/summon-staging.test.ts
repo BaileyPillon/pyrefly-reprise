@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
-import { heldOffStage, partyBack, partyOffStage } from '../../src/engine/SummonStaging.ts';
+import { heldOffAll, heldOffStage, idsBack, idsOffStage, partyBack, partyOffStage } from '../../src/engine/SummonStaging.ts';
 import type { BattleEvent } from '../../src/battle/common/types.ts';
 import { FakeStage, noSleep } from './helpers/FakeStage.ts';
 import { statusRowIds } from '../../src/ui/ffx/fieldRows.ts';
@@ -116,5 +116,67 @@ describe('Special look C1: the summon functions are exactly what they were', () 
     expect(heldOffStage(stage).size).toBe(2);
     await partyBack(stage, 0);
     expect(heldOffStage(stage).size).toBe(0);
+  });
+});
+
+describe('Special look C1: the second held-off map (idsOffStage, idsBack, heldOffAll)', () => {
+  const fadeLog = (stage: FakeStage, ids: string[]): Array<[string, number]> => {
+    const log: Array<[string, number]> = [];
+    for (const id of ids) (stage.actor(id) as unknown as { fadeTo: (a: number) => Promise<void> }).fadeTo = async (a: number) => void log.push([id, a]);
+    return log;
+  };
+
+  it('heldOffAll is heldOffStage with no form: the same members, and the very same set', async () => {
+    const stage = new FakeStage(['tidus', 'yuna', 'kimahri'], ['seymour-flux']);
+    expect([...heldOffAll(stage)]).toEqual([]);
+    await partyOffStage(stage, 'yuna', 0);
+    expect(heldOffAll(stage)).toBe(heldOffStage(stage));
+    expect([...heldOffAll(stage)].sort()).toEqual(['kimahri', 'tidus']);
+  });
+
+  it('idsOffStage records the ids BEFORE it awaits the fades, fades them out, and heldOffStage is not touched', async () => {
+    const stage = new FakeStage(['yuna', 'rikku', 'paine'], ['bahamut']);
+    const release: Array<() => void> = [];
+    for (const id of ['rikku', 'paine']) (stage.actor(id) as unknown as { fadeTo: () => Promise<void> }).fadeTo = () => new Promise<void>((r) => release.push(r));
+    const pending = idsOffStage(stage, ['rikku', 'paine']);
+    expect([...heldOffAll(stage)].sort(), 'populated while the fades are pending').toEqual(['paine', 'rikku']);
+    expect(heldOffStage(stage).size, 'the summon map is not the one written').toBe(0);
+    for (const r of release) r();
+    await pending;
+  });
+
+  it('idsBack forgets the ids, then fades them in; the other held ids stay', async () => {
+    const stage = new FakeStage(['yuna', 'rikku', 'paine'], ['bahamut']);
+    const log = fadeLog(stage, ['yuna', 'rikku', 'paine']);
+    await idsOffStage(stage, ['rikku', 'paine'], 0);
+    expect(log).toEqual([['rikku', 0], ['paine', 0]]);
+    await idsBack(stage, ['rikku'], 0);
+    expect([...heldOffAll(stage)]).toEqual(['paine']);
+    expect(log.slice(2)).toEqual([['rikku', 1]]);
+    await idsBack(stage, ['paine'], 0);
+    expect([...heldOffAll(stage)]).toEqual([]);
+    await idsBack(stage, ['nobody'], 0); // forgetting an id that was never held is not an error
+  });
+
+  it('heldOffAll is the union of the summon\'s set and the ids; an aeon\'s partyBack does not forget the ids, and partyOffStage does not replace them', async () => {
+    const stage = new FakeStage(['tidus', 'yuna', 'kimahri'], ['seymour-flux']);
+    await idsOffStage(stage, ['kimahri'], 0);
+    await partyOffStage(stage, 'bahamut', 0); // the summon's set REPLACES: tidus, yuna, kimahri (all on stage)
+    await idsOffStage(stage, ['rikku-elsewhere'], 0);
+    expect([...heldOffAll(stage)].sort()).toEqual(['kimahri', 'rikku-elsewhere', 'tidus', 'yuna']);
+    await partyOffStage(stage, 'yuna', 0); // a second summon call replaces the summon's set: tidus, kimahri
+    expect([...heldOffStage(stage)].sort()).toEqual(['kimahri', 'tidus']);
+    expect([...heldOffAll(stage)].sort()).toEqual(['kimahri', 'rikku-elsewhere', 'tidus']);
+    await partyBack(stage, 0);
+    expect(heldOffStage(stage).size).toBe(0);
+    expect([...heldOffAll(stage)].sort(), 'the aeon\'s partyBack leaves the second map alone').toEqual(['kimahri', 'rikku-elsewhere']);
+  });
+
+  it('one stage\'s ids are not another\'s', async () => {
+    const a = new FakeStage(['yuna', 'rikku'], ['bahamut']);
+    const b = new FakeStage(['yuna', 'rikku'], ['bahamut']);
+    await idsOffStage(a, ['rikku'], 0);
+    expect([...heldOffAll(a)]).toEqual(['rikku']);
+    expect([...heldOffAll(b)]).toEqual([]);
   });
 });

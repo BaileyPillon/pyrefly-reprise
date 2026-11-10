@@ -11,6 +11,12 @@
  */
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Group, type Mesh, type MeshBasicMaterial, type RingGeometry } from 'three';
+import { PART_RING_COLOUR, PartRings, type PartAnchor } from '../../src/engine/PartAnchors.ts';
+import { sceneOwnHeight } from '../../src/engine/PartyStature.ts';
+import { heldOffAll, heldOffStage } from '../../src/engine/SummonStaging.ts';
+import { anchorSourceOf, formHandleOf, formKeepIds, formSlots, partViewOf, specialFitOf } from '../../src/engine/SpecialStaging.ts';
+
 import type { AvailableCommand, BattleEvent, Command, CombatantId } from '../../src/battle/common/types.ts';
 import { createEngine } from '../../src/app/screens/BattleScreenWiring.ts';
 import { specialsDebug, specialsEngineOptions, specialsLookWord, specialsOn } from '../../src/app/specialsWord.ts';
@@ -22,6 +28,20 @@ import { bevelleBuild } from '../../src/data/ffx2/builds/bevelle.ts';
 import { FakeAudio, FakeCutscenes, FakeDamageNumbers, FakeMessageBar, FakeStage, noSleep } from './helpers/FakeStage.ts';
 import { bahamutGroup, chapterIV } from './helpers/specialFormState.ts';
 import { openSpecial } from './helpers/specialDrive.ts';
+
+// Step C1: every stage hook of the Special look is wrapped in a pass-through spy, so the cases below can prove an ordinary playback never calls one and that, called with no form, each changes no value.
+vi.mock('../../src/engine/SpecialStaging.ts', async (importOriginal) => {
+  const real = await importOriginal<typeof import('../../src/engine/SpecialStaging.ts')>();
+  return {
+    ...real,
+    formHandleOf: vi.fn(real.formHandleOf),
+    partViewOf: vi.fn(real.partViewOf),
+    specialFitOf: vi.fn(real.specialFitOf),
+    anchorSourceOf: vi.fn(real.anchorSourceOf),
+    formKeepIds: vi.fn(real.formKeepIds),
+    formSlots: vi.fn(real.formSlots),
+  };
+});
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -159,4 +179,56 @@ describe('the test word, with the production define (`__PYREFLY_SPECIALS__` fals
     const on = await createEngine('ffx2', setup);
     expect(on.state().flags['specialDressUp']).toBe(true);
   }, 60_000);
+});
+
+// ------------------------------------------------------------------ step C1: the stage hooks, with no form registered
+
+const hooks = [formHandleOf, partViewOf, specialFitOf, anchorSourceOf, formKeepIds, formSlots] as const;
+
+describe('step C1: the stage hooks of the Special look, with no form registered (every shipped chapter)', () => {
+  it('an ordinary Change burst through the real presenter calls none of them', async () => {
+    for (const hook of hooks) vi.mocked(hook).mockClear();
+    await playAnOrdinaryChange();
+    for (const hook of hooks) expect(hook, hook.name).not.toHaveBeenCalled();
+  }, 120_000);
+
+  it('each answers undefined, an empty list or the very same object, whatever it is asked', () => {
+    const stage = {};
+    const slots = { party: [], enemy: [], partyHeight: 1.82, enemyHeight: 4.1 } as never;
+    const c = { id: 'yuna-pod-r', side: 'party', flags: {} } as never;
+    expect(formSlots(stage, slots)).toBe(slots);
+    expect(formSlots(stage, slots, 'attack')).toBe(slots);
+    expect(partViewOf(stage, c)).toBe(c);
+    expect(formHandleOf(stage, 'yuna', { get: () => undefined })).toBeUndefined();
+    expect(formHandleOf(stage, 'yuna-pod-r', { get: () => ({ actor: {} as never }) })).toBeUndefined();
+    expect(specialFitOf(stage, { slots, canvas: { clientWidth: 1600, clientHeight: 900 } })).toBeUndefined();
+    expect(anchorSourceOf(stage)).toBeUndefined();
+    expect(formKeepIds(stage)).toEqual([]);
+  });
+
+  it('heldOffAll equals heldOffStage, and sceneOwnHeight without a fit is the old one-line body', () => {
+    const stage = new FakeStage(['yuna', 'rikku'], ['bahamut']);
+    expect(heldOffAll(stage)).toEqual(heldOffStage(stage));
+    const slots = { figureHeights: { yuna: 2.4 }, formHeights: { 'yuna-gunner': 2.2 } };
+    for (const [id, art] of [['yuna', 'yuna-floral-fallal'], ['rikku', 'yuna-gunner'], ['rikku', 'rikku-thief']] as const) {
+      expect(sceneOwnHeight(slots, id, art)).toBe(slots.figureHeights?.[id as 'yuna'] ?? slots.formHeights?.[art as 'yuna-gunner']);
+    }
+  });
+
+  it('PartRings.add of an anchor with no hidden, mark or colour makes the mesh it always made, and setMark and setAnchor leave it alone', () => {
+    const anchor: PartAnchor = { mode: 'onParent', px: [10, 20], paint: { width: 100, height: 100, baselineY: 95, contentTop: 5 }, ring: { radius: 0.6, ground: true } };
+    const root = new Group();
+    const rings = new PartRings(root);
+    rings.add('p', anchor);
+    const mesh = root.children[0] as Mesh;
+    const mat = mesh.material as MeshBasicMaterial;
+    const geo = mesh.geometry as RingGeometry;
+    expect([mat.color.getHex(), mat.opacity, mat.transparent, mat.depthTest, mat.depthWrite]).toEqual([PART_RING_COLOUR, 0, true, false, false]);
+    expect([geo.parameters.innerRadius, geo.parameters.outerRadius, geo.parameters.thetaSegments]).toEqual([0.6 * 0.86, 0.6, 48]);
+    expect([mesh.name, mesh.renderOrder, mesh.rotation.x]).toEqual(['part-ring:p', 7, -Math.PI / 2]);
+    rings.setMark('p', true);
+    rings.update(0.1, () => ({ x: 0, y: 0, z: 0, height: 2 }), null);
+    expect(mat.opacity).toBe(0.62);
+    expect(mat.color.getHex()).toBe(PART_RING_COLOUR);
+  });
 });
