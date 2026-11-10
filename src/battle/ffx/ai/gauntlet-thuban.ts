@@ -20,7 +20,7 @@
  * ## When it is hit (`onTargeted` reads the command, `onHit` answers it)
  *
  * Whatever the command did to it (a miss counts; the script tests no damage, no counterattack gate and no attacker), it reads two bits of the **command's own record** and answers in this order:
- * the command **changes the CTB** (Slow, Haste on others, the Delay moves: `damageClass` bit 4) -> **Haste on itself**; the command **changes HP** (`damageClass` bit 1) -> **Condemn on the front line** (it strips Shell, Protect, Reflect,
+ * the command **changes the CTB** (Slow and Haste on others: `damageClass` bit 4 alone; the Delay moves carry the HP bit alone and are answered by Condemn, below) -> **Haste on itself**; the command **changes HP** (`damageClass` bit 1) -> **Condemn on the front line** (it strips Shell, Protect, Reflect,
  * the four Nuls, Regen and Haste from everyone it hits, the party's Auto-Protect and Auto-Haste included if the engine lets a cleanse take them: the tests say).
  *
  * **One answer a hit.** The game's queue drops a second `performCommand` while the owner already has one waiting (`./hit-gates.ts#react`), so a command that did both bits would be answered by Haste alone (none of the party's does: Slow and Haste carry the CTB bit alone, Delay Attack and Delay Buster the HP bit alone, so the Delay moves are answered by Condemn; the both-bits case is pinned on a synthetic record). And the

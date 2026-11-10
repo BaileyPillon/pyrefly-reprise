@@ -33,8 +33,8 @@
  *
  * Tier 3 (stage 4: Th'uban, Neslug, the Ultima Buster) adds three rules, again each measured by an ablation (`docs/handoff/ch-gauntlet.md`); Th'uban needs none (the party is faster than it and empties it in 31 hits):
  *
- * 11. **Neslug in its shell: Lulu's magic** (`magicShell`). In the shell (the script publishes `gauntlet.neslug.state` = 1) every physical blow does 0, it regenerates and casts Curaga on itself; nothing in the menus of Tidus, Yuna
- *    and Auron is magic or a special. Tidus gives his turn to Lulu (a Switch), who casts Doublecast (two blows of 99,999 for 4 MP: the weapon has One MP Cost). Without it the shell is never broken: 0 of 100, the engine ends
+ * 11. **Neslug in its shell: Lulu's magic** (`magicShell`). In the shell (the script publishes `gauntlet.neslug.state` = 1) every physical blow does 0, it regenerates and casts Curaga on itself; Tidus, Yuna
+ *    and Auron have no attack spell of their own (the spells of Yuna's aeons and every Overdrive do pass the shell). Tidus gives his turn to Lulu (a Switch), who casts Doublecast (two blows of 99,999 for 4 MP: the weapon has One MP Cost). Without it the shell is never broken: 0 of 100, the engine ends
  *    the stalemate.
  * 12. **Lulu from the first turn against Neslug and the Ultima Buster** (`magicAt`). Her Doublecast is 199,998 an action against the 99,999 of the best physical blow, and the Ultima Buster's Arms gate physical blows only,
  *    never a spell. Against both it is the better line on every count the bench keeps (Neslug 50 inputs and no member lost a fight against 61 and 0.4 with her only in the shell; the Ultima Buster 42 inputs and no member
