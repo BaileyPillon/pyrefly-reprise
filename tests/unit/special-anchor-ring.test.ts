@@ -10,7 +10,7 @@
 import { describe, expect, it } from 'vitest';
 import { Group, PerspectiveCamera, Vector3, type Mesh, type MeshBasicMaterial, type RingGeometry } from 'three';
 import { anchorPoint, PartRings, type ParentPose, type PartAnchor, type PartAnchors } from '../../src/engine/PartAnchors.ts';
-import { anchoredActorOptions, anchoredAim, anchoredHeight, anchoredQuad, anchoredRingRadius, anchoredSpot } from '../../src/engine/StageAnchors.ts';
+import { anchorNow, anchoredActorOptions, anchoredAim, anchoredHeight, anchoredQuad, anchoredRingRadius, anchoredSpot } from '../../src/engine/StageAnchors.ts';
 import { figureSpec } from '../../src/engine/StageFigureRequest.ts';
 import { colossusStaging } from '../../src/scenes/farplane-colossus.ts';
 import { FARPLANE_PART_ANCHORS } from '../../src/scenes/farplane-parts.ts';
@@ -134,5 +134,118 @@ describe('the rings and the anchor maths of every anchor that exists today (the 
       }
     }
     await expect(lines.join('\n') + '\n').toMatchFileSnapshot('../fixtures/specials/anchor-ring-pin.txt');
+  });
+});
+
+// ------------------------------------------------------------------ the new optional fields (step C1)
+
+const PAINT = { width: 1000, height: 800, baselineY: 780, contentTop: 20 };
+const GOLD = 0xf0cf92;
+const whole = (over: Partial<PartAnchor> = {}): PartAnchor => ({
+  mode: 'onParent',
+  px: [500, 240],
+  chestPx: [500, 240],
+  paint: PAINT,
+  box: [200, 100, 800, 780],
+  ring: { radius: 0.15, ground: false, hidden: true },
+  ...over,
+} as PartAnchor);
+const marked = (): PartAnchor => ({ mode: 'onParent', px: [300, 400], chestPx: [300, 400], paint: PAINT, ring: { radius: 0.4, ground: false, mark: 'target', colour: GOLD } });
+
+describe('the optional fields: hidden, mark, colour, box', () => {
+  it('hidden draws no mesh at all, and a row added over an older ring removes it', () => {
+    const root = new Group();
+    const rings = new PartRings(root);
+    rings.add('p', { mode: 'onParent', px: [1, 1], paint: PAINT, ring: { radius: 0.5, ground: false } });
+    expect(root.children.length).toBe(1);
+    rings.add('p', whole());
+    expect(root.children.length).toBe(0);
+    expect(rings.snapshot()).toEqual([]);
+    rings.update(0.1, () => PROPORTIONAL, camera);
+    rings.setMark('p', true); // inert, no throw
+    expect(root.children.length).toBe(0);
+  });
+
+  it('a mark ring starts dark, lights to gold only after setMark(id, true), never turns violet, and fades out again', () => {
+    const root = new Group();
+    const rings = new PartRings(root);
+    rings.add('p', marked());
+    const mesh = root.children[0] as Mesh;
+    const mat = mesh.material as MeshBasicMaterial;
+    expect(mat.opacity).toBe(0);
+    expect(mat.color.getHex()).toBe(GOLD);
+    rings.sync('p', { combatants: {}, flags: {} } as never); // the stage syncs every ring every frame: it must not put the mark out
+    for (let i = 0; i < 10; i++) rings.update(0.1, () => PROPORTIONAL, camera);
+    expect(mat.opacity, 'not lit yet').toBe(0);
+    expect(mesh.visible).toBe(false);
+    rings.setMark('p', true);
+    for (let i = 0; i < 40; i++) {
+      rings.sync('p', { combatants: {}, flags: {} } as never);
+      rings.update(0.1, () => PROPORTIONAL, camera);
+    }
+    expect(mat.opacity).toBeGreaterThan(0.9);
+    expect(mat.opacity).toBeLessThanOrEqual(0.95);
+    expect(mat.color.getHex(), 'gold, never PART_RING_COLOUR').toBe(GOLD);
+    expect(mesh.visible).toBe(true);
+    rings.setMark('p', false);
+    for (let i = 0; i < 60; i++) rings.update(0.1, () => PROPORTIONAL, camera);
+    expect(mat.opacity).toBeLessThan(0.01);
+    expect(mat.color.getHex()).toBe(GOLD);
+  });
+
+  it('a mark without a colour is the violet of every other ring; setMark on an ordinary ring changes nothing', () => {
+    const root = new Group();
+    const rings = new PartRings(root);
+    rings.add('p', { mode: 'onParent', px: [300, 400], paint: PAINT, ring: { radius: 0.4, ground: false, mark: 'acting' } });
+    expect(((root.children[0] as Mesh).material as MeshBasicMaterial).color.getHex()).toBe(0xc8a0ff);
+    const plain = new PartRings(new Group());
+    plain.add('q', { mode: 'onParent', px: [1, 1], paint: PAINT, ring: { radius: 0.5, ground: false } });
+    plain.setMark('q', true);
+    plain.update(0.1, () => PROPORTIONAL, camera);
+    expect(plain.snapshot()[0]!.opacity).toBe(0.62); // the old maths: 0.62 at level 1, unlit
+  });
+
+  it('setAnchor replaces the row (the radius and the mesh are not rebuilt) and is inert for an unknown id', () => {
+    const root = new Group();
+    const rings = new PartRings(root);
+    rings.add('p', marked());
+    const mesh = root.children[0];
+    const next: PartAnchor = { mode: 'onParent', px: [900, 100], chestPx: [900, 100], paint: PAINT, ring: { radius: 0.4, ground: false, mark: 'target', colour: GOLD } };
+    rings.setAnchor('p', next);
+    rings.setMark('p', true);
+    for (let i = 0; i < 20; i++) rings.update(0.1, () => PROPORTIONAL, camera);
+    expect(root.children[0]).toBe(mesh);
+    const at = rings.snapshot()[0]!.at;
+    const [x, y] = anchorPoint(next, PROPORTIONAL);
+    expect([at[0], at[1]]).toEqual([x, y]);
+    expect(() => rings.setAnchor('nobody', next)).not.toThrow();
+  });
+
+  it('anchoredQuad with a box is the four corners of the box through the live plane (mirror included); without one it is the ring square as before', () => {
+    const a = whole();
+    const fresh = (): [Vector3, Vector3, Vector3, Vector3] => [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
+    for (const mirrored of [false, true]) {
+      const parent = planeParent(mirrored);
+      const q = anchoredQuad(a, parent, fresh());
+      const at = (px: number, py: number): number[] => parent.toWorld!(px / PAINT.width, py / PAINT.height);
+      expect(q.map((v) => [v.x, v.y, v.z]), `mirrored ${mirrored}`).toEqual([at(200, 780), at(800, 780), at(800, 100), at(200, 100)]);
+    }
+    // a box with no live plane (the pure fallback) and a row with no box are the ring square, exactly the maths of the pin above
+    const noPlane = anchoredQuad(a, PROPORTIONAL, fresh());
+    const ringOnly = { ...a, box: undefined } as PartAnchor;
+    expect(noPlane.map(vec)).toEqual(anchoredQuad(ringOnly, PROPORTIONAL, fresh()).map(vec));
+    const square = anchoredQuad(ringOnly, planeParent(false), fresh()).map(vec);
+    expect(square[1]![0]! - square[0]![0]!).toBeCloseTo(2 * 0.15, 9);
+  });
+
+  it('anchorNow answers the source\'s row for the shown pose, else the previous row; with no source it is the previous row itself', () => {
+    const prev = whole();
+    const other = whole({ px: [1, 2] } as Partial<PartAnchor>);
+    const seen: string[] = [];
+    expect(anchorNow(prev, undefined, 'right', 'idle')).toBe(prev);
+    expect(anchorNow(undefined, undefined, 'right', 'idle')).toBeUndefined();
+    expect(anchorNow(prev, (id, pose) => (seen.push(`${id}:${pose}`), other), 'right', 'attack')).toBe(other);
+    expect(anchorNow(prev, () => undefined, 'right', 'attack')).toBe(prev);
+    expect(seen).toEqual(['right:attack']);
   });
 });

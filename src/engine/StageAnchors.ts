@@ -89,6 +89,19 @@ export function anchoredQuad(
   parent: ParentPose,
   out: [Vector3, Vector3, Vector3, Vector3],
 ): [Vector3, Vector3, Vector3, Vector3] {
+  if (a.mode === 'onParent' && a.box && parent.toWorld) {
+    // A whole-figure row (the Special look, FFX-2 only): the four corners of the box through the parent's live plane, mirror and bob included. Bottom-left, bottom-right, top-right, top-left.
+    const [x0, y0, x1, y1] = a.box;
+    const at = (px: number, py: number, to: Vector3): void => {
+      const [wx, wy, wz] = parent.toWorld!(px / a.paint.width, py / a.paint.height);
+      to.set(wx, wy, wz);
+    };
+    at(x0, y1, out[0]);
+    at(x1, y1, out[1]);
+    at(x1, y0, out[2]);
+    at(x0, y0, out[3]);
+    return out;
+  }
   const [x, y, z] = anchorPoint(a, parent, 'ring');
   const r = anchoredRingRadius(a);
   const top = a.mode === 'onParent' && a.chestPx ? anchorPoint(a, parent, 'chest')[1] + r * 0.5 : y + r;
@@ -98,4 +111,17 @@ export function anchoredQuad(
   out[2].set(x + r, top, z);
   out[3].set(x - r, top, z);
   return out;
+}
+
+/**
+ * The anchor row for the painting a figure shows NOW (the Special look, FFX-2 only; the stage calls it every frame in `placeAnchored`): the source's row for `(partId, shownPose)` when a
+ * source is registered and has one, else `prev`. With no source (every scene today) it is `prev` itself, so nothing moves.
+ */
+export function anchorNow(
+  prev: PartAnchor | undefined,
+  source: ((partId: string, pose: string) => PartAnchor | undefined) | undefined,
+  partId: string,
+  shownPose: string,
+): PartAnchor | undefined {
+  return source ? (source(partId, shownPose) ?? prev) : prev;
 }

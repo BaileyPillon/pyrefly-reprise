@@ -54,8 +54,15 @@ export interface OnParentAnchor {
    * upright facing the camera. `squash` flattens an upright ring vertically
    * (1 = round; Vegnagun's colossus Bulwarks use {@link GROUND_RING_SQUASH},
    * the look of the picked frame).
+   * Additive (the Special look, step C1; every field absent for every anchor today): `hidden` draws no ring at all; `mark` is a ring drawn only while `PartRings.setMark` lights it
+   * (`'target'` while the part is aimed at, `'acting'` while it acts), in `colour` (default the violet) and never re-coloured by the lit-ring code.
    */
-  ring: { radius: number; ground: boolean; squash?: number };
+  ring: { radius: number; ground: boolean; squash?: number; hidden?: boolean; mark?: 'target' | 'acting'; colour?: number };
+  /**
+   * **A whole-figure row** (the FFX-2 Special look, step C1; FFX-2 only in what is seen): the rectangle, in the parent painting's pixels `[x0, y0, x1, y1]`, that `StageAnchors.anchoredQuad` answers
+   * in place of the ring's square, through the parent's live plane. Absent for every anchor today.
+   */
+  box?: [x0: number, y0: number, x1: number, y1: number];
 }
 
 /** A part hung in the air relative to its parent's feet, typically off-frame (the Nodes). */
@@ -218,11 +225,12 @@ export class PartRings {
   /** Add (or replace) the ring for `id`. An overhead anchor gets one only when it asks for a floor ring (`floorRing`); otherwise it is off-frame. */
   add(id: string, anchor: PartAnchor): void {
     this.remove(id);
+    if (anchor.mode === 'onParent' && anchor.ring.hidden === true) return; // a whole-figure row draws no ring (the Special look, mode (a))
     const ground = anchor.mode === 'onParent' ? anchor.ring.ground : anchor.floorRing !== undefined;
     const radius = anchor.mode === 'onParent' ? anchor.ring.radius : anchor.floorRing?.radius;
     if (radius === undefined) return;
     const mat = new MeshBasicMaterial({
-      color: PART_RING_COLOUR,
+      color: anchor.mode === 'onParent' && anchor.ring.mark !== undefined ? (anchor.ring.colour ?? PART_RING_COLOUR) : PART_RING_COLOUR,
       transparent: true,
       opacity: 0,
       depthWrite: false,
@@ -266,11 +274,24 @@ export class PartRings {
     if (e) e.alive = alive;
   }
 
+  /** Light (or put out) the ring of a part whose anchor has `ring.mark`; the existing fade does the rest. Inert for every other ring. */
+  setMark(id: string, on: boolean): void {
+    const e = this.rings.get(id);
+    if (e && e.anchor.mode === 'onParent' && e.anchor.ring.mark !== undefined) e.litNow = on;
+  }
+
+  /** Replace a ring's row (the Special look re-asks the row for the painting now shown); the radius and the mesh are not rebuilt. */
+  setAnchor(id: string, anchor: PartAnchor): void {
+    const e = this.rings.get(id);
+    if (e) e.anchor = anchor;
+  }
+
   /** Per frame from the stage: whether the part is alive, and whether its floor ring is lit (the anchor's `litFlag` is true in the battle's flags). Inert for a ring with no `litFlag`. */
   sync(id: string, state: DecalView | null | undefined): void {
     const e = this.rings.get(id);
     if (!e) return;
     e.alive = state?.combatants[id]?.alive !== false;
+    if (e.anchor.mode === 'onParent' && e.anchor.ring.mark !== undefined) return; // a mark ring is lit by `setMark` alone, never by a battle flag
     const floorRing = e.anchor.mode === 'overhead' ? e.anchor.floorRing : undefined;
     const flag = floorRing?.litFlag;
     e.litNow = flag !== undefined && state?.flags[flag] === true;
@@ -286,14 +307,15 @@ export class PartRings {
       e.level += (target - e.level) * k;
       e.lit += ((e.litNow ? 1 : 0) - e.lit) * k;
       const mat = e.mesh.material as MeshBasicMaterial;
-      mat.opacity = (0.62 + 0.33 * e.lit) * e.level;
-      if (e.lit > 0.001 || e.tinted) {
+      const mark = e.anchor.mode === 'onParent' && e.anchor.ring.mark !== undefined; // the Special look's mark: dark until lit, gold, never turned violet
+      mat.opacity = (mark ? 0.95 * e.lit : 0.62 + 0.33 * e.lit) * e.level;
+      if (!mark && (e.lit > 0.001 || e.tinted)) {
         // only a lit floor ring ever leaves the violet; when the glow has gone the colour is put back exactly
         mat.color.setHex(PART_RING_COLOUR);
         if (e.lit > 0.001) mat.color.lerp(LIT_RING, e.lit);
         e.tinted = e.lit > 0.001;
       }
-      e.mesh.visible = e.level > 0.02 && !!parent;
+      e.mesh.visible = e.level > 0.02 && !!parent && (!mark || e.lit > 0.001);
       const decal = e.decal;
       if (decal) {
         // The painting is the platform now: it takes the state's picture (the plain one stands for a state with none) and fades with the ring. The ring hides, except an amber one over a lit decal that has no mine picture (the rock).
