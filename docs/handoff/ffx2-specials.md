@@ -287,3 +287,67 @@ The entry walks A's `fullPlan`/`shortPlan` through `runPlan` (starts at 600 ms: 
 ### 11.8 Known edges for the next steps
 
 After a victory with the form up the figure and the faded parked girls stay on the stage for the results (OP-29: nothing built; D2's snapshot). `heldIds` of the parked girls survive a victory until the stage is rebuilt. The portrait's nominal length is 700 ms; a longer one is measured on the presenter's `now` clock. A `preSubmit` hold with a command the engine then rejects stays until the next release (harmless: it equals `activeIds`).
+
+## 12. The look, step D1: the party plates and the command menu (2026-11-10; branch `ffx2-specials`; plan `docs/plans/ffx2-specials-look-review.md`)
+
+**Game case: FFX-2 only in what is seen** (the three Special dresspheres exist only in FFX-2). The row helpers answer "no form" (`null`, the unit's own dress, `''`) for a unit with no `dresspheres.special`, which is every unit while the switch `specialDressUp` is OFF; `TargetCursor` is a shared FFX file and the hint is additive and absent by default; `CommandMenu` and the HUD pass new optional members that do nothing without a form. Nothing in an FFX or FF7 chapter changes. No browser, no dev server and no build ran in this step: the CSS numbers are the preflight's starting values and are judged on screenshots in Stage 2, not claimed here.
+
+### 12.1 What landed
+
+| Commit | What | Tests |
+|---|---|---|
+| `2298ca6e9` | **The pins, alone, before any source edit**: the real engine's command window at Chapter IV (top rows, the Change submenu, `helpLabel` of every Change row, the aimed-ally view), a mounted `FFX2BattleHud`'s party-list `className` and root `outerHTML` through a menu open and an ally pick, one FFX chapter's mounted HUD, the cursor's cycling order with no hint, the results page's member rows (FFX and FFX-2) | `command-menu-off-pin`, `target-cursor-order-pin`, `results-rows-off-pin` |
+| `e3f69e883` | the mounted-HUD pin leaves out the move advisor's card (see 12.7) | `command-menu-off-pin` |
+| `e7e33645b` | `specialRows.ts`, `partCrop.ts`, `specialLeave.ts`, `plateTap.ts`; `PartyRows` form markup; `dressphereIcons` six part ids | `party-rows-special`, `special-part-tile-crop` |
+| `69ddbf4cd` | `CommandMenu` (Leave label, tap path, order hint), `TargetCursor.setOrder`, `FFX2BattleHud` (one `PlateTaps`, two members handed to every menu); the switch-off append | `special-leave-label`, `ffx-cursor-unchanged`, `special-plate-tap`, `special-switch-off` (grown) |
+| `8315c2c05` | the CSS of three sheets, additions only | `special-form-css` |
+| this commit | CONTRACT-CHANGES entry and this section | |
+
+`partyFace.ts` is **not edited** (the main's head is chosen by `faceDressOf`, which `faceStackHtml` passes to `faceLadder`; the shared builders keep their pins). `faceLadder`, `faceLayersHtml`, `portrait.ts`, `tests/e2e/portraits.spec.ts` and `tests/unit/atb-live.test.ts` are untouched.
+
+### 12.2 The markup contract (what D2 and Stage 2 may rely on)
+
+- A row of a form: `class="ig-stat ... ig-stat--form ig-stat--form-main"` or `... ig-stat--form-part`, `data-actor-id="<id>"`, `data-form-role="main|right|left"`, `data-form-special="floral-fallal|machina-maw|full-throttle"`. `right` is the engine's `parts.podLeft` and `left` its `parts.podRight`: the names are never sorted by screen x.
+- The main's row also carries `<i class="ffx2stat__badge" style="--ffx2-special:<colour>" title="<Special>">FF|MW|FT</i>`, after the body's closing `</div>`; a part carries no badge and no job chip. The main's face tile shows HER head (`characters/<girl>-<returnTo>/idle.png`, `returnTo` read from the unit's own `sdsp`), not the figure's crown.
+- A part's tile: `ffx2stat__face ffx2stat__face--part` holding the monogram floor (RP LP SR CL DW SW) and, when the manifest does not say the art is missing, `<img class="ffx2stat__face-img ffx2stat__part-img">` cropped from `characters/<main's art id>/idle.png` by `partCropOf` (C1's `SPECIAL_PARTS[...].poses.idle.<role>.crop`). **No part id ever appears in a URL**, and the tile has no `data-face-*` attribute. If a Special has no `idle` row the tile is the monogram floor only, and the crop test fails first, so that cannot ship.
+- **No class, attribute or style is ever written to the party list**, switch OFF or ON. The form rules in CSS read `:has(.ig-stat--form-part)`.
+- The targeted ring is the existing `.ffx2--targeted-ally` that `paintLit` puts on any `[data-actor-id]`: no new class on an ordinary row, no pink "targeted name".
+- Taps: `PlateTaps` (one delegated `click` on the list; `[data-form-role]` rows only) is handed to `openCommandMenu`, which sets a handler at every build and clears it in `cleanup`. The handler acts only for an id in `targetIds` and goes through the same `clickPath` as a click on the figure's mark (a touch tap aims first, the second tap confirms; a mouse click confirms). The plates get `pointer-events: auto; cursor: pointer` from `[data-form-role]` alone.
+- Order: `formTargetOrder(state, ids)` returns the ids of `activeIds` that are in `ids`, in `activeIds` order (main, right, left), whenever `ids` holds a part, in both look modes; otherwise `null`. `TargetCursor.setOrder` puts the hinted ids first in that order and the rest after them by projected x.
+
+### 12.3 A finding for D2 and Stage 2: every plate-to-plate command of a form is a group heal today
+
+The real engine, driven through a form (all three girls' decisions, mastered and not), offers no single-target command that lists the plates: White Pollen, White Honey, Hard Leaves, Tough Nuts, Mirror Petals, Floral Rush and All-Life carry `targeting: 'all-allies'` and the menu aims them as a group at once; Barrier and Shield are self. So the plates' order hint and taps are reached by a group pick not at all and by a one-target pick only if the engine offers one (a Revival row for a fallen part is the candidate). `special-plate-tap.test.ts` therefore takes the real White Pollen row and drops its group `targeting`, an input to the menu and not game data; the e2e 24 that D2 writes and Stage 2 runs says whether a real one-target pick exists. Nothing was invented to make one.
+
+### 12.4 The CSS starting values (the preflight's; judged on screenshots in Stage 2)
+
+`ffx2-hud.css`: `--ffx2-form-w: 250px`, `--ffx2-form-name: 100px` on the form's list (not on `.ffx2hud`), acting row +7 px; the badge hidden by default and shown only while a part row is drawn. `hudf1-ffx2.css`: the F1 list anchored by its right edge (`right: 29px`) while a form is drawn, the name column. FFX-2 `phone-hud.css`: one column of slim rows (46 px, a 34 px face, 17 px lines), full names (`text-overflow: clip`), the badge at 14 px, and the Wait/Active chip and the status hint lifted by 84 px.
+
+### 12.5 `[ours]` rows (none is a game number)
+
+| Value or rule | Where | Why |
+|---|---|---|
+| The badge is hidden until a part row is drawn (OP-14) | `ffx2-hud.css` | no spoiler during the one-row stretch of the entry; delete the `:has` condition on the badge rule to show it always |
+| Floral Fallal's two parts in the neutral cream `#F4F1E8` (OP-15) | `dressphereIcons.ts` | pink already means the acting row, the aimed enemy and the Special itself; one table value |
+| Rows 46 px, face 34 px, lines 17 px, gap 4 px on the phone | `phone-hud.css` | the preflight's stacked rows; judged at 390 by 844 in Stage 2 |
+| The lift of the Wait/Active chip and the status hint by 84 px | `phone-hud.css` | the stack is about 84 px taller than the one line of chips; other anchors, if any, are found by the first phone screenshot (OP-17) |
+| The order hint is passed in both look modes, and cleared with `null` when a pick has no form | `CommandMenu.ts` | the plates' rectangles do not tie to the pixel under mode (a); a hint left by an earlier target view cannot leak |
+| A badge floor on the old HUD (`max(5.5px, var(--hud-floor))`, scoped to `:not(.hud-f1)`) | `ffx2-hud.css` | the job chip has the same rule in `hud-floor.css`; the F1 HUD has its own in `hudf1-ffx2.css` |
+
+### 12.6 The driver's calls this step took (open points; each is the spec's own recommendation)
+
+OP-13 (mode a/b of the part mark and the taps: the default draws no mark, leave to the first clip). OP-14 badge hidden until a part row is drawn. OP-15 the neutral cream. OP-16 `:has()`, not a `data-form` attribute (if a target browser lacks `:has`, the rules drop and the rows keep the ordinary layout; then add `partyEl.toggleAttribute('data-form', ...)` in `renderParty` and swap the selectors). OP-17 what sits above the lifted phone chips and O-7 (the pixel width of "Sinistral Wing" and "Smasher-R") are measured in Stage 2's first phone screenshots. OP-18 C1's crop table is provisional and regenerated at Stage 2; the tile follows without a code change. OP-23 the pause CHAPTER tab prints a part's dressphere with dashes removed (`panels.ts`): D2's file, left and recorded. OP-27 the "Use <Part> skills." help line is not built (no source says where the menu prints it; the menu already names the acting part). OP-31 the `[ours]` rows above. OP-33 "the figure does not cover the HUD lanes" is a Stage 2 screenshot. OP-35 no file outside the preflight's list was touched (the three CSS files, `PartyRows`, `dressphereIcons`, `CommandMenu`, `TargetCursor`, `FFX2BattleHud`). OP-20, OP-21, OP-24 to OP-26, OP-28 to OP-30, OP-34, OP-36 and OP-37 belong to other steps and are unchanged by this one.
+
+### 12.7 Deviations from the step spec, each kept to its intent
+
+1. **The mounted-HUD pin leaves out the move advisor's card** (`e3f69e883`). The card has text only when the tactics data was already imported, so the same HUD pinned differently in a file that had run `createEngine` first. D1 edits nothing of the advisor; the fixture is the first pin with the same cut applied, and it passes against the edited source.
+2. **`cursor.setOrder(order ?? null)`** in `renderTargets`, where the spec writes `if (order) cursor.setOrder(order)`: a hint an earlier target view left would otherwise stay. With the switch OFF the hint is `null` both ways.
+3. **A badge floor on the old HUD** (12.5), not in the spec's CSS list: the job chip has one in `hud-floor.css`.
+4. **Existing test edited: `special-switch-off.test.ts`**, as the spec says ("Append to ... test 10"): imports, three `vi.mock` pass-through spies (`specialRows`, `partCrop`, `specialLeave`), a `setAtbBarsSmooth(null)` in the existing `afterEach`, one new `describe`. No assertion was changed.
+5. **The plate-tap test drops the group `targeting` of one real row** (12.3).
+6. **`PlateTaps.dispose` is not called by the HUD's `unmount`** (the spec lists five call-in lines): the listener sits on an element the HUD drops with itself.
+7. **Process:** the first commit message was written with a shell heredoc (a rule of this build says to write files with the Write tool); it wrote only the message file.
+
+### 12.8 Known edges and what comes next
+
+D2: the pause tabs, `ProFieldMarks`, `phoneFraming`, the always-visible-surface snapshot, e2e 23 and 24 (written, not run). Stage 2: the real art, the CSS numbers judged at 1600 by 900 and 390 by 844, O-7, the lift anchors, `SPECIAL_SHOTS`, the effects. The count of three plates in the list is not yet tested at the phone's 360 width: rows stack, so the width is the name's.
