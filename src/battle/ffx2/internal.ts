@@ -100,11 +100,11 @@ export interface Ffx2Unit extends FFX2Combatant {
   aiMemory?: Record<string, number | string | boolean>;
   /** Queued command waiting on the purple charge bar, mirrored from `atb.charging`. */
   pendingCommand?: Command | null;
-  /** Set on a special-dressphere part so the engine can restore the girl on defeat. */
+  /** On a Special pod: the girl whose form it is (`special/enter.ts`). */
   sdspOwnerId?: CombatantId;
-  /** Set on a girl who is currently transformed; her parts hold the field. */
+  /** On a girl in her Special, and on her pods: the three parts. */
   sdspPartIds?: CombatantId[];
-  /** Grid node count she transformed from, 2–6. Drives main-part stat scaling. */
+  /** The Garment Grid's node count the form was put on with, 2–6 (the main body's stat scale). */
   sdspGridNodeCount?: number;
   /** The item her cast in flight has reserved (the item ledger, `adapt/item-ledger.ts`; re-parity RC8, lane X2-F): kept spent when the cast fires, given back when it leaves the queue. */
   itemHold?: ItemHold;
@@ -280,6 +280,7 @@ export interface Ffx2EngineOptions {
   rollFirstAttack?: boolean;
   /** `constants.ts` LEBLANC_SCRIPT_SINIROTHX (PR-0106, Chapter VI's Leblanc), for a measurement run. */
   leblancScriptSinirothX?: boolean;
+  specialDressUp?: boolean; // `constants.ts` SPECIAL_DRESS_UP (`special/`): a girl may put on her Special and fight as three parts; default OFF
 }
 
 /** The party's live state as it crosses from one chained group to the next. */

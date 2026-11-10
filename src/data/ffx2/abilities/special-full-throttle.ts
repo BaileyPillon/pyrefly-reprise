@@ -1,311 +1,46 @@
 /**
- * Full Throttle — Paine's special dressphere [ffx2-combat-core §2.9.2, §3.15, verified: 2 sources].
+ * Full Throttle — Paine's special dressphere: every command of its three parts, from the game's own rows [research/re-ffx2-special-dresspheres.md §4; verified: the game's tables].
  *
- * Three parts: main body (Throttle / Fright / Sword Dance — every main-part
- * offensive move is `RT` with **no charge at all**, the fastest SDSP in the
- * game), Sinistral Wing (buff/debuff), Dextral Wing (status delivery, `Sp Mag`
- * off the wing's own Magic). **Sword Dance is the strongest thing in the game
- * per action** — 48 x2 hits vs every enemy, both hits self-chaining
- * [§2.9.2] — and is why `ffx2-bahamut.md` §3.3 recommends the transformation.
+ * Generated from the kernel tables (the part, the MP, the status chances and the targets are read off each row); the numbers the damage kernels run on are the rows themselves
+ * (`../command-records/special.ts`, attached by id), so the fields below are the menu's: the name, the MP, who it can target, the statuses it carries, the flags. Parts, in order: the main body,
+ * then full-throttle-right and full-throttle-left.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
-import { CT_MEDIUM, RT_NORMAL } from './helpers.ts';
+import { special } from './special-build.ts';
 
 export const fullThrottleAbilities: AbilityDef[] = [
-  // --- main body (0 MP, RT only) ----------------------------------------------
-  {
-    id: 'x2-full-throttle-attack',
-    name: 'Attack',
-    game: 'ffx2',
-    category: 'attack',
-    mpCost: 0,
-    chargeTicks: 0,
-    recoveryTicks: RT_NORMAL,
-    power: 16,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible'],
-    messageTemplate: '{user} attacks {target}',
-  },
-  {
-    id: 'x2-full-throttle-aestus',
-    name: 'Aestus',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: 0,
-    recoveryTicks: RT_NORMAL,
-    power: 20,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['fire'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible'],
-    messageTemplate: '{user} uses Aestus',
-  },
-  {
-    id: 'x2-full-throttle-fiers',
-    name: 'Fiers',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: 0,
-    recoveryTicks: RT_NORMAL,
-    power: 16,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible'],
-    bonusCrit: 100, // guaranteed critical -> effective power 32 [ffx2-combat-core §2.9.2]
-    messageTemplate: '{user} uses Fiers',
-  },
-  {
-    id: 'x2-full-throttle-deeth',
-    name: 'Deeth',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: 0,
-    recoveryTicks: RT_NORMAL,
-    power: 20,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [{ status: 'ko', chance: 90, duration: 0 }],
-    removesStatuses: [],
-    flags: ['crit-eligible'],
-    messageTemplate: '{user} uses Deeth',
-  },
-  {
-    id: 'x2-full-throttle-fright',
-    name: 'Fright',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 24,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-enemy',
-    hits: 1,
-    statusEffects: [
-      { status: 'confuse', chance: 254, duration: 255 },
-      { status: 'delay-effect', chance: 254, duration: 0 },
-    ],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'weak-delay'],
-    messageTemplate: '{user} uses Fright',
-  },
-  {
-    id: 'x2-full-throttle-sword-dance',
-    name: 'Sword Dance',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 48,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'all-enemies',
-    hits: 2,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range'],
-    messageTemplate: '{user} uses Sword Dance',
-  },
-  // --- Sinistral Wing (buff/debuff) --------------------------------------------
-  {
-    id: 'x2-full-throttle-steel-feather',
-    name: 'Steel Feather',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'all-allies',
-    hits: 1,
-    statusEffects: [{ status: 'str-up', chance: 254, duration: 255, stacks: 2 }],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Steel Feather',
-  },
-  {
-    id: 'x2-full-throttle-diamond-feather',
-    name: 'Diamond Feather',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'all-allies',
-    hits: 1,
-    statusEffects: [{ status: 'def-up', chance: 254, duration: 255, stacks: 2 }],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Diamond Feather',
-  },
-  {
-    id: 'x2-full-throttle-buckle-feather',
-    name: 'Buckle Feather',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 16,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'all-enemies',
-    hits: 1,
-    statusEffects: [{ status: 'def-down', chance: 254, duration: 255, stacks: 4 }], // 4, not 2 [§2.9.2]
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Buckle Feather',
-  },
-  {
-    id: 'x2-full-throttle-pumice-feather',
-    name: 'Pumice Feather',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 38,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'all-allies',
-    hits: 1,
-    statusEffects: [{ status: 'haste', chance: 254, duration: 50 }],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Pumice Feather',
-  },
-  {
-    id: 'x2-full-throttle-stamina',
-    name: 'Stamina',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 31,
-    formula: 'healing',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'single-ally',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['heals'],
-    messageTemplate: '{user} uses Stamina',
-  },
-  {
-    id: 'x2-full-throttle-reboot',
-    name: 'Reboot',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'single-ally',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['can-target-dead', 'misses-if-target-alive'],
-    messageTemplate: '{user} uses Reboot',
-    extra: { revivePercent: 100 },
-  },
-  // --- Dextral Wing (status delivery, all 18/Sp Mag/12MP/CT) -------------------
-  {
-    id: 'x2-full-throttle-venom-wing',
-    name: 'Venom Wing',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 18,
-    formula: 'special-magic',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'single-enemy',
-    hits: 1,
-    statusEffects: [{ status: 'poison', chance: 254, duration: 255 }],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Venom Wing',
-  },
-  {
-    id: 'x2-full-throttle-lazy-wing',
-    name: 'Lazy Wing',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 18,
-    formula: 'special-magic',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'single-enemy',
-    hits: 1,
-    statusEffects: [{ status: 'sleep', chance: 254, duration: 97 }], // corrected to Sleep, not Slow [§2.9.2]
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Lazy Wing',
-  },
-  {
-    id: 'x2-full-throttle-still-wing',
-    name: 'Still Wing',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 18,
-    formula: 'special-magic',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'single-enemy',
-    hits: 1,
-    statusEffects: [{ status: 'stop', chance: 100, duration: 100 }],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Still Wing',
-  },
+  special("x2-full-throttle-attack", "Attack", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', [], 'attack'), // main
+  special("x2-full-throttle-fright", "Fright", 0, [{ status: 'confuse', chance: 254, duration: 255 }], [], 'single-enemy', [], 'skill'), // main
+  special("x2-full-throttle-aestus", "Aestus", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', ['fire'], 'skill'), // main
+  special("x2-full-throttle-winterkill", "Winterkill", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', ['ice'], 'skill'), // main
+  special("x2-full-throttle-whelmen", "Whelmen", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', ['water'], 'skill'), // main
+  special("x2-full-throttle-levin", "Levin", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', ['lightning'], 'skill'), // main
+  special("x2-full-throttle-wisenen", "Wisenen", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', ['gravity'], 'skill'), // main
+  special("x2-full-throttle-fiers", "Fiers", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', [], 'skill'), // main
+  special("x2-full-throttle-deeth", "Deeth", 0, [{ status: 'ko', chance: 90, duration: 255 }], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', [], 'skill'), // main
+  special("x2-full-throttle-assoil", "Assoil", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', ['holy'], 'skill'), // main
+  special("x2-full-throttle-sword-dance", "Sword Dance", 0, [], [], 'all-enemies', [], 'skill'), // main
+  special("x2-full-throttle-venom-wing", "Venom Wing", 12, [{ status: 'poison', chance: 254, duration: 255 }], [], 'single-enemy', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-blind-wing", "Blind Wing", 12, [{ status: 'darkness', chance: 254, duration: 255 }], [], 'single-enemy', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-mute-wing", "Mute Wing", 12, [{ status: 'silence', chance: 254, duration: 255 }], [], 'single-enemy', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-rock-wing", "Rock Wing", 12, [{ status: 'petrify', chance: 100, duration: 255 }], [], 'single-enemy', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-lazy-wing", "Lazy Wing", 12, [{ status: 'sleep', chance: 254, duration: 255 }], [], 'single-enemy', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-violent-wing", "Violent Wing", 12, [{ status: 'berserk', chance: 254, duration: 255 }], [], 'single-enemy', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-still-wing", "Still Wing", 12, [{ status: 'stop', chance: 100, duration: 100 }], [], 'single-enemy', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-crazy-wing", "Crazy Wing", 12, [{ status: 'confuse', chance: 254, duration: 255 }], [], 'single-enemy', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-stamina-dextral", "Stamina", 0, [], ['heals'], 'single-ally', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-mettle-dextral", "Mettle", 0, [], ['heals'], 'single-ally', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-reboot-dextral", "Reboot", 0, [{ status: 'ko', chance: 254, duration: 255 }], ['heals', 'can-target-dead', 'misses-if-target-alive', 'removes-statuses'], 'single-ally', [], 'skill'), // full-throttle-right
+  special("x2-full-throttle-steel-feather", "Steel Feather", 12, [{ status: 'str-up', chance: 254, duration: 255, stacks: 2 }], [], 'all-allies', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-diamond-feather", "Diamond Feather", 12, [{ status: 'def-up', chance: 254, duration: 255, stacks: 2 }], [], 'all-allies', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-white-feather", "White Feather", 16, [{ status: 'str-down', chance: 254, duration: 255, stacks: 2 }], [], 'all-enemies', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-buckle-feather", "Buckle Feather", 16, [{ status: 'def-down', chance: 254, duration: 255, stacks: 2 }], [], 'all-enemies', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-cloudy-feather", "Cloudy Feather", 16, [{ status: 'mag-down', chance: 254, duration: 255, stacks: 2 }], [], 'all-enemies', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-pointed-feather", "Pointed Feather", 16, [{ status: 'mdef-down', chance: 254, duration: 255, stacks: 2 }], [], 'all-enemies', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-pumice-feather", "Pumice Feather", 38, [{ status: 'haste', chance: 254, duration: 50 }], [], 'all-allies', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-maats-feather", "Ma'at's Feather", 0, [], [], 'single-enemy', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-stamina", "Stamina", 0, [], ['heals'], 'single-ally', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-mettle-sinistral", "Mettle", 0, [], ['heals'], 'single-ally', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-reboot", "Reboot", 0, [{ status: 'ko', chance: 254, duration: 255 }], ['heals', 'can-target-dead', 'misses-if-target-alive', 'removes-statuses'], 'single-ally', [], 'skill'), // full-throttle-left
 ];
-
-export default fullThrottleAbilities;

@@ -106,8 +106,9 @@ export function ownerUnits(units: readonly Ffx2Unit[]): Array<Ffx2Unit | undefin
 /** The nine owner slots as the roll reads them: a girl is present unless her slot is empty, ejected when she was removed by Eject. */
 export function rewardOwnersOf(owners: ReadonlyArray<Ffx2Unit | undefined>): RewardOwner[] {
   return owners.map((unit, slot) => ({
-    present: unit !== undefined,
-    ejected: unit?.removed === true,
+    // a Special pod standing down is not in the party this battle, and a girl parked while her sister wears a Special is out of the field but not Ejected (`special/enter.ts`)
+    present: unit !== undefined && unit.aiMemory?.['sdspDormant'] !== true,
+    ejected: unit?.removed === true && unit.aiMemory?.['sdspParked'] !== true,
     word1: unit?.autoWords?.[1] ?? 0,
     pointless: unit?.statuses['pointless'] !== undefined,
     saveIndex: slot,

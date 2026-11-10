@@ -18,14 +18,14 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 1287, from 2026-09-15 to 2026-11-09 (ids A-0001 to A-1287), 1017 of them linked to at least one decision (1327 distinct decision ids).
+- **Rows:** 1289, from 2026-09-15 to 2026-11-09 (ids A-0001 to A-1289), 1019 of them linked to at least one decision (1335 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
-| implementation | 460 |
+| implementation | 461 |
 | art | 114 |
 | deploy | 107 |
-| review | 278 |
+| review | 279 |
 | records | 73 |
 | infrastructure | 34 |
 | account | 30 |
@@ -37,21 +37,33 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 |---|---|
 | September 2026 | 297 |
 | October 2026 | 836 |
-| November 2026 | 154 |
+| November 2026 | 156 |
 
-- **By game:** 927 both, 129 FFX, 125 n/a, 106 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 927 both, 129 FFX, 125 n/a, 108 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 107 deploy rows: 92 lines of docs/deploys.log (67 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to 04:53 EST (2026-11-07).
-- **Reviews:** 278 rows: 72 focused reviews (68 SHIP, 3 HOLD, 1 no verdict), 75 live checks (72 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 30 deep rounds with a report (14 SHIP, 10 no verdict, 6 HOLD) and 101 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
+- **Reviews:** 279 rows: 72 focused reviews (68 SHIP, 3 HOLD, 1 no verdict), 75 live checks (72 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 30 deep rounds with a report (14 SHIP, 10 no verdict, 6 HOLD) and 102 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 80 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[11-09](#2026-11-09) (18) · [11-08](#2026-11-08) (12) · [11-07](#2026-11-07) (27) · [11-06](#2026-11-06) (32) · [11-04](#2026-11-04) (3) · [11-03](#2026-11-03) (16) · [11-02](#2026-11-02) (27) · [11-01](#2026-11-01) (19) · [10-31](#2026-10-31) (30) · [10-30](#2026-10-30) (15) · [10-29](#2026-10-29) (22) · [10-28](#2026-10-28) (31) · [10-27](#2026-10-27) (10) · [10-26](#2026-10-26) (3) · [10-25](#2026-10-25) (21) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[11-09](#2026-11-09) (20) · [11-08](#2026-11-08) (12) · [11-07](#2026-11-07) (27) · [11-06](#2026-11-06) (32) · [11-04](#2026-11-04) (3) · [11-03](#2026-11-03) (16) · [11-02](#2026-11-02) (27) · [11-01](#2026-11-01) (19) · [10-31](#2026-10-31) (30) · [10-30](#2026-10-30) (15) · [10-29](#2026-10-29) (22) · [10-28](#2026-10-28) (31) · [10-27](#2026-10-27) (10) · [10-26](#2026-10-26) (3) · [10-25](#2026-10-25) (21) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-11-09
 
+- **A-1289** · `review` · FFX-2 · **Adversarial review of the Specials branch (7516dbf8e) and its fix pass: two majors in the form's end, a pod bug found while testing, his yes put on record, the minors fixed**
+  - What: The review re-read the raw kernel tables against the fixture (99 rows, no difference), ran the 210-run flag-off census and the SFX golden diff, and probed the flag-on form. The fix pass: a girl already Ejected is not parked; the form's Auto-Life carries a source mark and comes off with the form; a fall rebuilds the girl's automatic layer; every form still on ends when the battle's result is built; the pods are made new in place (the engine's slot order is kept by object and checked by length, so a swapped pod was never stepped); two gridNodeContents callers pass the switch; the stale community growth rows left the data; his answer to D-1499 was found in the driver's chat and put on record; the paper preflight, the handoff and the ledgers were written; the cards' captions got a backing strip. New test file ffx2-special-form-edges.test.ts (9 tests). Still open: pick 8 (a fallen main body ends the form) has only a fan thread behind it; no Ghidra instance ran.
+  - Who: FFX-2 Specials lane (a sub-agent of the driver), fix pass after an adversarial review sub-agent · Decisions: D-937, D-1499, D-1504, D-1513, D-1514, D-1515, D-1516, D-1517, D-1518, D-1519
+  - Result: done on branch ffx2-specials; no critical finding; every major and the cheap minors fixed; not merged, not deployed
+  - Evidence: `docs/handoff/ffx2-specials.md section 8` · `docs/plans/ffx2-specials-review.md` · `tests/unit/ffx2-special-form-edges.test.ts`
+  - Reversible: yes, a branch; nothing merged or deployed
+- **A-1288** · `implementation` · FFX-2 · **FFX-2 Special dresspheres (Floral Fallal, Machina Maw, Full Throttle): the engine, the 99 command rows, the research note and three look cards, behind a switch that is OFF (branch ffx2-specials)**
+  - What: The Special Dress Up through the real Garment Grid walk, three-part actors with the game's own growth rows, every command of the nine parts as the game's row (a fixture pinned by a test), the Ribbon wards, the form's end and the way out, new battle/ffx2/special/ files and switch-gated hooks, the research note and three look options for decision 92d (the cards stay in scratch and wait for Bailey's pick); the measurement of the Farplane Cup's first duel with each Special (a bot, never tuned). With the switch off every shipped chapter plays as before (a 210-run census, branch against main). Nothing perceivable was built: the presenter, HUD, wheel and sprites wait for his pick of the look.
+  - Who: FFX-2 Specials lane (a sub-agent of the driver) · Decisions: D-937, D-1499, D-1504, D-1513, D-1514, D-1515, D-1516, D-1517, D-1518, D-1519
+  - Result: done on branch ffx2-specials (switch OFF); not merged, not deployed; the look waits for his pick (92d); which chapters turn it on is not decided
+  - Evidence: `research/re-ffx2-special-dresspheres.md` · `docs/handoff/ffx2-specials.md` · `tests/unit/ffx2-special-dress-up.test.ts` · `tests/unit/data-ffx2-special-rows.test.ts` · `tests/unit/chapters/farplane-cup-specials.test.ts` · `commits c9673e94a and 7516dbf8e on branch ffx2-specials`
+  - Reversible: yes, a branch; nothing merged, deployed or shipped; the switch is off in every build
 - **A-1287** · `records` · both · **Recorded release 79 on main: A-1275 to A-1287, D-1504 to D-1512, the deploy records, the CHANGELOG address, LIVE.md, the in-flight list, the promises check and NOW.md (records only)**
   - What: Two fast-forward pushes of origin/main from a61354d59 (release 78's records): release 79's own commits (the merge of r79-int and the release notes, 193f6aef4) with the deploy records (docs/deploys.log line 96, the ledger, the artifact manifest, the pending marker with live done PASS and focused and deep pending, the focused and live reports with their small JSON evidence and the pictures under 200 KB; the pictures over 200 KB, the logs and the film stay in the release tree and the release tree's path prefix is replaced by a placeholder in what was committed), the CHANGELOG address with what the reviews read, docs/LIVE.md and the in-flight list (ch-belgemine, ch-garik-ronso and ch-shinryu left; ffx2-specials, wendigo-finish, ch-luca-opener, ch-oblitzerator and ch-gullwings-ch1 joined), then these ledgers and NOW.md. Queue items 221c to 221j became D-1504 to D-1511 (221a and 221b were already D-1497 and D-1498) and the release 79 deploy call D-1512; D-1499 was closed by D-1504. The promise tracker was refreshed and the release check read: 1 promise ships in the range (D-1474, the umbrella "every unimplemented chapter", recorded done only when the last chapter lands and not now), none recorded done here. The deploy build folder was removed after a check of 0 links.
   - Who: records sub-agent for the release driver · Decisions: D-1504, D-1505, D-1506, D-1507, D-1508, D-1509, D-1510, D-1511, D-1512

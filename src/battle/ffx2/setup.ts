@@ -36,7 +36,8 @@ import { autoWordsOf } from './adapt/menu.ts';
 import { baseRequired } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { applyStatus } from './statuses.ts';
-import { LEBLANC_SCRIPT_SINIROTHX, SEPARATE_BATTLE_GAUGES } from './constants.ts';
+import { LEBLANC_SCRIPT_SINIROTHX, SEPARATE_BATTLE_GAUGES, SPECIAL_DRESS_UP } from './constants.ts';
+import { isSpecialDress } from './special/forms.ts';
 import { newGauge } from './atb-engine.ts';
 import { openBattleGauges } from './atb-open.ts';
 import { aiScriptFor } from './ai/index.ts';
@@ -53,9 +54,10 @@ function emptyAtb(agi: number): Ffx2Unit['atb'] {
  * Exported for `app/screens/BattleScreenCarry.ts`, which keeps a carried girl's grid
  * laid out as it was when her worn dressphere rides into the next link (GP3 a).
  */
-export function gridNodeContents(member: FFX2MemberBuild, nodes: number): Array<string | null> {
+export function gridNodeContents(member: FFX2MemberBuild, nodes: number, specialsOffGrid = false): Array<string | null> {
   const out: Array<string | null> = new Array(nodes).fill(null);
-  const ordered = [member.currentDressphere, ...member.owned.filter((d) => d !== member.currentDressphere)];
+  // A Special cannot be placed in a node (combat-core 3.15); with the Special Dress Up switch on it never takes one, with it off the layout is as it always was.
+  const ordered = [member.currentDressphere, ...member.owned.filter((d) => d !== member.currentDressphere && !(specialsOffGrid && isSpecialDress(d)))];
   for (let i = 0; i < nodes && i < ordered.length; i++) out[i] = ordered[i] ?? null;
   // `noUncheckedIndexedAccess`: every slot is now `string | null`, never undefined.
   const at = member.garmentGrid.nodePosition;
@@ -295,7 +297,7 @@ export function buildState(
   party.members.forEach((member, i) => {
     const unit = buildMember(member, i, options);
     const grid = grids.get(member.garmentGrid.id);
-    gridNodes[unit.id] = gridNodeContents(member, grid?.nodes ?? 6);
+    gridNodes[unit.id] = gridNodeContents(member, grid?.nodes ?? 6, options.specialDressUp ?? SPECIAL_DRESS_UP);
     if (options.carriedParty) applyCarriedState(unit, options.carriedParty);
     if (enemies.restoresPartyOnEntry) restoreAtSaveSphere(unit);
     // Ribbon's wards (`kit.ts`). Her automatic statuses (the accessories' and the dressphere's Auto and SOS abilities) come from `initAutoLayers` below.
@@ -352,6 +354,7 @@ export function buildState(
       canEscape: setup.canEscape ?? enemies.canEscape ?? false,
       // PR-0106's switch, read by `ai/leblanc-syndicate.ts`; absent (OFF) leaves every state as it was.
       ...((options.leblancScriptSinirothX ?? LEBLANC_SCRIPT_SINIROTHX) ? { leblancScriptSinirothX: true } : {}),
+      ...((options.specialDressUp ?? SPECIAL_DRESS_UP) ? { specialDressUp: true } : {}), // Special Dress Up (`special/`), OFF by default
       ...inventoryFlags(party, options),
     },
   };

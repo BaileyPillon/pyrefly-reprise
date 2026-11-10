@@ -1,267 +1,46 @@
 /**
- * Floral Fallal — Yuna's special dressphere [ffx2-combat-core §2.9.2, §3.15, verified: 2 sources].
+ * Floral Fallal — Yuna's special dressphere: every command of its three parts, from the game's own rows [research/re-ffx2-special-dresspheres.md §4; verified: the game's tables].
  *
- * Three independently-commanded combatants: main body (Fallalery / Great
- * Whirl / Libra), Left Pistil (offence + status, all abilities 0 MP), Right
- * Pistil (support + debuff, all abilities 0 MP). A trimmed subset per part;
- * full lists run ~11 entries each. Great Whirl and the elemental Whirls all
- * use `formula: 'special-magic'` per the constant table's `Sp Mag` tag.
+ * Generated from the kernel tables (the part, the MP, the status chances and the targets are read off each row); the numbers the damage kernels run on are the rows themselves
+ * (`../command-records/special.ts`, attached by id), so the fields below are the menu's: the name, the MP, who it can target, the statuses it carries, the flags. Parts, in order: the main body,
+ * then floral-fallal-right-pistil and floral-fallal-left-pistil.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
-import { CT_MEDIUM, RT_NORMAL } from './helpers.ts';
+import { special } from './special-build.ts';
 
 export const floralFallalAbilities: AbilityDef[] = [
-  // --- main body -------------------------------------------------------------
-  {
-    id: 'x2-floral-fallal-attack',
-    name: 'Attack',
-    game: 'ffx2',
-    category: 'attack',
-    mpCost: 0,
-    chargeTicks: 0,
-    recoveryTicks: RT_NORMAL,
-    power: 16,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible'],
-    messageTemplate: '{user} attacks {target}',
-  },
-  {
-    id: 'x2-floral-fallal-heat-whirl',
-    name: 'Heat Whirl',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 8,
-    formula: 'special-magic',
-    damageType: 'magical',
-    element: ['fire'],
-    targeting: 'random-enemy',
-    hits: 3,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Heat Whirl',
-  },
-  {
-    id: 'x2-floral-fallal-barrier',
-    name: 'Barrier',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 36,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'self',
-    hits: 1,
-    statusEffects: [{ status: 'null-magic', chance: 254, duration: 20 }], // 20 -> 10.6s [§2.8]
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} casts Barrier',
-  },
-  {
-    id: 'x2-floral-fallal-flare-whirl',
-    name: 'Flare Whirl',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 64,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 18,
-    formula: 'special-magic',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'random-enemy',
-    hits: 3,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Flare Whirl',
-  },
-  {
-    id: 'x2-floral-fallal-great-whirl',
-    name: 'Great Whirl',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 8,
-    formula: 'special-magic',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'random-enemy',
-    hits: 12,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['long-range'], // reaches the Vegnagun Leg's Nodes [ffx2-vegnagun-shuyin §3.2]
-    messageTemplate: '{user} uses Great Whirl',
-  },
-  // --- Left Pistil (offence/status, 0 MP) -------------------------------------
-  {
-    id: 'x2-floral-fallal-dream-pollen',
-    name: 'Dream Pollen',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 18,
-    formula: 'special-magic',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'all-enemies',
-    hits: 1,
-    statusEffects: [{ status: 'sleep', chance: 100, duration: 97 }], // corrected to Sleep, not Slow [§2.9.2]
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Dream Pollen',
-  },
-  {
-    id: 'x2-floral-fallal-halfdeath-petals',
-    name: 'Halfdeath Petals',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 8, // 8/16 = 50% of current HP
-    formula: 'percent-current',
-    damageType: 'magical',
-    element: ['gravity'],
-    targeting: 'all-enemies',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Halfdeath Petals',
-  },
-  {
-    id: 'x2-floral-fallal-death-petals',
-    name: 'Death Petals',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [{ status: 'ko', chance: 20, duration: 0 }], // Status 2 [§2.6a]
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Death Petals',
-  },
-  {
-    id: 'x2-floral-fallal-left-stigma',
-    name: 'Left Stigma',
-    game: 'ffx2',
-    category: 'attack',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 24,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range'],
-    messageTemplate: '{user} uses Left Stigma',
-  },
-  // --- Right Pistil (support/debuff, 0 MP) ------------------------------------
-  {
-    id: 'x2-floral-fallal-white-pollen',
-    name: 'White Pollen',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 16,
-    formula: 'special-magic',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'all-allies',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['heals'],
-    messageTemplate: '{user} uses White Pollen',
-  },
-  {
-    id: 'x2-floral-fallal-tough-nuts',
-    name: 'Tough Nuts',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'all-allies',
-    hits: 1,
-    statusEffects: [{ status: 'protect', chance: 254, duration: 255 }],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Tough Nuts',
-  },
-  {
-    id: 'x2-floral-fallal-hard-leaves',
-    name: 'Hard Leaves',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'all-allies',
-    hits: 1,
-    statusEffects: [{ status: 'shell', chance: 254, duration: 255 }],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Hard Leaves',
-  },
-  {
-    id: 'x2-floral-fallal-right-stigma',
-    name: 'Right Stigma',
-    game: 'ffx2',
-    category: 'attack',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 24,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range'],
-    messageTemplate: '{user} uses Right Stigma',
-  },
+  special("x2-floral-fallal-attack", "Attack", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', [], 'attack'), // main
+  special("x2-floral-fallal-libra", "Libra", 0, [], [], 'single-enemy', [], 'skill'), // main
+  special("x2-floral-fallal-heat-whirl", "Heat Whirl", 0, [], [], 'random-enemy', ['fire'], 'skill'), // main
+  special("x2-floral-fallal-ice-whirl", "Ice Whirl", 0, [], [], 'random-enemy', ['ice'], 'skill'), // main
+  special("x2-floral-fallal-electric-whirl", "Electric Whirl", 0, [], [], 'random-enemy', ['lightning'], 'skill'), // main
+  special("x2-floral-fallal-aqua-whirl", "Aqua Whirl", 0, [], [], 'random-enemy', ['water'], 'skill'), // main
+  special("x2-floral-fallal-barrier", "Barrier", 36, [{ status: 'null-magic', chance: 254, duration: 20 }], [], 'self', [], 'skill'), // main
+  special("x2-floral-fallal-shield", "Shield", 36, [{ status: 'null-physical', chance: 254, duration: 20 }], [], 'self', [], 'skill'), // main
+  special("x2-floral-fallal-flare-whirl", "Flare Whirl", 64, [], [], 'random-enemy', [], 'skill'), // main
+  special("x2-floral-fallal-great-whirl", "Great Whirl", 0, [], [], 'random-enemy', [], 'skill'), // main
+  special("x2-floral-fallal-all-life", "All-Life", 70, [{ status: 'ko', chance: 254, duration: 255 }], ['heals', 'can-target-dead', 'misses-if-target-alive', 'removes-statuses'], 'all-allies', [], 'skill'), // main
+  special("x2-floral-fallal-white-pollen", "White Pollen", 0, [], ['heals'], 'all-allies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-white-honey", "White Honey", 0, [{ status: 'regen', chance: 254, duration: 100 }], [], 'all-allies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-hard-leaves", "Hard Leaves", 0, [{ status: 'shell', chance: 254, duration: 100 }], [], 'all-allies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-tough-nuts", "Tough Nuts", 0, [{ status: 'protect', chance: 254, duration: 100 }], [], 'all-allies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-mirror-petals", "Mirror Petals", 0, [{ status: 'reflect', chance: 254, duration: 100 }], [], 'all-allies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-floral-rush", "Floral Rush", 0, [{ status: 'haste', chance: 254, duration: 50 }], [], 'all-allies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-floral-bomb", "Floral Bomb", 0, [{ status: 'str-down', chance: 254, duration: 255, stacks: 1 }], ['crit-eligible'], 'all-enemies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-fallal-bomb", "Fallal Bomb", 0, [{ status: 'def-down', chance: 254, duration: 255, stacks: 1 }], ['crit-eligible'], 'all-enemies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-floral-magisol", "Floral Magisol", 0, [{ status: 'mag-down', chance: 254, duration: 255, stacks: 1 }], ['crit-eligible'], 'all-enemies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-fallal-magisol", "Fallal Magisol", 0, [{ status: 'mdef-down', chance: 254, duration: 255, stacks: 1 }], ['crit-eligible'], 'all-enemies', [], 'skill'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-right-stigma", "Right Stigma", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', [], 'attack'), // floral-fallal-right-pistil
+  special("x2-floral-fallal-dream-pollen", "Dream Pollen", 0, [{ status: 'sleep', chance: 100, duration: 255 }], [], 'all-enemies', [], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-mad-seeds", "Mad Seeds", 0, [{ status: 'berserk', chance: 100, duration: 255 }], [], 'all-enemies', [], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-sticky-honey", "Sticky Honey", 0, [{ status: 'slow', chance: 100, duration: 100 }], [], 'all-enemies', [], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-halfdeath-petals", "Halfdeath Petals", 0, [], [], 'all-enemies', ['gravity'], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-poison-leaves", "Poison Leaves", 0, [{ status: 'poison', chance: 100, duration: 255 }], [], 'all-enemies', [], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-death-petals", "Death Petals", 0, [{ status: 'ko', chance: 254, duration: 255 }], [], 'single-enemy', [], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-silent-white", "Silent White", 0, [{ status: 'silence', chance: 100, duration: 255 }, { status: 'darkness', chance: 100, duration: 255 }], ['crit-eligible'], 'all-enemies', [], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-congealed-honey", "Congealed Honey", 0, [{ status: 'stop', chance: 100, duration: 100 }], ['crit-eligible'], 'all-enemies', [], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-panic-floralysis", "Panic Floralysis", 0, [{ status: 'confuse', chance: 100, duration: 255 }], ['crit-eligible'], 'all-enemies', [], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-ash-floralysis", "Ash Floralysis", 0, [{ status: 'petrify', chance: 80, duration: 255 }], ['crit-eligible'], 'all-enemies', [], 'skill'), // floral-fallal-left-pistil
+  special("x2-floral-fallal-left-stigma", "Left Stigma", 0, [], ['crit-eligible', 'affected-by-darkness'], 'single-enemy', [], 'attack'), // floral-fallal-left-pistil
 ];
-
-export default floralFallalAbilities;

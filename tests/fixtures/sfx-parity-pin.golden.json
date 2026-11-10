@@ -1466,7 +1466,6 @@
    "ability:imp:x2-den-nooj-greedy-aura",
    "ability:imp:x2-den-nooj-lightfall",
    "ability:imp:x2-experiment-lifeslicer",
-   "ability:imp:x2-full-throttle-reboot",
    "ability:imp:x2-gun-mage-1000-needles",
    "ability:imp:x2-gun-mage-fiend-hunter-lv2",
    "ability:imp:x2-gun-mage-scan",
@@ -1505,8 +1504,6 @@
    "ability:imp:x2-lady-luck-two-dice",
    "ability:imp:x2-leblanc-mach-fan",
    "ability:imp:x2-logos-hail-of-bullets",
-   "ability:imp:x2-machina-maw-mp-repair",
-   "ability:imp:x2-machina-maw-vajra",
    "ability:imp:x2-magus-delta-attack",
    "ability:imp:x2-mascot-auto-protect",
    "ability:imp:x2-mascot-auto-shell",
@@ -1571,7 +1568,6 @@
    "ability:yuna:x2-den-nooj-greedy-aura",
    "ability:yuna:x2-den-nooj-lightfall",
    "ability:yuna:x2-experiment-lifeslicer",
-   "ability:yuna:x2-full-throttle-reboot",
    "ability:yuna:x2-gun-mage-1000-needles",
    "ability:yuna:x2-gun-mage-fiend-hunter-lv2",
    "ability:yuna:x2-gun-mage-scan",
@@ -1610,8 +1606,6 @@
    "ability:yuna:x2-lady-luck-two-dice",
    "ability:yuna:x2-leblanc-mach-fan",
    "ability:yuna:x2-logos-hail-of-bullets",
-   "ability:yuna:x2-machina-maw-mp-repair",
-   "ability:yuna:x2-machina-maw-vajra",
    "ability:yuna:x2-magus-delta-attack",
    "ability:yuna:x2-mascot-auto-protect",
    "ability:yuna:x2-mascot-auto-shell",
@@ -1652,8 +1646,6 @@
    "ability:imp:x2-bulwark-right-regen",
    "ability:imp:x2-cindy-regen",
    "ability:imp:x2-den-baralai-regen",
-   "ability:imp:x2-full-throttle-diamond-feather",
-   "ability:imp:x2-full-throttle-steel-feather",
    "ability:imp:x2-item-hero-drink",
    "ability:imp:x2-item-stamina-tonic",
    "ability:imp:x2-item-three-stars",
@@ -1677,8 +1669,6 @@
    "ability:yuna:x2-bulwark-right-regen",
    "ability:yuna:x2-cindy-regen",
    "ability:yuna:x2-den-baralai-regen",
-   "ability:yuna:x2-full-throttle-diamond-feather",
-   "ability:yuna:x2-full-throttle-steel-feather",
    "ability:yuna:x2-item-hero-drink",
    "ability:yuna:x2-item-stamina-tonic",
    "ability:yuna:x2-item-three-stars",
@@ -1738,7 +1728,7 @@
    "ability:imp:x2-ixion-recharge",
    "ability:imp:x2-leblanc-white-wind",
    "ability:imp:x2-machina-maw-hp-repair",
-   "ability:imp:x2-machina-maw-revival",
+   "ability:imp:x2-machina-maw-mp-repair",
    "ability:imp:x2-node-cura",
    "ability:imp:x2-redoubt-full-life",
    "ability:imp:x2-samurai-clean-slate",
@@ -1775,7 +1765,7 @@
    "ability:yuna:x2-ixion-recharge",
    "ability:yuna:x2-leblanc-white-wind",
    "ability:yuna:x2-machina-maw-hp-repair",
-   "ability:yuna:x2-machina-maw-revival",
+   "ability:yuna:x2-machina-maw-mp-repair",
    "ability:yuna:x2-node-cura",
    "ability:yuna:x2-redoubt-full-life",
    "ability:yuna:x2-samurai-clean-slate",
@@ -1795,6 +1785,12 @@
    "ability:imp:x2-trainer-flurry-speed",
    "ability:yuna:x2-trainer-flurry-speed"
   ],
+  "v2:magic-charge-x2@0.7+-#510 v2:cure-x2@0.7+-#890 v2:status-applied@0.7+-#1080 v2:status-applied@0.5+-#1270": [
+   "ability:imp:x2-full-throttle-reboot",
+   "ability:imp:x2-machina-maw-revival",
+   "ability:yuna:x2-full-throttle-reboot",
+   "ability:yuna:x2-machina-maw-revival"
+  ],
   "v2:magic-charge-x2@0.7+-#510 v2:debuff-generic-x2@0.5+-#890": [
    "ability:imp:x2-bahamut-curse",
    "ability:imp:x2-bulwark-left-break",
@@ -1803,7 +1799,6 @@
    "ability:imp:x2-dark-knight-confuse",
    "ability:imp:x2-dark-knight-doom",
    "ability:imp:x2-den-gippal-flash-bomb",
-   "ability:imp:x2-full-throttle-buckle-feather",
    "ability:imp:x2-gun-mage-stone-breath",
    "ability:imp:x2-item-candle-of-life",
    "ability:imp:x2-item-gold-hourglass",
@@ -1823,7 +1818,6 @@
    "ability:yuna:x2-dark-knight-confuse",
    "ability:yuna:x2-dark-knight-doom",
    "ability:yuna:x2-den-gippal-flash-bomb",
-   "ability:yuna:x2-full-throttle-buckle-feather",
    "ability:yuna:x2-gun-mage-stone-breath",
    "ability:yuna:x2-item-candle-of-life",
    "ability:yuna:x2-item-gold-hourglass",
@@ -1968,15 +1962,41 @@
    "ability:yuna:x2-vegnagun-odi-et-amo",
    "ability:yuna:x2-vegnagun-pallida-mors"
   ],
+  "v2:magic-charge-x2@0.7+-#510 v2:flare-x2@0.8+-#890 v2:hit-1@0.8+-#1080 v2:buff-generic-x2@0.5+-#1270": [
+   "ability:imp:x2-full-throttle-diamond-feather",
+   "ability:imp:x2-full-throttle-steel-feather",
+   "ability:yuna:x2-full-throttle-diamond-feather",
+   "ability:yuna:x2-full-throttle-steel-feather"
+  ],
   "v2:magic-charge-x2@0.7+-#510 v2:flare-x2@0.8+-#890 v2:hit-1@0.8+-#1080 v2:debuff-generic-x2@0.5+-#1270": [
+   "ability:imp:x2-full-throttle-buckle-feather",
    "ability:imp:x2-vegnagun-vita-brevis",
+   "ability:yuna:x2-full-throttle-buckle-feather",
    "ability:yuna:x2-vegnagun-vita-brevis"
+  ],
+  "v2:magic-charge-x2@0.7+-#510 v2:flare-x2@0.8+-#890 v2:hit-1@0.8+-#1080 v2:haste@0.5+-#1270": [
+   "ability:imp:x2-full-throttle-pumice-feather",
+   "ability:imp:x2-machina-maw-booster",
+   "ability:yuna:x2-full-throttle-pumice-feather",
+   "ability:yuna:x2-machina-maw-booster"
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:flare-x2@0.8+-#890 v2:hit-1@0.8+-#1080 v2:poison@0.5+-#1270": [
    "ability:imp:x2-anima-stare",
    "ability:imp:x2-full-throttle-venom-wing",
    "ability:yuna:x2-anima-stare",
    "ability:yuna:x2-full-throttle-venom-wing"
+  ],
+  "v2:magic-charge-x2@0.7+-#510 v2:flare-x2@0.8+-#890 v2:hit-1@0.8+-#1080 v2:protect@0.5+-#1270": [
+   "ability:imp:x2-floral-fallal-tough-nuts",
+   "ability:yuna:x2-floral-fallal-tough-nuts"
+  ],
+  "v2:magic-charge-x2@0.7+-#510 v2:flare-x2@0.8+-#890 v2:hit-1@0.8+-#1080 v2:shell@0.5+-#1270": [
+   "ability:imp:x2-floral-fallal-barrier",
+   "ability:imp:x2-floral-fallal-hard-leaves",
+   "ability:imp:x2-machina-maw-shellter",
+   "ability:yuna:x2-floral-fallal-barrier",
+   "ability:yuna:x2-floral-fallal-hard-leaves",
+   "ability:yuna:x2-machina-maw-shellter"
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:flare-x2@0.8+-#890 v2:hit-1@0.8+-#1080 v2:silence@0.5+-#1270 v2:status-applied@0.5+-#1490": [
    "ability:imp:x2-anima-pain",
@@ -1990,6 +2010,10 @@
    "ability:yuna:x2-floral-fallal-dream-pollen",
    "ability:yuna:x2-full-throttle-lazy-wing"
   ],
+  "v2:magic-charge-x2@0.7+-#510 v2:flare-x2@0.8+-#890 v2:hit-1@0.8+-#1080 v2:status-applied@0.5+-#1270": [
+   "ability:imp:x2-floral-fallal-death-petals",
+   "ability:yuna:x2-floral-fallal-death-petals"
+  ],
   "v2:magic-charge-x2@0.7+-#510 v2:flare-x2@0.8+-#890 v2:hit-1@0.8+-#1080 v2:stop@0.5+-#1270": [
    "ability:imp:x2-full-throttle-still-wing",
    "ability:yuna:x2-full-throttle-still-wing"
@@ -2002,19 +2026,15 @@
    "status-in-action:defend"
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:haste@0.5+-#890": [
-   "ability:imp:x2-full-throttle-pumice-feather",
    "ability:imp:x2-item-chocobo-feather",
    "ability:imp:x2-item-chocobo-wing",
    "ability:imp:x2-leblanc-love-tap",
-   "ability:imp:x2-machina-maw-booster",
    "ability:imp:x2-shared-haste",
    "ability:imp:x2-shared-hastega",
    "ability:imp:x2-songstress-jitterbug",
-   "ability:yuna:x2-full-throttle-pumice-feather",
    "ability:yuna:x2-item-chocobo-feather",
    "ability:yuna:x2-item-chocobo-wing",
    "ability:yuna:x2-leblanc-love-tap",
-   "ability:yuna:x2-machina-maw-booster",
    "ability:yuna:x2-shared-haste",
    "ability:yuna:x2-shared-hastega",
    "ability:yuna:x2-songstress-jitterbug"
@@ -2077,7 +2097,9 @@
    "ability:yuna:x2-logos-double-shot",
    "ability:yuna:x2-machina-maw-attack",
    "ability:yuna:x2-machina-maw-howitzer",
+   "ability:yuna:x2-machina-maw-shockstorm",
    "ability:yuna:x2-machina-maw-shockwave",
+   "ability:yuna:x2-machina-maw-vajra",
    "ability:yuna:x2-mascot-cactling-gun",
    "ability:yuna:x2-node-dies-irae",
    "ability:yuna:x2-node-missile",
@@ -2106,10 +2128,10 @@
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:hit-gun@0.8+-#890 v2:hit-gun@0.8+-#1080 v2:debuff-generic-x2@0.5+-#1270": [
    "ability:yuna:paragon-attack-itchy",
+   "ability:yuna:x2-full-throttle-fright",
    "ability:yuna:x2-machina-maw-anti-magic-shell",
    "ability:yuna:x2-machina-maw-anti-power-shell",
    "ability:yuna:x2-machina-maw-blind-shell",
-   "ability:yuna:x2-machina-maw-shockstorm",
    "ability:yuna:x2-trainer-doom-kogoro",
    "ability:yuna:x2-trainer-ghiki-gouge",
    "ability:yuna:x2-warrior-armor-break",
@@ -2118,9 +2140,6 @@
    "ability:yuna:x2-warrior-magic-break",
    "ability:yuna:x2-warrior-mental-break",
    "ability:yuna:x2-warrior-power-break"
-  ],
-  "v2:magic-charge-x2@0.7+-#510 v2:hit-gun@0.8+-#890 v2:hit-gun@0.8+-#1080 v2:debuff-generic-x2@0.5+-#1270 v2:status-applied@0.5+-#1490": [
-   "ability:yuna:x2-full-throttle-fright"
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:hit-gun@0.8+-#890 v2:hit-gun@0.8+-#1080 v2:poison@0.5+-#1270": [
    "ability:yuna:paragon-attack-poison",
@@ -2193,7 +2212,9 @@
    "ability:imp:x2-logos-double-shot",
    "ability:imp:x2-machina-maw-attack",
    "ability:imp:x2-machina-maw-howitzer",
+   "ability:imp:x2-machina-maw-shockstorm",
    "ability:imp:x2-machina-maw-shockwave",
+   "ability:imp:x2-machina-maw-vajra",
    "ability:imp:x2-mascot-cactling-gun",
    "ability:imp:x2-node-dies-irae",
    "ability:imp:x2-node-missile",
@@ -2222,10 +2243,10 @@
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:hit-heavy-enemy@0.8+-#890 v2:hit-heavy-enemy@0.8+-#1080 v2:debuff-generic-x2@0.5+-#1270": [
    "ability:imp:paragon-attack-itchy",
+   "ability:imp:x2-full-throttle-fright",
    "ability:imp:x2-machina-maw-anti-magic-shell",
    "ability:imp:x2-machina-maw-anti-power-shell",
    "ability:imp:x2-machina-maw-blind-shell",
-   "ability:imp:x2-machina-maw-shockstorm",
    "ability:imp:x2-trainer-doom-kogoro",
    "ability:imp:x2-trainer-ghiki-gouge",
    "ability:imp:x2-warrior-armor-break",
@@ -2234,9 +2255,6 @@
    "ability:imp:x2-warrior-magic-break",
    "ability:imp:x2-warrior-mental-break",
    "ability:imp:x2-warrior-power-break"
-  ],
-  "v2:magic-charge-x2@0.7+-#510 v2:hit-heavy-enemy@0.8+-#890 v2:hit-heavy-enemy@0.8+-#1080 v2:debuff-generic-x2@0.5+-#1270 v2:status-applied@0.5+-#1490": [
-   "ability:imp:x2-full-throttle-fright"
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:hit-heavy-enemy@0.8+-#890 v2:hit-heavy-enemy@0.8+-#1080 v2:poison@0.5+-#1270": [
    "ability:imp:paragon-attack-poison",
@@ -2304,12 +2322,10 @@
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:protect@0.5+-#890": [
    "ability:imp:x2-bulwark-right-protect",
-   "ability:imp:x2-floral-fallal-tough-nuts",
    "ability:imp:x2-item-light-curtain",
    "ability:imp:x2-node-protect",
    "ability:imp:x2-white-mage-protect",
    "ability:yuna:x2-bulwark-right-protect",
-   "ability:yuna:x2-floral-fallal-tough-nuts",
    "ability:yuna:x2-item-light-curtain",
    "ability:yuna:x2-node-protect",
    "ability:yuna:x2-white-mage-protect"
@@ -2325,20 +2341,14 @@
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:shell@0.5+-#890": [
    "ability:imp:x2-bulwark-right-shell",
-   "ability:imp:x2-floral-fallal-barrier",
-   "ability:imp:x2-floral-fallal-hard-leaves",
    "ability:imp:x2-item-lunar-curtain",
    "ability:imp:x2-item-star-curtain",
-   "ability:imp:x2-machina-maw-shellter",
    "ability:imp:x2-node-shell",
    "ability:imp:x2-white-mage-reflect",
    "ability:imp:x2-white-mage-shell",
    "ability:yuna:x2-bulwark-right-shell",
-   "ability:yuna:x2-floral-fallal-barrier",
-   "ability:yuna:x2-floral-fallal-hard-leaves",
    "ability:yuna:x2-item-lunar-curtain",
    "ability:yuna:x2-item-star-curtain",
-   "ability:yuna:x2-machina-maw-shellter",
    "ability:yuna:x2-node-shell",
    "ability:yuna:x2-white-mage-reflect",
    "ability:yuna:x2-white-mage-shell"
@@ -2389,7 +2399,6 @@
   "v2:magic-charge-x2@0.7+-#510 v2:status-applied@0.5+-#890": [
    "ability:imp:x2-berserker-eject",
    "ability:imp:x2-dark-knight-death",
-   "ability:imp:x2-floral-fallal-death-petals",
    "ability:imp:x2-item-farplane-shadow",
    "ability:imp:x2-mascot-pupu-platter",
    "ability:imp:x2-samurai-shin-zantetsu",
@@ -2399,7 +2408,6 @@
    "ability:imp:x2-trainer-death-flurry",
    "ability:imp:x2-trainer-kogoro-strike",
    "ability:yuna:x2-dark-knight-death",
-   "ability:yuna:x2-floral-fallal-death-petals",
    "ability:yuna:x2-item-farplane-shadow",
    "ability:yuna:x2-samurai-shin-zantetsu",
    "ability:yuna:x2-samurai-zantetsu",

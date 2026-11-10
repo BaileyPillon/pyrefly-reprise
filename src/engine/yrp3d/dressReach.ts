@@ -8,6 +8,7 @@
 import type { FFX2MemberBuild } from '../../battle/common/types.ts';
 import { adjacentNodes, defaultGarmentGrids } from '../../battle/ffx2/garment-grids.ts';
 import { gridNodeContents } from '../../battle/ffx2/setup.ts';
+import { SPECIAL_DRESS_UP } from '../../battle/ffx2/constants.ts';
 import type { GarmentGridDef, GarmentGridRegistry } from '../../battle/ffx2/internal.ts';
 import type { Girl } from './dress.ts';
 
@@ -16,7 +17,7 @@ export function reachFor(members: readonly FFX2MemberBuild[], grids: GarmentGrid
   const laid = new Map<string, { grid: GarmentGridDef; contents: Array<string | null> }>();
   for (const m of members) {
     const grid = grids.get(m.garmentGrid.id);
-    if (grid) laid.set(m.id, { grid, contents: gridNodeContents(m, grid.nodes) });
+    if (grid) laid.set(m.id, { grid, contents: gridNodeContents(m, grid.nodes, SPECIAL_DRESS_UP) });
   }
   return (girl, current) => {
     const one = laid.get(girl);

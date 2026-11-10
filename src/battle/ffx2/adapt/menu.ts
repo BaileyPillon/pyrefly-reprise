@@ -205,7 +205,8 @@ export function offeredAbilityIds(actor: Ffx2Unit, sphere: DressphereDef | undef
 /** True when the ability's dressphere is a Special (its forms have no Item, no Escape and no Dresspheres command). */
 export function isSpecialWearer(actor: Ffx2Unit): boolean {
   const sphere = actor.dresspheres?.current;
-  return sphere !== undefined && SPECIAL_DRESSPHERE_IDS.has(sphere);
+  // a pod wears its own dressphere id and carries the form's state (`special/enter.ts`); the main body wears the Special's id
+  return actor.dresspheres?.special !== undefined || (sphere !== undefined && SPECIAL_DRESSPHERE_IDS.has(sphere));
 }
 
 /** Is this ability stopped by Silence? The row's own bit decides (88 rows, no parent); an ability with no game row keeps the old rule (the two spell menus). */
