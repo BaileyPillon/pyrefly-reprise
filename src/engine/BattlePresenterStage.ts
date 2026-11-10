@@ -55,7 +55,9 @@ import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
 import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
 import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
 import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
-import { heldOffStage } from './SummonStaging.ts';
+import { heldOffAll } from './SummonStaging.ts';
+import { anchorSourceOf, formHandleOf, formKeepIds, formSlots, markedPartsOf, partViewOf, setStageForm, specialFitOf, type StageForm } from './SpecialStaging.ts'; // FFX-2 Special look (step C2): every one answers "no form" until a form is registered
+import { isSpecialArtId } from './SpecialArtIds.ts';
 import { paceRate } from './pace.ts';
 import { ItemOrbStage } from './ItemOrbStage.ts'; // FFX item gesture: the orb of light and the hand it leaves (`BattlePresenterItem.ts`)
 import { SOFT_BLOOM_CAP, softWash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
@@ -208,7 +210,7 @@ export class PaintedStage implements BattleStage {
     this.groundLuma = groundLumaOf(opts.scene);
     this.arrivals = opts.arrivals ?? arrivalsOf(opts.scene);
     this.highlight = new TargetHighlight({
-      actor: (id) => this.actor(id),
+      actor: (id) => this.actors.get(id)?.actor,
       staged: () => this.staged(),
     });
     const still = (): boolean => opts.comfort?.().reduceMotion === true;
@@ -244,7 +246,7 @@ export class PaintedStage implements BattleStage {
     this.vfx = withOwnImpacts(this.makeVfxPort(), impactsOwned(opts.slots)); // a scene that draws its own hits has the shared impact effects off (`ownImpacts.ts`); any other scene keeps this very port
     this.art = new StageArt({
       actors: () => [...this.actors.values()].map((s) => s.actor),
-      party: () => [...this.actors.values()].filter((s) => s.kind === 'party').map((s) => s.actor),
+      party: () => [...this.actors.values()].filter((s) => s.kind === 'party' && !s.anchor).map((s) => s.actor),
       camera: opts.camera,
       canvas: opts.canvas,
       battleCamera: opts.battleCamera,
@@ -310,7 +312,7 @@ export class PaintedStage implements BattleStage {
   /** FFX-2 only (RUN-IN is the one user of the smear): which party figure's painting builds the smear's program in the opening; none under REDUCE MOTION, which never runs. */
   private smearWarmId(): CombatantId | undefined {
     if (this.opts.spellFx?.game !== 'ffx2' || this.opts.comfort?.().reduceMotion === true) return undefined;
-    for (const [id, s] of this.actors) if (s.kind === 'party') return id;
+    for (const [id, s] of this.actors) if (s.kind === 'party' && !s.anchor) return id;
     return undefined;
   }
 
@@ -331,6 +333,7 @@ export class PaintedStage implements BattleStage {
       ...(state.aeonIds ?? (state.aeonId ? [state.aeonId] : [])),
       ...state.enemyIds,
     ]);
+    for (const id of formKeepIds(this)) ids.add(id); // FFX-2 Special look: the girls a form parked survive a re-stage
     // Destructible parts are separate combatants that still need drawing.
     for (const c of Object.values(state.combatants)) {
       if (c.flags.isPart && !c.flags.hidden && !c.removed) ids.add(c.id);
@@ -354,6 +357,7 @@ export class PaintedStage implements BattleStage {
     this.applyFormation();
     // PR-0181 (FFX): a re-stage while an aeon is out keeps the party off the field (`SummonStaging.ts`).
     if (state.aeonId) for (const id of state.activeIds) this.actors.get(id)?.actor.setAlpha(0);
+    for (const id of formKeepIds(this)) this.actors.get(id)?.actor.setAlpha(0); // and stay off it
     // D-224: a Vegnagun link's seam re-stages the field (FFX-2, Ch V).
     const link = phaseForFormation(state.enemyIds);
     if (link) this.lighting.phase(link);
@@ -365,7 +369,7 @@ export class PaintedStage implements BattleStage {
     let x = 0;
     let z = 0;
     for (const s of this.actors.values()) {
-      if (s.kind !== 'party') continue;
+      if (s.kind !== 'party' || s.anchor) continue;
       x += s.actor.position.x;
       z += s.actor.position.z;
       n++;
@@ -375,11 +379,12 @@ export class PaintedStage implements BattleStage {
 
   /** What a figure's request reads of this stage (`StageFigureRequest.ts`). */
   private figureEnv(): FigureEnv {
-    return { slots: this.opts.slots, rim: this.opts.rim, rigs: this.opts.rigs, groundLuma: this.groundLuma, game: this.lastState?.game };
+    return { slots: formSlots(this, this.opts.slots), rim: this.opts.rim, rigs: this.opts.rigs, groundLuma: this.groundLuma, game: this.lastState?.game, specialFit: specialFitOf(this, this.opts) };
   }
 
   /** Add (or replace) one combatant's actor. */
   async add(c: AnyCombatant, worldHeight?: number): Promise<PaintedActor | undefined> {
+    c = partViewOf(this, c); // FFX-2 Special look: a pod of the registered form names the main as its parent
     this.removeCombatant(c.id);
     const kind = figureKind(c);
     // The mapped id first, then the raw ones, so a figure whose art has not
@@ -445,7 +450,7 @@ export class PaintedStage implements BattleStage {
   // ---------------------------------------------------------- BattleStage API
 
   actor(id: CombatantId): PaintedActor | undefined {
-    return this.actors.get(id)?.actor;
+    return formHandleOf(this, id, this.actors) ?? this.actors.get(id)?.actor; // FFX-2 Special look: a part's handle, the main's hit-gated figure; undefined with no form
   }
 
   sideOf(id: CombatantId): Side | undefined {
@@ -619,7 +624,7 @@ export class PaintedStage implements BattleStage {
     // to show the part would erase the very thing the ring marks (D-044).
     const anchored = id ? !!this.actors.get(id)?.anchor : false;
     const cover = id && !anchored ? new Set(this.occluders(id)) : new Set<CombatantId>();
-    const off = heldOffStage(this); // PR-0181: the party stays off while an aeon is out
+    const off = heldOffAll(this); // PR-0181: the party stays off while an aeon is out (and a Special form's parked girls)
     for (const [otherId, staged] of this.actors) {
       const wanted = off.has(otherId) ? 0 : cover.has(otherId) ? alpha : 1;
       if (Math.abs(staged.actor.alpha - wanted) > 0.01) void staged.actor.fadeTo(wanted, 140);
@@ -709,9 +714,10 @@ export class PaintedStage implements BattleStage {
   private fitFormHeight(id: CombatantId, staged: StagedActor, fromArt: string, toArt: string): void {
     const forms = this.opts.slots.formHeights;
     const c = this.lastState?.combatants[id];
-    if (!forms || !c || staged.anchor || (forms[fromArt] === undefined && forms[toArt] === undefined)) return;
+    const special = isSpecialArtId(fromArt) || isSpecialArtId(toArt); // FFX-2 Special look: the fitted height, in a scene with no `formHeights` too (Chapters IV and V)
+    if (!c || staged.anchor || (!special && (!forms || (forms[fromArt] === undefined && forms[toArt] === undefined)))) return;
     const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
-    const size = figureHeight({ shared: worldHeightFor(c, heights), own: sceneOwnHeight(this.opts.slots, id, toArt), given: undefined, stature: partyStature(this.lastState?.game, c.side, id) });
+    const size = figureHeight({ shared: worldHeightFor(c, heights), own: sceneOwnHeight(this.opts.slots, id, toArt, specialFitOf(this, this.opts)), given: undefined, stature: partyStature(this.lastState?.game, c.side, id) });
     const k = size.ringScale;
     const party = staged.kind === 'party';
     staged.actor.setWorldHeight(size.height, { shadow: (party ? 0.62 : 1.5) * k, ring: (party ? 0.78 : 1.7) * k });
@@ -897,6 +903,11 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     const parent = staged?.anchor ? this.parentPose(staged) : undefined;
     if (!staged?.anchor || !parent) return;
+    const src = anchorSourceOf(this); // FFX-2 Special look: the row for the painting the figure shows now; undefined with no form, so nothing else changes
+    if (src) {
+      staged.anchor = SA.anchorNow(staged.anchor, src, id, this.actors.get(staged.parentId ?? '')?.actor.pose ?? 'idle') ?? staged.anchor;
+      this.partRings.setAnchor(id, staged.anchor);
+    }
     staged.actor.position.set(...SA.anchoredSpot(staged.anchor, parent, staged.actor.height));
   }
 
@@ -928,6 +939,16 @@ export class PaintedStage implements BattleStage {
       }
     }
     return out;
+  }
+
+  /** FFX-2 Special look (`BattleStage.setForm`): register the form whose parts stand on the main's figure, or drop it. */
+  setForm(form: StageForm | null): void {
+    setStageForm(this, form);
+  }
+
+  /** FFX-2 Special look, part mark (b): light the rings of the aimed-at parts and put the rest out. A no-op under the default (a) and with no form. */
+  markParts(ids: readonly CombatantId[]): void {
+    for (const [id, on] of markedPartsOf(this, ids)) this.partRings.setMark(id, on);
   }
 
   /** The part rings' state, for the debug surface and the tests. */

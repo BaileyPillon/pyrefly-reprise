@@ -215,6 +215,12 @@ export function specialFitOf(stage: object, o: { slots: SceneSlots; canvas: { cl
   return makeSpecialFit({ partyHeight: o.slots.partyHeight ?? REFERENCE_PARTY_HEIGHT, enemyHeight: o.slots.enemyHeight ?? REFERENCE_ENEMY_HEIGHT, surface: surfaceOf(o.canvas.clientWidth, o.canvas.clientHeight) }, look);
 }
 
+/** The part marks the targeting port wants lit: [stub id, lit] for each stub of the registered form under the mark (b); empty under the default (a) and with no form. */
+export function markedPartsOf(stage: object, ids: readonly CombatantId[]): ReadonlyArray<readonly [CombatantId, boolean]> {
+  const form = forms.get(stage);
+  return form && look.mark === 'b' ? [form.right, form.left].map((id) => [id, ids.includes(id)] as const) : [];
+}
+
 /** The per-frame row source for the registered form's stubs (`StageAnchors.anchorNow`), else undefined. */
 export function anchorSourceOf(stage: object): ((partId: string, pose: string) => PartAnchor | undefined) | undefined {
   const form = forms.get(stage);
