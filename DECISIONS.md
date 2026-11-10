@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-2073 decisions in all: 1503 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1391 of the written decisions record a blanket yes.
+2082 decisions in all: 1512 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1392 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1946 |
-| proposed | 10 |
+| adopted | 1953 |
+| proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
-| superseded | 94 |
-| **All** | **2073** |
+| superseded | 97 |
+| **All** | **2082** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 157 |
+| combat | 158 |
 | art | 407 |
-| visuals | 180 |
+| visuals | 183 |
 | camera | 76 |
 | audio | 160 |
 | ui | 231 |
 | story | 17 |
-| chapters | 318 |
+| chapters | 320 |
 | guide | 34 |
-| release | 116 |
+| release | 117 |
 | hosting | 18 |
-| process | 231 |
+| process | 233 |
 | critic | 45 |
 | data | 17 |
 | tech | 45 |
 | site | 21 |
-| **All** | **2073** |
+| **All** | **2082** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 1102 |
+| both games | 1105 |
 | FFX only | 530 |
-| FFX-2 only | 423 |
+| FFX-2 only | 429 |
 | FF7 hidden experiment | 18 |
-| **All** | **2073** |
+| **All** | **2082** |
 
 ## Standing rules in force
 
@@ -136,7 +136,6 @@ Proposed, asked or drafted, with no yes on record. Nothing here is built.
 - [D-1049](#d-1049) — Still his own, not decidable by the driver (ear, eye or presence): the open music picks (D-253), the Behind the Scenes page (D-633, D-639) and the time of the Steam session (D-258)
 - [D-1293](#d-1293) — OPEN, not covered by his yes (no recommendation was stated to him first): the HUD’s open details of 193d (D-1286), Bahamut kept whole in frame during attacks (the party then fills 28 to 31 percent of …
 - [D-1371](#d-1371) — The owner listening verdict (CHK-B1) cannot be delegated because agents cannot hear: a short audition session stays on his list, asked as a plain line, with no deadline (both games)
-- [D-1499](#d-1499) — OPEN question, asked and not answered: should the FFX-2 engine model the Special dresspheres' own abilities (Floral Fallal, Machina Maw, Full Throttle)? The driver recommends building them (FFX-2 …
 
 Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
 
@@ -9748,7 +9747,7 @@ Friday · 22 decisions
 
 ### 2026-11-07
 
-Saturday · 7 decisions
+Saturday · 8 decisions
 
 - <a id="d-1495"></a>**D-1495** — He says "ok keep going we have full usage here" and the delegation stands: the held lanes resume (both games, process)
   - Bailey: “ok keep going we have full usage here”
@@ -9773,13 +9772,18 @@ Saturday · 7 decisions
 - <a id="d-1499"></a>**D-1499** — OPEN question, asked and not answered: should the FFX-2 engine model the Special dresspheres' own abilities (Floral Fallal, Machina Maw, Full Throttle)? The driver recommends building them (FFX-2 only)
   - Bailey: no verbatim quote on record for this decision
   - What changed: Item 221c. Stands as asked, not answered. Today a Special form is a plain attacker in the engine (the garment is registered; its own abilities are not modelled), so the Farplane Cup's first duel is won about 1 time in 9 as built (11 of 100 seeds; PR-0636). It is new gameplay, so nothing is built before his yes (AGENTS.md rule 10). The question was left open from 2026-11-07 about 15:50 EST; it blocked the scheduled checks of the copy that asked it and was part of the stall of A-1258.
-  - area combat · FFX-2 · proposed · nothing to build · see [D-1498](#d-1498), [D-1423](#d-1423)
+  - area combat · FFX-2 · superseded by [D-1504](#d-1504) · nothing to build · see [D-1498](#d-1498), [D-1423](#d-1423)
   - Source: The driver's question to Bailey of 2026-11-07 about 15:50 EST, put as a question with a recommendation (build them). Game case: FFX-2 only (the …
 - <a id="d-1500"></a>**D-1500** — DRIVER CALL under the standing deploy words, his to overturn: release 77 deploys on its focused review's SHIP (6429ff15e / DQzgTgdc; changed area UNVERIFIED, 0 critical; R77-1 and R77-2 disclosed) (both games)
   - Bailey: “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.”
   - What changed: Made by account #4's copy of the driver on 2026-11-07 about 22:00 EST, under D-931. The first deploy attempt stopped at the tool's login check before anything was uploaded; the retry deployed at 22:41 EST (A-1255). The deploy was the first since the deep review round 35b, so the ledger counted one deploy; the live check read PASS (A-1256). The deep review of this build is owed.
   - area release · both games · adopted · delivery implemented · see [D-931](#d-931), [D-1423](#d-1423), A-1254, A-1255
   - Source: The driver's state log of 2026-11-07 (22:20 and 22:50 EST lines), under his standing words of 2026-10-17 (D-931) and his delegation (D-1423). Game …
+- <a id="d-1504"></a>**D-1504** — He answers the Special dresspheres question with "Build them (Recommended)": the FFX-2 engine models Floral Fallal, Machina Maw and Full Throttle, in a later release (FFX-2 only)
+  - Bailey: “Build them (Recommended)” (blanket yes)
+  - What changed: Item 221c of the queue (the answer reached the log only on 2026-11-09 about 12:30 EST; he gave it as the AskUserQuestion pick on 2026-11-07 in the second account's window). The option text read: the real FFX-2 mechanic, the dress-up from the garment grid, each Special's own moves from the game files, and its portrait on the change and the finishers; a few days of work, in a later release. This closes D-1499, which stood as the open question. Item 92d stays in force: the Specials' look gets 2 to 4 options first, then the build (he picked card A on 2026-11-09 at about 14:45 EST, D-1507, and reading G at about 19:05 EST, D-1510). Built so far: the engine on origin/ffx2-specials (8e72c5191), behind the specialDressUp switch, which is OFF; the review's two engine majors fixed; with the switch off 210 of 210 seeded runs are identical to main; not merged, not deployed, queued for release 80 (A-1280). That branch wrote its own rows D-1504 to D-1511, A-1275 and A-1276 before this record existed: they renumber at the merge.
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-1499](#d-1499), [D-1507](#d-1507), [D-1510](#d-1510), [D-1423](#d-1423) · refines [D-1499](#d-1499)
+  - Source: Bailey, 2026-11-07, his answer to the AskUserQuestion "FFX-2 special dresspheres ... Should I build them?" in the second account's window, verbatim: …
 - **Picture** (presentation) — Approved: Turn cut-in
   - Bailey: “A: only on big moves”
   - Delivery: Live since release 77 (2026-11-08T03:41:51Z, D-1497): the slab shows on a big move only, full the first time a member does one in a fight and a 110 ms flash after; ?portraits=turns brings the old per-turn slab back. Implemented, not verified: the focused review and the live check of release 77 saw no big-move portrait frame.
@@ -9803,10 +9807,50 @@ Sunday · 2 decisions
 
 ### 2026-11-09
 
-Monday · 1 decision
+Monday · 9 decisions
 
 - <a id="d-1503"></a>**D-1503** — DRIVER CALL under the standing deploy words, his to overturn: release 78 (r78-fix, 44 Jenova LIFE, 46 Ifrit at Kilika, 49 Wendigo) deploys on its focused review's SHIP (cc0fea14a / BAH_qvc7; changed area FAIL on a carried class, no regression); wave 4 waits for release 79
   - Bailey: “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.”
   - What changed: Made by account #1's copy of the driver on 2026-11-09 about 00:50 EST, under D-931. The review read SHIP with 0 critical: R78-1 (major, in the new FF7 Jenova LIFE chapter, candidate-introduced, no regression) is disclosed. It was the second deploy while release 77's deep review is owed (allowed; the ledger counts 2), so release 79 waits for round 36. The Wendigo chapter adds 127.8 MiB of models to the site, fetched only when that hidden desktop chapter opens. Wave 4 (47 Garik Ronso, 48 Shinryu) was still being built and reviewed when the integration started, so it waits for release 79; the rebuild of 45 Belgemine (its first build hung on a permission prompt) is held until the records free space on D:. Deployed 05:54 UTC (00:54 EST).
   - area release · both games · adopted · delivery implemented · at ~01:20 EST · see [D-931](#d-931), [D-1494](#d-1494), A-1269, A-1270
   - Source: The driver's state log of 2026-11-08 17:55 to 2026-11-09 01:20 EST, under his standing words of 2026-10-17 (D-931) and the chapters program (D-1474 …
+- <a id="d-1505"></a>**D-1505** — He says "Keep going please with everything you were doing finish the wendigo chapter also" and the delegation stands: the Wendigo chapter (FFX only) is finished and the held lanes continue (both games, process)
+  - Bailey: “Keep going please with everything you were doing finish the wendigo chapter also”
+  - What changed: Item 221d of the queue's tail (the older rows D-1501 and D-1502 carry the earlier copy's own numbers 221d and 221e), about 12:35 EST on 2026-11-09, typed in the second account's window. A confirmation, not a new rule (like D-1495): the delegation of D-1423 stands and he adds one named job, finish the Wendigo chapter (D-1494). The finish pass is built on origin/wendigo-finish (40608ee1e, FFX only; A-1279) and waits for his eye on the motion, the aeons and Valefor's size. The Specials engine (A-1280), the chapters program (A-1282 to A-1285) and the release 79 pipeline (A-1275 to A-1278) went on under it.
+  - area process · both games · adopted · delivery in progress · see [D-1495](#d-1495), [D-1494](#d-1494), [D-1423](#d-1423) · refines [D-1495](#d-1495)
+  - Source: Bailey, 2026-11-09 about 12:35 EST, typed in the chat, verbatim: "Keep going please with everything you were doing finish the wendigo chapter also". …
+- <a id="d-1506"></a>**D-1506** — He says "Keep going please! Fable 5.2 enabled with ultracode" and the delegation stands: the lanes continue (both games, process)
+  - Bailey: “Keep going please! Fable 5.2 enabled with ultracode”
+  - What changed: Item 221e, about 14:35 EST on 2026-11-09, typed in the second account's window. A confirmation like D-1505, not a new rule: the three lanes go on (the Wendigo finish, FFX only; the Specials, FFX-2 only; the chapters program by game), and the session runs with the stronger model and mode he names. The driver reads it as information about the session, not as a change to the delegation or to the usage mode: the mode stays by his words ("keep going we have full usage here", D-1495), which the weekly table alone would call conserve (weekly all models 65 percent used, weekly Fable 9 percent, read at 20:20 EST on 2026-11-09).
+  - area process · both games · adopted · delivery implemented · see [D-1505](#d-1505), [D-1495](#d-1495), [D-1423](#d-1423) · refines [D-1505](#d-1505)
+  - Source: Bailey, 2026-11-09 about 14:35 EST, typed in the chat, verbatim: "Keep going please! Fable 5.2 enabled with ultracode". Item 221e of the driver's …
+- <a id="d-1507"></a>**D-1507** — He picks card "A" for the FFX-2 Special dresspheres (three bodies take the front, each with its own plate): liked, with two parts moved out by his later "G" (FFX-2 only)
+  - Bailey: “A”
+  - What changed: Item 221f, about 14:45 EST on 2026-11-09, his answer to the three look cards for the Special dresspheres (item 92d; cards special-dress-up-A, B and C, asked in plain chat "Reply A, B, C or a mix", the driver recommending A for the fight with B's portrait cut-in at the change). REACTION for the tile: liked = card A, the game's own reading, faithful to the FFX-2 form. Must remain (what card A states): three bodies take the front (the main and two parts), each with its own gauge, menu and HP; three HUD plates; the Special's badge on the main; the other two girls leave the field; the change in a bloom of light, in full the first time and short after. Not picked: B (one creature, pods orbit, one wide plate), C (a held tableau, girl-sized spirits). INFERRED by the driver, his to overturn: (i) the girl stands in her Special as in the game (card A drew the bloom alone; he was told in the question); (ii) the portrait on the special dress change stays as built under D-1497 (his "only on big moves"), with no new B layout; (iii) the nine sprites are the faithful reading of the game models (220m), shown to him as a pilot before the batch goes on. Undecided: nothing named. Moved by the driver's check of the real game (D-1508) and his answer "G" (D-1510): "three bodies take the front" and "nine new full sprites" are no longer must-remain; the other lines stand.
+  - area visuals · FFX-2 · adopted · delivery in progress · see [D-1504](#d-1504), [D-1508](#d-1508), [D-1510](#d-1510), [D-1497](#d-1497) · refines [D-1504](#d-1504)
+  - Source: Bailey, 2026-11-09 about 14:45 EST, in the second account's window, his answer to the look cards of item 92d, verbatim: "A". Item 221f of the …
+- <a id="d-1508"></a>**D-1508** — DRIVER FINDING AND RECOMMENDATION, his to overturn (closed by his "G", D-1510): the real game shows each Special as ONE connected figure with three HUD rows, not three bodies; the driver recommends reading G, follow the game (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221g, about 15:45 EST on 2026-11-09, told to Bailey in chat with a real-game frame and a real-model render; his answer was open until D-1510. The check of the real game for D-1507 (game-reading.md sections 0 and A to C, the model renders) shows that card A drew one thing wrong. The game shows each Special as ONE connected figure (one model a Special: Floral Fallal, Machina Maw, Full Throttle; the girl visible inside it; the two named parts are regions of that figure) with three HUD rows in the order main, right part, left part; it does not show three separate bodies and there are not nine separate sprites. Everything else card A states matches the game (the bloom, in full the first time and short after; the other two girls leave; three plates, each part with its own gauge, menu and HP; the badge on the main). RECOMMENDED, his to overturn: READING G, follow the game (one figure, painted once and cut into three registered layers so each part stays addressable; three plates). ALTERNATIVE: READING T, card A as drawn (three bodies, nine sprites). Nothing perceivable was built until he answered; the prep (the preflight for G with T costed, whole-figure paintings with layers, two side-by-side phone cards) served both readings.
+  - area visuals · FFX-2 · superseded by [D-1510](#d-1510) · nothing to build · see [D-1507](#d-1507), [D-1510](#d-1510), [D-1423](#d-1423) · refines [D-1507](#d-1507)
+  - Source: The driver's finding and question to Bailey of 2026-11-09 about 15:45 EST, put in the chat with a recommendation (G). Item 221g of the driver's list. …
+- <a id="d-1509"></a>**D-1509** — DRIVER QUESTION, asked and closed by his "A" (D-1511): Last Mission (chapters-program row 63, door word lastmission) has no readable boss AI or damage formula; options A drop it, B four estimated duels, C a faithful grid port, D main-game rows; the driver recommended A (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221h, about 16:12 EST on 2026-11-09, asked of Bailey in chat. The research (w78/63, re-ffx2-last-mission.md and ch-lastmission-review.md, each checked by a second reader) finds the mode is a grid roguelike with no readable boss AI and no readable damage formula, so four ATB duels would need invented timing and weights (hard rule 6: never invent game data). OPTIONS: A drop the row (the research's ruling; the driver recommended it); B four ATB duels with estimated behaviour, flagged as ours (46 to 52 h); C a faithful grid port (about 350 h); D build the four names from their main-game rows and scripts where those exist. The driver did not drop it on its own because he had asked for every chapter and a dropped promise needs his words. Nothing was built either way; the door word stayed reserved. Answered at 20:17 EST by D-1511.
+  - area chapters · FFX-2 · superseded by [D-1511](#d-1511) · nothing to build · see [D-1511](#d-1511), [D-1474](#d-1474), [D-1479](#d-1479) · refines [D-1474](#d-1474)
+  - Source: The driver's question to Bailey of 2026-11-09 about 16:12 EST, put in the chat with a recommendation (A). Item 221h of the driver's list. Game case: …
+- <a id="d-1510"></a>**D-1510** — He answers "G": each FFX-2 Special is one connected figure with three HUD plates (main, right part, left part); the three-bodies reading T is not built (FFX-2 only)
+  - Bailey: “G”
+  - What changed: Item 221i, about 19:05 EST on 2026-11-09, his answer to D-1508 (asked in plain chat "G or T" with the two model-render cards of 17:31 and the painted card of 18:35; the driver recommending G). This closes D-1508. REACTION for the tile: picked = READING G, the game's own reading: each Special is ONE connected figure (one model: Floral Fallal, Machina Maw, Full Throttle) with three HUD plates in the order main, right part, left part. Must remain (D-1507, unchanged): the bloom of light, in full the first time and short after; the other two girls leave the field; three plates, each part with its own gauge, menu and HP; the Special's badge on the main. Moved out: "three bodies take the front" and "nine new full sprites" (card A as first drawn; reading T) are NOT built. Disliked: nothing named. A pick approves only what he names, so STILL UNDECIDED and his to answer by picture (five phone cards, sent about 21:30 EST with the driver's recommendations): how a Special is drawn (our painting / the game's model with an ink line / the game's model as it is; recommended: the game's model as it is), how a part is marked on the one figure (plates only / a ring on the part / ring, glow and dim; recommended: a ring on the part), how big the figure is on screen (fitted / larger / true size with a wider camera; recommended: fitted); and whether the forced first full change of 19 to 23 s stays unskippable except by fast-forward (waits for the first motion clip). DISCLOSED TO HIM IN THE SAME REPLY: the second art critic judged the 18:35 painted card unfair to T (G a finished painting, T raw cut pieces with a hole); the 17:31 model-render pair is the fair comparison; his answer stands unless he says otherwise. The other reading, T, is not built. NEXT: the presentation build under reading G behind the OFF flag on the final ffx2-specials tip; motion clips to him before anything is switched on (A-1280, A-1281).
+  - area visuals · FFX-2 · adopted · delivery in progress · see [D-1508](#d-1508), [D-1507](#d-1507), [D-1504](#d-1504) · refines [D-1507](#d-1507)
+  - Source: Bailey, 2026-11-09 about 19:05 EST, in the second account's window, his answer to D-1508, verbatim: "G". Item 221i of the driver's list. Game case: …
+- <a id="d-1511"></a>**D-1511** — DRIVER'S READING of his "A", his to overturn: Last Mission (chapters-program row 63, door word lastmission) is DROPPED; nothing of it is built and no door word is added (FFX-2 only)
+  - Bailey: “A”
+  - What changed: Item 221j, 20:17 EST on 2026-11-09, in the second account's window. He typed "A" straight after the driver's 19:45 reply, whose last line was the Last Mission question (D-1509) with its options "A drop it, B four estimated duels, C the full grid port, D main-game rows" and the driver's recommendation A. The driver read it as the Last Mission answer and told him so in plain chat at about 20:28 EST: "I read it as the Last Mission answer (A = drop it). I'm recording Last Mission as dropped; say so if you meant something else." A dropped promise needs his words: these are the words, with the reading stated. If he says he meant something else this row is corrected by a new line, never edited. Done under it: PLAN.md row 63 marked DROPPED (A-1285); the promise tracker's Last Mission rows read DROPPED. Not touched by this answer: the three look-A card questions (how a Special is drawn, the part mark, the size), which had not been asked yet at 20:17 (the five cards were still in their check and repair), and the first-change question.
+  - area chapters · FFX-2 · adopted · nothing to build · at ~20:17 EST · see [D-1509](#d-1509), [D-1474](#d-1474), [D-1479](#d-1479) · refines [D-1509](#d-1509)
+  - Source: Bailey, 2026-11-09 20:17 EST, in the second account's window, verbatim: "A". Item 221j of the driver's list; the reading is the driver's, told back …
+- <a id="d-1512"></a>**D-1512** — DRIVER CALL under the standing deploy words, his to overturn: release 79 (Belgemine, Garik Ronso, Shinryu and the paintings of five hidden chapters) deploys on its focused review's SHIP (193f6aef4 / BYej0WB6; R79-1 disclosed)
+  - Bailey: “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.”
+  - What changed: Made by the second account's copy of the driver on 2026-11-09 at 20:30 EST, after the focused review of the production candidate read SHIP at 20:15 EST: 0 critical; R79-1 (major, Jenova LIFE in FF7, not introduced by this build, no regression against release 78, the continuity checks fail equal to the live build) is disclosed and carried into release 80. Deployed at 02:13:47 UTC on 2026-11-10 (21:13 EST on 2026-11-09, A-1277); the live check read deployment PASS (A-1278). Release 79 owes live (settled), focused and deep; the ledger counts 1 deploy since the last passing deep review; deep round 37 covers release 79 and is planned after release 80, and release 81 refuses until it is settled. Usage before the deploy (20:20 EST): weekly all models 65 percent, weekly Fable 9 percent. The first focused attempt at about 16:44 EST had read HOLD only because the browser lock was held for the whole 20 minutes (no evidence, no defect); the re-run started at 19:44 EST when the first driver read the other copy's handover.
+  - area release · both games · adopted · delivery implemented · see [D-931](#d-931), [D-1503](#d-1503), [D-1500](#d-1500), [D-1423](#d-1423), A-1276, A-1277, A-1278 · refines [D-931](#d-931)
+  - Source: The driver's state log of 2026-11-09 (the 19:45, 20:40 and 21:30 EST lines), under his standing words of 2026-10-17 (D-931), "you make the executive …
