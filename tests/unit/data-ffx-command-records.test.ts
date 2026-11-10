@@ -224,8 +224,11 @@ describe('what the adapter assumes of the data', () => {
     expect(lost).toEqual([]);
   });
 
-  it('no ability uses a formula the adapter cannot supply an input for (0x16 reads a save counter)', () => {
-    for (const a of ALL_ABILITIES) expect(FORMULA_NUMBER[a.formula], a.id).not.toBe(0x16);
+  it('no ability uses a formula the adapter cannot supply an input for (0x16 reads a save counter; Karma of the hidden Gauntlet chapter is the one row that has it, and the adapter feeds it: adapt/kill-count.ts)', () => {
+    for (const a of ALL_ABILITIES) {
+      if (a.id === 'gauntlet-karma') expect([a.formula, FORMULA_NUMBER[a.formula]], a.id).toEqual(['kill-count', 0x16]);
+      else expect(FORMULA_NUMBER[a.formula], a.id).not.toBe(0x16);
+    }
   });
 
   it("the possessed aeons' plain Attack is the game's monster-side record 0x6000, word for word", () => {

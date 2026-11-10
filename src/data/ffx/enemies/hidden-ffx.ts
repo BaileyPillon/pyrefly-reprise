@@ -16,10 +16,11 @@ import { WEAPON_ABILITIES, WEAPON_GROUPS } from './weapons-groups.ts'; // the hi
 import { WENDIGO_ABILITIES, wendigoGroup } from './wendigo.ts'; // the hidden Wendigo chapter (2026-11-06)
 import { BELGEMINE_ABILITIES, BELGEMINE_GROUPS } from './belgemine.ts'; // the hidden Belgemine's Challenge chapter (2026-11-09): her eight aeons at the Remiem Temple
 import { SHINRYU_ABILITIES, shinryuGroup } from './shinryu.ts'; // the hidden Shinryu chapter (2026-11-07)
-import { GAUNTLET_ABILITIES } from './gauntlet-abilities.ts'; // the hidden Gauntlet chapter (54, 2026-11-09): the Monster Arena creations' moves; the formations come with the group stage
+import { GAUNTLET_ABILITIES } from './gauntlet-abilities.ts'; // the hidden Gauntlet chapter (54, 2026-11-09): the Monster Arena creations' moves
+import { GAUNTLET_GROUPS } from './gauntlet-groups.ts'; // ... and the formations of the tiers built (one in stage 2: acts 1 to 3)
 
 /** Every ability row of the hidden FFX chapters (Bulldoze, the Breaths, Berserk and the half-HP Rages; the Dark Aeons' fourteen rows). */
 export const HIDDEN_FFX_ABILITIES: readonly AbilityDef[] = [...Object.values(BIRAN_YENKE_ABILITIES), ...Object.values(DARK_AEONS_ABILITIES), ...Object.values(SPECTRAL_KEEPER_ABILITIES), ...Object.values(DARK_SIX_ABILITIES), ...Object.values(PENANCE_ABILITIES), ...Object.values(FLOODED_WAYS_ABILITIES), ...Object.values(SANCTUARY_KEEPER_ABILITIES), ...Object.values(SPHERIMORPH_ABILITIES), ...Object.values(WEAPON_ABILITIES), ...Object.values(WENDIGO_ABILITIES), ...Object.values(BELGEMINE_ABILITIES), ...Object.values(SHINRYU_ABILITIES), ...Object.values(GAUNTLET_ABILITIES)];
 
 /** Every formation of the hidden FFX chapters (the brothers' duel; the Dark Aeons' eleven). */
-export const HIDDEN_FFX_GROUPS: readonly EnemyGroupDef[] = [...BIRAN_YENKE_GROUPS, ...DARK_AEONS_GROUPS, spectralKeeperGroup, ...DARK_SIX_GROUPS, penanceGroup, ...FLOODED_GROUPS, sanctuaryKeeperGroup, spherimorphGroup, ...WEAPON_GROUPS, wendigoGroup, ...BELGEMINE_GROUPS, shinryuGroup];
+export const HIDDEN_FFX_GROUPS: readonly EnemyGroupDef[] = [...BIRAN_YENKE_GROUPS, ...DARK_AEONS_GROUPS, spectralKeeperGroup, ...DARK_SIX_GROUPS, penanceGroup, ...FLOODED_GROUPS, sanctuaryKeeperGroup, spherimorphGroup, ...WEAPON_GROUPS, wendigoGroup, ...BELGEMINE_GROUPS, shinryuGroup, ...GAUNTLET_GROUPS];

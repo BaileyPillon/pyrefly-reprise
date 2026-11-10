@@ -59,6 +59,7 @@ import './wendigo.ts'; // the hidden Wendigo chapter (FFX only): Wendigo and its
 import './lake-guardian.ts'; // the hidden Wendigo chapter (FFX only): the two Guado Guardians of that fight
 import './belgemine.ts'; // the hidden Belgemine's Challenge chapter (FFX only, 2026-11-09): her eight aeons at the Remiem Temple (the Bahamut, Yojimbo, Anima and Sisters scripts ride on its imports)
 import './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07): the Monster Arena's deep-water dragon
+import './gauntlet-cactuar-king.ts'; import './gauntlet-don-tonberry.ts'; import './gauntlet-jormungand.ts'; // the hidden Gauntlet chapter (FFX only, 2026-11-09): the Monster Arena creations of acts 1 to 3 (the later acts add theirs)
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';

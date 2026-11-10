@@ -85,7 +85,7 @@ function memberToCombatant(m: FFXMemberBuild, slot: number, active: boolean): FF
     removed: !active,
     slot,
     flags: {},
-    ...(m.guest ? { guest: { ...m.guest } } : {}),
+    ...(m.guest ? { guest: { ...m.guest } } : {}), ...(m.kills !== undefined ? { kills: m.kills } : {}), // kills: the Gauntlet's Karma (formula 0x16; adapt/kill-count.ts)
     learnedAbilityIds: [...m.learnedAbilityIds],
     equipment: { weapon: { ...m.equipment.weapon }, armor: { ...m.equipment.armor } },
     overdrive: {

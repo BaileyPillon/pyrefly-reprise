@@ -69,11 +69,10 @@ export const GAUNTLET_SCRIPT: Readonly<Record<GauntletCombatantId, string>> = {
 };
 
 /**
- * The painting key of each combatant (`public/art/characters/<key>/<pose>.png`). **None of them exists yet** (the art lane owes eight new creatures and the Th'uban recolour, the handoff's art list); the group stage
- * of the chapter maps each to a stand-in that does exist, in this one table, and the factories read it, so a painting that lands is a one-line change. Th'uban's body is the Sanctuary Keeper's painting (same model word,
- * RE n 0): its key is its own so that the recolour can carry it.
+ * The painting key the art lane owes each combatant (`public/art/characters/<key>/<pose>.png`). **None of them exists yet** (the art lane owes eight new creatures and the Th'uban recolour, the handoff's art list). Th'uban's
+ * body is the Sanctuary Keeper's painting (same model word, RE n 0): its key is its own so that the recolour can carry it. The two Arms share one painting. The keys the data draws today are {@link GAUNTLET_SPRITE}.
  */
-export const GAUNTLET_SPRITE: Readonly<Record<GauntletCombatantId, string>> = {
+export const GAUNTLET_SPRITE_WANTED: Readonly<Record<GauntletCombatantId, string>> = {
   'cactuar-king': 'cactuar-king',
   'don-tonberry': 'don-tonberry',
   jormungand: 'jormungand',
@@ -86,6 +85,39 @@ export const GAUNTLET_SPRITE: Readonly<Record<GauntletCombatantId, string>> = {
   'ultima-buster-head': 'ultima-buster-head',
   'ultima-buster-arm-left': 'ultima-buster-arm',
   'ultima-buster-arm-right': 'ultima-buster-arm',
+};
+
+/**
+ * **The stand-in paintings the fights draw until the art lane's land** (`spriteKey`, `EnemyForm.spriteKey`): an existing painting in the art mirror per combatant, so every act renders and plays. **Nothing here is final** (hard
+ * rule 9: Bailey alone approves a painting; the driver's pick, his to overturn); a painting that lands is a one-line change in this table. Why each one:
+ *
+ * | Combatant | Stand-in | Why |
+ * |---|---|---|
+ * | Cactuar King | `pterya` | a small winged figure with the full pose set (idle, attack, cast, hurt); nothing in the mirror is a cactus |
+ * | Don Tonberry | `grothia` | a small hooded figure with attack, cast, hurt (nothing in the mirror is a Tonberry) |
+ * | Jormungand | `geosgaeno` | the Via Purifico's serpent: the only long-bodied monster with idle, attack, cast, hurt and ko |
+ * | Earth Eater | `sinspawn-gui` | a heavy ground-bound beast |
+ * | Greater Sphere | `spherimorph` | the same creature class (Spherimorph's mechanic at a larger scale, RE n 3.5) |
+ * | Catastrophe | `spectral-keeper` | a large caster with idle, cast, hurt and ko |
+ * | Th'uban | `sanctuary-keeper` | the same model (RE n 0); the recolour is the art lane's |
+ * | Neslug | `mortibody` | a bulky body with attack, cast, hurt |
+ * | Ultima Buster | `ultima-weapon` | a giant machine with idle, attack, cast, hurt and ko |
+ * | its Head | `ginnem` | a small separate figure (idle only) |
+ * | its Arms | `gate-lock` | a small separate figure (idle and ko) |
+ */
+export const GAUNTLET_SPRITE: Readonly<Record<GauntletCombatantId, string>> = {
+  'cactuar-king': 'pterya',
+  'don-tonberry': 'grothia',
+  jormungand: 'geosgaeno',
+  'earth-eater': 'sinspawn-gui',
+  'greater-sphere': 'spherimorph',
+  catastrophe: 'spectral-keeper',
+  thuban: 'sanctuary-keeper',
+  neslug: 'mortibody',
+  'ultima-buster': 'ultima-weapon',
+  'ultima-buster-head': 'ginnem',
+  'ultima-buster-arm-left': 'gate-lock',
+  'ultima-buster-arm-right': 'gate-lock',
 };
 
 /**
@@ -144,6 +176,44 @@ export const GAUNTLET_PLAYER_ROWS = {
   ultima: 'ultima',
 } as const;
 
-/** The scene key of the arena (the integration stage's `scenes/gauntlet.ts`) and the formation ids of the nine acts (the group stage's). */
+/** The scene key of the arena (the integration stage's `scenes/gauntlet.ts`) and the formation id of each act. */
 export const GAUNTLET_SCENE = 'gauntlet' as const;
 export const gauntletGroupId = (creature: GauntletCreatureId): string => `gauntlet-${creature}`;
+
+/**
+ * The plate every act is fought on. **A stand-in** (preflight GA11, owed a mockup: hard rule 9): no Calm Lands arena plate exists, so the preflight's own option (c) names `zanarkand-dome`, a round arena (wrong place, right
+ * shape). The new `monster-arena` plate is the art lane's; the integration stage's scene maps the plate (`scenes/gauntlet.ts`).
+ */
+export const GAUNTLET_PLATE = 'zanarkand-dome' as const;
+
+/** One act of the chain. */
+export interface GauntletAct {
+  /** 1 to 9. */
+  readonly act: number;
+  readonly tier: 1 | 2 | 3;
+  readonly creature: GauntletCreatureId;
+  readonly groupId: string;
+  /** The battle-start card's name for the foe. */
+  readonly headline: string;
+  /** The game's HP of the body (RE n 1). */
+  readonly hp: number;
+}
+
+const HEADLINE: Readonly<Record<GauntletCreatureId, string>> = {
+  'cactuar-king': 'Cactuar King', 'don-tonberry': 'Don Tonberry', jormungand: 'Jormungand', 'earth-eater': 'Earth Eater', 'greater-sphere': 'Greater Sphere', catastrophe: 'Catastrophe', thuban: "Th'uban", neslug: 'Neslug', 'ultima-buster': 'Ultima Buster',
+};
+const HP: Readonly<Record<GauntletCreatureId, number>> = {
+  'cactuar-king': 100_000, 'don-tonberry': 480_000, jormungand: 520_000, 'earth-eater': 1_300_000, 'greater-sphere': 1_500_000, catastrophe: 2_200_000, thuban: 3_000_000, neslug: 4_000_000, 'ultima-buster': 5_000_000,
+};
+
+/** The nine acts in order (preflight GA2: nine acts, in the arena's own unlock order, which is also HP order). */
+export const GAUNTLET_ACTS: readonly GauntletAct[] = GAUNTLET_TIERS.flatMap((t) =>
+  t.creatures.map((creature, i) => ({ act: t.acts[i]!, tier: t.tier, creature, groupId: gauntletGroupId(creature), headline: HEADLINE[creature], hp: HP[creature] })),
+);
+
+/**
+ * **How many tiers have their rules built** (preflight GA3: three tiers, each a releasable cut). The chain runs acts 1 to `3 x GAUNTLET_TIERS_BUILT` and ends there (the last built act has no next link and pays every act's
+ * spoils); the formations of an act whose tier is not built are not registered, so nothing can reach a creature whose script is not written. **1** after stage 2 (Cactuar King, Don Tonberry, Jormungand); stage 3 makes it
+ * 2 (Earth Eater, Greater Sphere, Catastrophe) and stage 4 makes it 3.
+ */
+export const GAUNTLET_TIERS_BUILT: 1 | 2 | 3 = 1;

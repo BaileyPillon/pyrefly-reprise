@@ -25,6 +25,7 @@ import { aeonDuelLost, aeonsDown, dismissAeon } from './aeons.ts';
 import { settleAeonRecovery } from './adapt/aeon-party.ts';
 import { buildBattleResult, scriptedGameOver } from './results.ts';
 import { floodedWaysOutcome } from './ai/flooded-ways-end.ts'; // the hidden Flooded Ways' own ends: a Via Purifico area cleared by its locks, a death blow that ends the party
+import { gauntletOutcome } from './ai/gauntlet-end.ts'; // the hidden Gauntlet's act 1: a Cactuar King that ran away ends the battle as 'it got away' (an 'escape'; undefined in every other battle)
 import { settleMaxHp } from './ai/geosgaeno-hold.ts'; // ... and the maximum HP Geosgaeno's Regurgitate rewrote, put back once it has resolved
 
 /** What the end-of-turn helpers need from the facade. */
@@ -191,7 +192,7 @@ export function afterAction(
 export function checkEnd(h: EndHooks): boolean {
   const ctx = h.ctx;
   if (ctx.state.result) return true;
-  const scripted = floodedWaysOutcome(ctx); // the hidden Flooded Ways (FFX only): undefined in every other battle
+  const scripted = floodedWaysOutcome(ctx) ?? gauntletOutcome(ctx); // the hidden Flooded Ways and Gauntlet (FFX only): undefined in every other battle
   if (scripted !== undefined) { finish(h, scripted); return true; }
 
   const bosses = ctx.state.enemyIds

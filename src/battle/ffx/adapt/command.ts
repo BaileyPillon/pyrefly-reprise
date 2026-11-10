@@ -44,6 +44,7 @@ export const FORMULA_NUMBER: Readonly<Record<FormulaKey, number>> = {
   'special-magic': 0x0f,
   'user-max-hp': 0x10,
   gil: 0x15,
+  'kill-count': 0x16, // Karma (the hidden Gauntlet chapter): the target's kill count x power; the hit adapter feeds it (adapt/kill-count.ts)
   'deal-9999': 0x17,
   // Lancet reads MAG and the user's Focus and ignores the target's defence: formula 4.
   lancet: 0x04,

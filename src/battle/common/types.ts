@@ -1132,6 +1132,8 @@ export interface FFXCombatant extends Combatant {
    * {@link FFXMemberBuild.guest}; absent on every other combatant, so nothing else reads it. Read-only after setup.
    */
   guest?: FFXGuestSpec;
+  /** The enemies this character has killed ({@link FFXMemberBuild.kills}); absent on every combatant of a build that does not give one. Read-only in a battle: formula 0x16 (Karma) reads it, nothing writes it. */
+  kills?: number;
 }
 
 /**
@@ -1308,6 +1310,8 @@ export type FormulaKey =
   | 'gil'
   /** `9999 * DmgCon`. Sunburst (DmgCon 2 -> 19 998). */
   | 'deal-9999'
+  /** FFX only (the hidden Gauntlet chapter's Don Tonberry, 2026-11-09): formula 0x16, the **target's kill count x DmgCon** (Karma: 100 a kill); a target with no kill count takes the formula's fallback, 0. */
+  | 'kill-count'
   /** Lancet: drains **both** HP and MP pools, damage type `other`, ignores Armored. */
   | 'lancet'
   /** FFX-2: `n/16` of the target's max HP or MP, ignoring Level/Str/Mag entirely. Every Bulwark attack. */
@@ -2857,6 +2861,11 @@ export interface FFXMemberBuild {
   statuses?: Partial<Record<StatusId, StatusInstance>>;
   /** A guest in the party for this chapter's battle (see {@link FFXGuestSpec}). Absent for every ordinary member. */
   guest?: FFXGuestSpec;
+  /**
+   * FFX only (additive, 2026-11-09; the hidden Gauntlet chapter's Karma, formula 0x16): the enemies this character has killed, the game's per-character kill counter (`saveCounter`). Copied to
+   * {@link FFXCombatant.kills}; read by formula 0x16 only (`battle/ffx/adapt/kill-count.ts`), so a build that omits it changes nothing anywhere.
+   */
+  kills?: number;
 }
 
 /** One aeon Yuna owns at this point. */

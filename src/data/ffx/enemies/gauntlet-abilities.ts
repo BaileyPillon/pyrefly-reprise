@@ -24,8 +24,7 @@
  * | 10000 Needles, 99999 Needles, Run Away | 0x40BC, 0x40F2, 0x4033 | Cactuar King | special f6 p200 = **10,000 flat** / special **f23 p51 = 509,949, capped to 99,999** / the departure |
  * | Attack, Voodoo, Karma, Waddle | 0x4062, 0x40EA, 0x40FF, 0x4081 | Don Tonberry | physical f1 p20 (Dark Valefor's row) / special f3 p255 / special **f22 p100 = kill count x 100** / the walk-in |
  *
- * **Formula 22 (Karma) has no `FormulaKey`**, so the row's `formula` is `'none'` (it deals 0 today) and the engine's hit adapter feeds the kernel `saveCounter: 0` and `id: 0xff`: the seam is named, with the file and
- * the lines to change, in `tests/unit/chapters/gauntlet-engine.test.ts` and the handoff `docs/handoff/ch-gauntlet.md` (T0 check C3); the record's formula byte (22) and power (100) are pinned from the fixture.
+ * **Formula 22 (Karma) is the `FormulaKey` `'kill-count'`** (added in stage 2, `docs/CONTRACT-CHANGES.md`): the hit adapter feeds the kernel the target's party number and its kill count (`FFXMemberBuild.kills`, `battle/ffx/adapt/kill-count.ts`); a target without a kill count takes the fallback, 0. The record's formula byte (22) and power (100) are pinned from the fixture.
  *
  * **Targets the fixture does not give** (the four Don Tonberry rows and the relay come from the kernel fixtures, which carry no target byte): the script's own use decides (RE n 3): Attack, Voodoo and Karma
  * aim at one party member, Waddle at itself, Special 1 at the body. Marked `[inferred]` on each row.
@@ -118,8 +117,8 @@ export const gauntletNeedles99999 = row({ id: ROW.needles99999, name: '99999 Nee
 export const gauntletRunAway = state(ROW.runAway, 'Run Away', 1);
 export const gauntletTonberryAttack = row({ id: ROW.tonberryAttack, name: 'Attack', power: 20, formula: 'strength', damageType: 'physical', targeting: single, hits: 1, flags: [CRIT, GEAR], shatterChance: 10 }); // targeting [inferred]
 export const gauntletVoodoo = row({ id: ROW.voodoo, name: 'Voodoo', power: 255, formula: 'magic', damageType: 'other', targeting: single, hits: 1, flags: [CAP] }); // targeting [inferred]
-/** Formula 22 (the target's kill count x power) has no `FormulaKey` yet: `'none'` deals 0 until the seam (T0 check C3) is made. Targeting [inferred]: the last attacker. */
-export const gauntletKarma = row({ id: ROW.karma, name: 'Karma', power: 100, formula: 'none', damageType: 'other', targeting: single, hits: 1, flags: [CAP] });
+/** Formula 22 (the target's kill count x power; `'kill-count'`, 0x16 in the kernel's numbering, fed by `battle/ffx/adapt/kill-count.ts`). Targeting [inferred]: the last attacker. */
+export const gauntletKarma = row({ id: ROW.karma, name: 'Karma', power: 100, formula: 'kill-count', damageType: 'other', targeting: single, hits: 1, flags: [CAP] });
 export const gauntletWaddle = state(ROW.waddle, 'Waddle', 1); // [inferred] aimed at itself
 
 /** Every row, for the data index (`./hidden-ffx.ts`). */

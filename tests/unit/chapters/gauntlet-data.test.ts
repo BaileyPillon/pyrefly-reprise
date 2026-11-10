@@ -306,10 +306,11 @@ describe('the 31 move rows: each ability and each command record equals the game
     it(`${a.name} (${a.id}): the ability's formula, power, hits, kind, target, accuracy, crit, shatter and statuses equal the row's`, () => {
       const r = ROW_OF.get(rec.id)!;
       const state = a.formula === 'none' && a.power === 0;
-      // The formula: our key's number is the game's, except a state row (a status or movement row with no damage class) and Karma (formula 22 has no key yet: the T0 seam).
+      // The formula: our key's number is the game's, except a state row (a status or movement row with no damage class). Karma is formula 22 = 0x16 (the `'kill-count'` key, stage 2).
       if (a.id === ids.GAUNTLET_ROWS.karma) {
         expect([r.formula, r.power]).toEqual([22, 100]);
-        expect(FORMULA_NUMBER[a.formula]).toBe(0);
+        expect(a.formula).toBe('kill-count');
+        expect(FORMULA_NUMBER[a.formula]).toBe(22);
       } else if (r.damageClass === 0) {
         expect(a.formula).toBe('none');
       } else {
@@ -428,7 +429,10 @@ describe('the ids module', () => {
     expect(new Set(scripts).size).toBe(scripts.length - 1);
     expect(ids.GAUNTLET_SCRIPT['ultima-buster-arm-left']).toBe(ids.GAUNTLET_SCRIPT['ultima-buster-arm-right']);
     expect(ids.GAUNTLET_SPRITE['ultima-buster-arm-left']).toBe(ids.GAUNTLET_SPRITE['ultima-buster-arm-right']);
-    for (const id of ids.GAUNTLET_CREATURES) expect(ids.GAUNTLET_SPRITE[id]).toBe(id);
+    expect(ids.GAUNTLET_SPRITE_WANTED['ultima-buster-arm-left']).toBe(ids.GAUNTLET_SPRITE_WANTED['ultima-buster-arm-right']);
+    // The keys the art lane owes are the creature ids; the data draws stand-ins until they land (`GAUNTLET_SPRITE`).
+    for (const id of ids.GAUNTLET_CREATURES) expect(ids.GAUNTLET_SPRITE_WANTED[id]).toBe(id);
+    for (const id of ids.GAUNTLET_CREATURES) expect(ids.GAUNTLET_SPRITE[id], 'a stand-in, not the owed key').not.toBe(id);
   });
 
   it('game case FFX only (rule 14): no FFX-2 source file (battle, data, UI) names the chapter', () => {

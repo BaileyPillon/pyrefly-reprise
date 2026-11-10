@@ -5,7 +5,7 @@
  * `tests/fixtures/parity/ffx/gauntlet_rows.json`.
  *
  * **What is not here, on purpose:** the formations (the group stage's), the scripts (`battle/ffx/ai/gauntlet-*.ts`, the rules stages'), the start-up statuses (Earth Eater's Reflect) and writes (the Ultima Buster's
- * defence gate), and the paintings (`../gauntlet-ids.ts#GAUNTLET_SPRITE`, none exists yet). No Scan or Sensor text: every body is immune to both (the extra word's Scan bit, the flag byte's Sensor bit), so the panel
+ * defence gate), and the paintings (`../gauntlet-ids.ts#GAUNTLET_SPRITE`: stand-ins from the art mirror until the art lane's land, `GAUNTLET_SPRITE_WANTED`). No Scan or Sensor text: every body is immune to both (the extra word's Scan bit, the flag byte's Sensor bit), so the panel
  * prints "Immune to sensors." as Shinryu's does. Escape and Flee off (`boss`, preflight GA13) is the bodies' flag; the parts carry none.
  */
 

@@ -26,6 +26,7 @@ import { DARK_CINDY_ID, DARK_DAIGORO_ID, DARK_MINDY_ID, DARK_SANDY_ID, DARK_YOJI
 import { SPECTRAL_CIRCLE_IDS, SPECTRAL_KEEPER_ID } from '../../src/data/ffx/spectral-keeper-ids.ts';
 import { DARK_SIX_LINKS } from '../../src/data/ffx/dark-aeons-six-ids.ts';
 import { PENANCE_ID, PENANCE_LEFT_ARM_ID, PENANCE_RIGHT_ARM_ID } from '../../src/data/ffx/penance-ids.ts';
+import { GAUNTLET_CREATURES, ULTIMA_BUSTER_PARTS } from '../../src/data/ffx/gauntlet-ids.ts';
 import { SHINRYU_ID } from '../../src/data/ffx/shinryu-ids.ts';
 import { EVRAE_ALTANA_ID, GATE_LOCK_IDS, GEOSGAENO_ID } from '../../src/data/ffx/flooded-ways-ids.ts';
 import { SANCTUARY_KEEPER_ID } from '../../src/data/ffx/sanctuary-keeper-ids.ts';
@@ -239,7 +240,9 @@ const WRITES: Readonly<Record<string, Partial<FfxLootRecord>>> = {
  * r49, before the chapter, so the r51 merge names them: every other formation is still fought and checked against the oracle.
  */
 const DARK_AEON_IDS: ReadonlySet<string> = new Set([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID, DARK_DAIGORO_ID, SPECTRAL_KEEPER_ID, ...SPECTRAL_CIRCLE_IDS, PENANCE_ID, PENANCE_RIGHT_ARM_ID, PENANCE_LEFT_ARM_ID, ...DARK_SIX_LINKS.map((l) => l.bodyId), EVRAE_ALTANA_ID, GEOSGAENO_ID, ...GATE_LOCK_IDS, SANCTUARY_KEEPER_ID, SPHERIMORPH_ID, ULTIMA_WEAPON_ID, OMEGA_WEAPON_ID, NEMESIS_ID, WENDIGO_ID, ...LAKE_GUARDIAN_IDS, BELGEMINE_ID, ...Object.values(BELG_IDS), SHINRYU_ID]); // Shinryu (m283, 2026-11-07: its loot chunk's digest is not in the repo, so it pays through its enemy file's own reward fields, `chapters/shinryu-data.test.ts`), the hidden Wendigo chapter's three bodies (m212 and m213 twice, 2026-11-06: their loot records' digests are not in the repo, so the engine pays the fields of their rows), and the hidden Flooded Ways' four bodies (m120, m109, m162, m171, 2026-11-06: no record in the table, `parity-ffx-loot-data.test.ts`), and Penance's three bodies (m344 to m346, 2026-11-06: no record in the table, `parity-ffx-loot-data.test.ts`), and the hidden Dark Aeons' six bodies (m334 to m339, 2026-11-06: their loot records are the enemy file's own rows, pinned by `chapters/dark-aeons-six-data.test.ts`), and the hidden Spectral Keeper's bodies (m129, m146: no record in the table, `parity-ffx-loot-data.test.ts`)
-const hasNoRecord = (g: EnemyGroupDef): boolean => g.enemies.some((e) => DARK_AEON_IDS.has(e.id));
+/** + the hidden Gauntlet chapter's twelve combatants (2026-11-09): their loot records are their own (`gauntlet_rows.json`, pinned by `chapters/gauntlet-data.test.ts`), not among the 43 files of this oracle. */
+const GAUNTLET_COMBATANTS: ReadonlySet<string> = new Set<string>([...GAUNTLET_CREATURES, ...ULTIMA_BUSTER_PARTS]);
+const hasNoRecord = (g: EnemyGroupDef): boolean => g.enemies.some((e) => DARK_AEON_IDS.has(e.id) || GAUNTLET_COMBATANTS.has(e.id));
 
 describe('every shipped formation: kill everything in it, and the result pays the sum of the records', () => {
   const pairs = formationsWithChapter().filter((p) => !hasNoRecord(p.group));

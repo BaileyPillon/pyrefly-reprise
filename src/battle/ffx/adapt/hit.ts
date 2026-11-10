@@ -27,6 +27,7 @@ import { stacks } from '../predicates.ts';
 import { affinityLabel } from './affinity.ts';
 import { accuracyByteOf, defaultAttackIdOf, resolveCommand, type ResolvedCommand } from './command.ts';
 import type { HitDraws } from './draws.ts';
+import { killCountInput } from './kill-count.ts';
 import {
   affinityMasks,
   autoWordA,
@@ -203,9 +204,8 @@ export function hitInputOf(req: HitRequest, command: ResolvedCommand): HitInput 
       scale: timer > 0 ? (req.timing?.scale ?? { a: Math.min(req.timing?.timeRemainingMs ?? 0, timer), b: timer }) : null,
     },
     target: {
-      // The id and the save counter are read by formula 0x16 only, which no ability of ours has (FORMULA_NUMBER cannot give it).
-      id: 0xff,
-      saveCounter: 0,
+      // The id and the save counter are read by formula 0x16 only (Karma, the hidden Gauntlet chapter's `'kill-count'`): the party member's number and kill count when the build gives one, else 0xff and 0 (`adapt/kill-count.ts`).
+      ...killCountInput(target),
       def: target.stats.def,
       mdf: target.stats.mdef,
       cheer: stacks(target, 'cheer'),

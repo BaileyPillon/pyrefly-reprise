@@ -3,7 +3,7 @@
  *
  * - **C1** damage formulas 22 and 23 and the random-spread and finite-hit flags in the kernel, and every move row of the nine against the endgame preset (`darkAeonsBuild`: HP 9,999, DEF and MDEF 255, Auto-Protect), whose
  *   numbers the research lane worked out by arithmetic (`calc-54`, quoted in `research/re-ffx-monster-arena-creations.md` section 4).
- * - **C2** Karma through the kernel's `saveCounter` input (formula 22): the kernel is right; the engine's hit adapter feeds it nothing, and the test pins that as a **named seam**.
+ * - **C2** Karma through the kernel's `saveCounter` input (formula 22): the kernel was right and the engine's hit adapter fed it nothing; stage 2 closed that seam (the `'kill-count'` formula key, `adapt/kill-count.ts`, `FFXMemberBuild.kills`) and this check now pins Karma through the engine.
  * - **C3** a Flare a creature casts at itself, bounced by its own Reflect.
  * - **C4** a DEF and Armored write on a part at targeting time (`onTargeted`), seen by the same action's damage.
  * - **C5** three findings about the preset that the research note did not know: the Ribbon is no Death ward, Evasion 255 turns the two accuracy-2 Attacks into misses, and Don Tonberry's Attack is power 20.
@@ -16,6 +16,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { AbilityDef, EnemyGroupDef, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
 import { registerScriptHooks } from '../../../src/battle/ffx/ai/hooks.ts';
+import { killCountInput } from '../../../src/battle/ffx/adapt/kill-count.ts';
 import { baseDamage } from '../../../src/battle/ffx/kernel/damage.ts';
 import { resolveAbility } from '../../../src/battle/ffx/index.ts';
 import { darkAeonsBuild } from '../../../src/data/ffx/builds/dark-aeons.ts';
@@ -192,7 +193,7 @@ describe('C1 every move row against the endgame preset: the engine\'s damage equ
 // C2: Karma
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-describe('C2 Karma (formula 22): the kernel reads the kill count through `saveCounter`; the engine feeds it nothing yet (a named seam)', () => {
+describe('C2 Karma (formula 22): the kernel reads the kill count through `saveCounter`; the engine feeds it from the build (the seam closed in stage 2)', () => {
   it('the kernel: kill count x power for a target id below 0x12 (a party slot), the fallback for any other; variance does not touch it', () => {
     for (const [kills, want] of [[0, 0], [1, 100], [5, 500], [500, 50_000], [1000, 100_000]] as const) {
       expect(kernel(22, 100, target({ saveCounter: kills })), `${kills} kills`).toBe(want);
@@ -203,22 +204,40 @@ describe('C2 Karma (formula 22): the kernel reads the kill count through `saveCo
     expect(kernel(22, 100, target({ saveCounter: 500 }), 31)).toBe(kernel(22, 100, target({ saveCounter: 500 }), 0, false));
   });
 
-  it('SEAM C2: the engine deals Karma no damage at all today (the row carries formula "none"); to make it hit for kills x 100, three small additive edits are owed to the stage that writes Don Tonberry\'s rules', () => {
-    // What is missing, and where (the kernel needs none of it):
-    //  1. `FormulaKey` (src/battle/common/types.ts) has no key for formula 22: add 'kill-count', and `FORMULA_NUMBER` (src/battle/ffx/adapt/command.ts) 'kill-count': 0x16, then give the Karma row that formula.
-    //     (A CONTRACT-CHANGES entry: it is a shared contract.)
-    //  2. `hitInputOf` (src/battle/ffx/adapt/hit.ts, the `target: { id: 0xff, saveCounter: 0, ... }` literal) must pass the target's party slot (below 0x12) and its kill count. Both fields are read by formula 0x16 only,
-    //     so the change is inert for every other row; the kill count has no home today: `FFXMemberBuild` has no field for it, so the build carries one (preflight GA5: 500 each, an estimate) and the combatant keeps it.
-    //  3. This test flips: Karma then hits for kills x 100 (capped at 99,999 by the row's cap bit).
-    const t = arena('don-tonberry');
-    restore(t);
-    const from = t.events.length;
+  it('SEAM C2 CLOSED (stage 2): Karma hits for kills x 100 through the engine (the FormulaKey kill-count is 0x16, adapt/kill-count.ts feeds the party number and the kills of the target); a target with no kill count takes the fallback, 0', () => {
+    const withKills = (kills: number | undefined): FFXPartyBuild => ({ ...darkAeonsBuild, members: darkAeonsBuild.members.map((m) => (m.id === 'tidus' && kills !== undefined ? { ...m, kills } : m)) });
+    const karmaOn = (party: FFXPartyBuild, n = 1): number[] => {
+      const t = arena('don-tonberry', 1, party);
+      const out: number[] = [];
+      for (let i = 0; i < n; i++) {
+        restore(t);
+        const from = t.events.length;
+        resolveAbility(t.ctx, t.at('don-tonberry'), abilityOf(t, ROW.karma), ['tidus']);
+        out.push(...t.events.slice(from).flatMap((e) => (e.type === 'damage' ? [e.amount] : [])));
+      }
+      return out;
+    };
+    expect(abilityOf(arena('don-tonberry'), ROW.karma).formula).toBe('kill-count');
+    expect(abilityOf(arena('don-tonberry'), ROW.karma).record?.id).toBe(0x40ff);
+    expect(abilityOf(arena('don-tonberry'), ROW.karma).power).toBe(100);
+    expect(karmaOn(withKills(500), 20), '500 kills x 100, every cast, variance-proof').toEqual(Array(20).fill(50_000));
+    expect(karmaOn(withKills(1)), 'one kill: 100').toEqual([100]);
+    expect(karmaOn(withKills(1000)), '1,000 kills: 100,000 before the cap; the cap bit of the row (99,999) keeps it').toEqual([99_999]);
+    expect(karmaOn(withKills(0)), 'no kills: 0 damage (a zero-damage hit is still a hit event)').toEqual([0]);
+    expect(karmaOn(withKills(undefined)), 'a build with no kill count: the fallback, 0').toEqual([0]);
+    const t = arena('don-tonberry', 1, withKills(500));
     resolveAbility(t.ctx, t.at('don-tonberry'), abilityOf(t, ROW.karma), ['tidus']);
-    expect(t.events.slice(from).filter((e) => e.type === 'damage'), 'no damage event: formula none').toEqual([]);
-    expect(t.at('tidus').hp).toBe(9_999);
-    expect(abilityOf(t, ROW.karma).record?.id).toBe(0x40ff);
-    expect(abilityOf(t, ROW.karma).power).toBe(100);
-    expect(abilityOf(t, ROW.karma).formula).toBe('none');
+    expect(t.at('tidus').hp, 'it kills a 9,999-HP member outright').toBe(0);
+  });
+
+  it('the kill count reaches the combatant from the build and nowhere else, and killCountInput is the old constants for everyone else', () => {
+    const t = arena('don-tonberry', 1, { ...darkAeonsBuild, members: darkAeonsBuild.members.map((m) => (m.id === 'yuna' ? { ...m, kills: 7 } : m)) });
+    expect(t.at('yuna').kills).toBe(7);
+    expect(t.at('tidus').kills).toBeUndefined();
+    expect(t.at('don-tonberry').kills).toBeUndefined();
+    expect(killCountInput(t.at('tidus'))).toEqual({ id: 0xff, saveCounter: 0 });
+    expect(killCountInput(t.at('yuna'))).toEqual({ id: 1, saveCounter: 7 });
+    expect(killCountInput(t.at('don-tonberry'))).toEqual({ id: 0xff, saveCounter: 0 });
   });
 });
 
