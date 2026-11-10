@@ -1,0 +1,1221 @@
+[
+ {
+  "d": {
+   "id": "anima-macalania",
+   "side": "enemy",
+   "spriteKey": "anima",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "anima",
+   "anima",
+   "anima-macalania"
+  ],
+  "ns": [
+   "exp-leblanc-anima",
+   "exp-leblanc-anima",
+   "exp-leblanc-anima-macalania"
+  ]
+ },
+ {
+  "d": {
+   "id": "auron",
+   "side": "party",
+   "spriteKey": "auron"
+  },
+  "bare": [
+   "auron",
+   "auron",
+   "auron"
+  ],
+  "ns": [
+   "exp-leblanc-auron",
+   "exp-leblanc-auron",
+   "exp-leblanc-auron"
+  ]
+ },
+ {
+  "d": {
+   "id": "bahamut",
+   "side": "enemy",
+   "spriteKey": "ffx2-bahamut",
+   "level": 20,
+   "enemy": {
+    "formIndex": 0,
+    "level": 20
+   }
+  },
+  "bare": [
+   "ffx2-bahamut",
+   "ffx2-bahamut",
+   "bahamut"
+  ],
+  "ns": [
+   "exp-leblanc-ffx2-bahamut",
+   "exp-leblanc-ffx2-bahamut",
+   "exp-leblanc-bahamut"
+  ]
+ },
+ {
+  "d": {
+   "id": "braskas-final-aeon",
+   "side": "enemy",
+   "spriteKey": "braskas-final-aeon-1",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "braskas-final-aeon-1",
+   "braskas-final-aeon-1",
+   "braskas-final-aeon"
+  ],
+  "ns": [
+   "exp-leblanc-braskas-final-aeon-1",
+   "exp-leblanc-braskas-final-aeon-1",
+   "exp-leblanc-braskas-final-aeon"
+  ]
+ },
+ {
+  "d": {
+   "id": "cid",
+   "side": "enemy",
+   "spriteKey": "cid",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "cid",
+   "cid",
+   "cid"
+  ],
+  "ns": [
+   "exp-leblanc-cid",
+   "exp-leblanc-cid",
+   "exp-leblanc-cid"
+  ]
+ },
+ {
+  "d": {
+   "id": "daigoro",
+   "side": "enemy",
+   "spriteKey": "daigoro",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "daigoro",
+   "daigoro",
+   "daigoro"
+  ],
+  "ns": [
+   "exp-leblanc-daigoro",
+   "exp-leblanc-daigoro",
+   "exp-leblanc-daigoro"
+  ]
+ },
+ {
+  "d": {
+   "id": "dark-mindy",
+   "side": "enemy",
+   "spriteKey": "dark-mindy",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "dark-mindy",
+   "dark-mindy",
+   "dark-mindy"
+  ],
+  "ns": [
+   "exp-leblanc-dark-mindy",
+   "exp-leblanc-dark-mindy",
+   "exp-leblanc-dark-mindy"
+  ]
+ },
+ {
+  "d": {
+   "id": "dark-sandy",
+   "side": "enemy",
+   "spriteKey": "dark-sandy",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "dark-sandy",
+   "dark-sandy",
+   "dark-sandy"
+  ],
+  "ns": [
+   "exp-leblanc-dark-sandy",
+   "exp-leblanc-dark-sandy",
+   "exp-leblanc-dark-sandy"
+  ]
+ },
+ {
+  "d": {
+   "id": "dr-goon",
+   "side": "enemy",
+   "spriteKey": "ffx2-dr-goon",
+   "level": 14,
+   "enemy": {
+    "formIndex": 0,
+    "level": 14
+   }
+  },
+  "bare": [
+   "ffx2-dr-goon",
+   "ffx2-dr-goon",
+   "dr-goon"
+  ],
+  "ns": [
+   "exp-leblanc-ffx2-dr-goon",
+   "exp-leblanc-ffx2-dr-goon",
+   "exp-leblanc-dr-goon"
+  ]
+ },
+ {
+  "d": {
+   "id": "evrae",
+   "side": "enemy",
+   "spriteKey": "evrae",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "evrae",
+   "evrae",
+   "evrae"
+  ],
+  "ns": [
+   "exp-leblanc-evrae",
+   "exp-leblanc-evrae",
+   "exp-leblanc-evrae"
+  ]
+ },
+ {
+  "d": {
+   "id": "fem-goon",
+   "side": "enemy",
+   "spriteKey": "ffx2-fem-goon",
+   "level": 16,
+   "enemy": {
+    "formIndex": 0,
+    "level": 16
+   }
+  },
+  "bare": [
+   "ffx2-fem-goon",
+   "ffx2-fem-goon",
+   "fem-goon"
+  ],
+  "ns": [
+   "exp-leblanc-ffx2-fem-goon",
+   "exp-leblanc-ffx2-fem-goon",
+   "exp-leblanc-fem-goon"
+  ]
+ },
+ {
+  "d": {
+   "id": "ginnem",
+   "side": "enemy",
+   "spriteKey": "ginnem",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "ginnem",
+   "ginnem",
+   "ginnem"
+  ],
+  "ns": [
+   "exp-leblanc-ginnem",
+   "exp-leblanc-ginnem",
+   "exp-leblanc-ginnem"
+  ]
+ },
+ {
+  "d": {
+   "id": "grothia",
+   "side": "enemy",
+   "spriteKey": "grothia",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "grothia",
+   "grothia",
+   "grothia"
+  ],
+  "ns": [
+   "exp-leblanc-grothia",
+   "exp-leblanc-grothia",
+   "exp-leblanc-grothia"
+  ]
+ },
+ {
+  "d": {
+   "id": "guado-guardian-a",
+   "side": "enemy",
+   "spriteKey": "guado-guardian",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "guado-guardian",
+   "guado-guardian",
+   "guado-guardian-a"
+  ],
+  "ns": [
+   "exp-leblanc-guado-guardian",
+   "exp-leblanc-guado-guardian",
+   "exp-leblanc-guado-guardian-a"
+  ]
+ },
+ {
+  "d": {
+   "id": "guado-guardian-b",
+   "side": "enemy",
+   "spriteKey": "guado-guardian",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "guado-guardian",
+   "guado-guardian",
+   "guado-guardian-b"
+  ],
+  "ns": [
+   "exp-leblanc-guado-guardian",
+   "exp-leblanc-guado-guardian",
+   "exp-leblanc-guado-guardian-b"
+  ]
+ },
+ {
+  "d": {
+   "id": "isaaru",
+   "side": "enemy",
+   "spriteKey": "isaaru",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "isaaru",
+   "isaaru",
+   "isaaru"
+  ],
+  "ns": [
+   "exp-leblanc-isaaru",
+   "exp-leblanc-isaaru",
+   "exp-leblanc-isaaru"
+  ]
+ },
+ {
+  "d": {
+   "id": "kimahri",
+   "side": "party",
+   "spriteKey": "kimahri"
+  },
+  "bare": [
+   "kimahri",
+   "kimahri",
+   "kimahri"
+  ],
+  "ns": [
+   "exp-leblanc-kimahri",
+   "exp-leblanc-kimahri",
+   "exp-leblanc-kimahri"
+  ]
+ },
+ {
+  "d": {
+   "id": "left-fin",
+   "side": "enemy",
+   "spriteKey": "sin-left-fin",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "sin-left-fin",
+   "sin-left-fin",
+   "left-fin"
+  ],
+  "ns": [
+   "exp-leblanc-sin-left-fin",
+   "exp-leblanc-sin-left-fin",
+   "exp-leblanc-left-fin"
+  ]
+ },
+ {
+  "d": {
+   "id": "lulu",
+   "side": "party",
+   "spriteKey": "lulu"
+  },
+  "bare": [
+   "lulu",
+   "lulu",
+   "lulu"
+  ],
+  "ns": [
+   "exp-leblanc-lulu",
+   "exp-leblanc-lulu",
+   "exp-leblanc-lulu"
+  ]
+ },
+ {
+  "d": {
+   "id": "mortibody",
+   "side": "enemy",
+   "spriteKey": "mortibody",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "mortibody",
+   "mortibody",
+   "mortibody"
+  ],
+  "ns": [
+   "exp-leblanc-mortibody",
+   "exp-leblanc-mortibody",
+   "exp-leblanc-mortibody"
+  ]
+ },
+ {
+  "d": {
+   "id": "mortiorchis",
+   "side": "enemy",
+   "spriteKey": "mortiorchis",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "mortiorchis",
+   "mortiorchis",
+   "mortiorchis"
+  ],
+  "ns": [
+   "exp-leblanc-mortiorchis",
+   "exp-leblanc-mortiorchis",
+   "exp-leblanc-mortiorchis"
+  ]
+ },
+ {
+  "d": {
+   "id": "mortiphasm-1",
+   "side": "enemy",
+   "spriteKey": "mortiphasm",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "mortiphasm",
+   "mortiphasm",
+   "mortiphasm-1"
+  ],
+  "ns": [
+   "exp-leblanc-mortiphasm",
+   "exp-leblanc-mortiphasm",
+   "exp-leblanc-mortiphasm-1"
+  ]
+ },
+ {
+  "d": {
+   "id": "mortiphasm-2",
+   "side": "enemy",
+   "spriteKey": "mortiphasm",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "mortiphasm",
+   "mortiphasm",
+   "mortiphasm-2"
+  ],
+  "ns": [
+   "exp-leblanc-mortiphasm",
+   "exp-leblanc-mortiphasm",
+   "exp-leblanc-mortiphasm-2"
+  ]
+ },
+ {
+  "d": {
+   "id": "mortiphasm-3",
+   "side": "enemy",
+   "spriteKey": "mortiphasm",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "mortiphasm",
+   "mortiphasm",
+   "mortiphasm-3"
+  ],
+  "ns": [
+   "exp-leblanc-mortiphasm",
+   "exp-leblanc-mortiphasm",
+   "exp-leblanc-mortiphasm-3"
+  ]
+ },
+ {
+  "d": {
+   "id": "mortiphasm-4",
+   "side": "enemy",
+   "spriteKey": "mortiphasm",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "mortiphasm",
+   "mortiphasm",
+   "mortiphasm-4"
+  ],
+  "ns": [
+   "exp-leblanc-mortiphasm",
+   "exp-leblanc-mortiphasm",
+   "exp-leblanc-mortiphasm-4"
+  ]
+ },
+ {
+  "d": {
+   "id": "ormi-entrance",
+   "side": "enemy",
+   "spriteKey": "ormi",
+   "level": 19,
+   "enemy": {
+    "formIndex": 0,
+    "level": 19
+   }
+  },
+  "bare": [
+   "ormi",
+   "ormi",
+   "ormi-entrance"
+  ],
+  "ns": [
+   "exp-leblanc-ormi",
+   "exp-leblanc-ormi",
+   "exp-leblanc-ormi-entrance"
+  ]
+ },
+ {
+  "d": {
+   "id": "overdrive-sin",
+   "side": "enemy",
+   "spriteKey": "overdrive-sin",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "overdrive-sin",
+   "overdrive-sin",
+   "overdrive-sin"
+  ],
+  "ns": [
+   "exp-leblanc-overdrive-sin",
+   "exp-leblanc-overdrive-sin",
+   "exp-leblanc-overdrive-sin"
+  ]
+ },
+ {
+  "d": {
+   "id": "paine",
+   "side": "party",
+   "spriteKey": "paine-dark-knight",
+   "dress": "dark-knight",
+   "level": 34
+  },
+  "bare": [
+   "paine-dark-knight",
+   "paine-dark-knight",
+   "paine"
+  ],
+  "ns": [
+   "exp-leblanc-paine-dark-knight",
+   "exp-leblanc-paine-dark-knight",
+   "exp-leblanc-paine"
+  ]
+ },
+ {
+  "d": {
+   "id": "paine",
+   "side": "party",
+   "spriteKey": "paine-dark-knight",
+   "dress": "dark-knight",
+   "level": 50
+  },
+  "bare": [
+   "paine-dark-knight",
+   "paine-dark-knight",
+   "paine"
+  ],
+  "ns": [
+   "exp-leblanc-paine-dark-knight",
+   "exp-leblanc-paine-dark-knight",
+   "exp-leblanc-paine"
+  ]
+ },
+ {
+  "d": {
+   "id": "paine",
+   "side": "party",
+   "spriteKey": "paine-dark-knight",
+   "dress": "dark-knight",
+   "level": 58
+  },
+  "bare": [
+   "paine-dark-knight",
+   "paine-dark-knight",
+   "paine"
+  ],
+  "ns": [
+   "exp-leblanc-paine-dark-knight",
+   "exp-leblanc-paine-dark-knight",
+   "exp-leblanc-paine"
+  ]
+ },
+ {
+  "d": {
+   "id": "paine",
+   "side": "party",
+   "spriteKey": "paine-dark-knight",
+   "dress": "dark-knight",
+   "level": 99
+  },
+  "bare": [
+   "paine-dark-knight",
+   "paine-dark-knight",
+   "paine"
+  ],
+  "ns": [
+   "exp-leblanc-paine-dark-knight",
+   "exp-leblanc-paine-dark-knight",
+   "exp-leblanc-paine"
+  ]
+ },
+ {
+  "d": {
+   "id": "paine",
+   "side": "party",
+   "spriteKey": "paine-warrior",
+   "dress": "warrior",
+   "level": 22
+  },
+  "bare": [
+   "paine-warrior",
+   "paine-warrior",
+   "paine"
+  ],
+  "ns": [
+   "exp-leblanc-paine-warrior",
+   "exp-leblanc-paine-warrior",
+   "exp-leblanc-paine"
+  ]
+ },
+ {
+  "d": {
+   "id": "paine",
+   "side": "party",
+   "spriteKey": "paine-warrior",
+   "dress": "warrior",
+   "level": 25
+  },
+  "bare": [
+   "paine-warrior",
+   "paine-warrior",
+   "paine"
+  ],
+  "ns": [
+   "exp-leblanc-paine-warrior",
+   "exp-leblanc-paine-warrior",
+   "exp-leblanc-paine"
+  ]
+ },
+ {
+  "d": {
+   "id": "paragon",
+   "side": "enemy",
+   "spriteKey": "paragon",
+   "level": 99,
+   "enemy": {
+    "formIndex": 0,
+    "level": 99
+   }
+  },
+  "bare": [
+   "paragon",
+   "paragon",
+   "paragon"
+  ],
+  "ns": [
+   "exp-leblanc-paragon",
+   "exp-leblanc-paragon",
+   "exp-leblanc-paragon"
+  ]
+ },
+ {
+  "d": {
+   "id": "rikku",
+   "side": "party",
+   "spriteKey": "rikku-alchemist",
+   "dress": "alchemist",
+   "level": 99
+  },
+  "bare": [
+   "rikku-alchemist",
+   "rikku-alchemist",
+   "rikku"
+  ],
+  "ns": [
+   "exp-leblanc-rikku-alchemist",
+   "exp-leblanc-rikku-alchemist",
+   "exp-leblanc-rikku"
+  ]
+ },
+ {
+  "d": {
+   "id": "rikku",
+   "side": "party",
+   "spriteKey": "rikku-dark-knight",
+   "dress": "dark-knight",
+   "level": 24
+  },
+  "bare": [
+   "rikku-dark-knight",
+   "rikku-dark-knight",
+   "rikku"
+  ],
+  "ns": [
+   "exp-leblanc-rikku-dark-knight",
+   "exp-leblanc-rikku-dark-knight",
+   "exp-leblanc-rikku"
+  ]
+ },
+ {
+  "d": {
+   "id": "rikku",
+   "side": "party",
+   "spriteKey": "rikku-dark-knight",
+   "dress": "dark-knight",
+   "level": 33
+  },
+  "bare": [
+   "rikku-dark-knight",
+   "rikku-dark-knight",
+   "rikku"
+  ],
+  "ns": [
+   "exp-leblanc-rikku-dark-knight",
+   "exp-leblanc-rikku-dark-knight",
+   "exp-leblanc-rikku"
+  ]
+ },
+ {
+  "d": {
+   "id": "rikku",
+   "side": "party",
+   "spriteKey": "rikku-dark-knight",
+   "dress": "dark-knight",
+   "level": 48
+  },
+  "bare": [
+   "rikku-dark-knight",
+   "rikku-dark-knight",
+   "rikku"
+  ],
+  "ns": [
+   "exp-leblanc-rikku-dark-knight",
+   "exp-leblanc-rikku-dark-knight",
+   "exp-leblanc-rikku"
+  ]
+ },
+ {
+  "d": {
+   "id": "rikku",
+   "side": "party",
+   "spriteKey": "rikku-dark-knight",
+   "dress": "dark-knight",
+   "level": 56
+  },
+  "bare": [
+   "rikku-dark-knight",
+   "rikku-dark-knight",
+   "rikku"
+  ],
+  "ns": [
+   "exp-leblanc-rikku-dark-knight",
+   "exp-leblanc-rikku-dark-knight",
+   "exp-leblanc-rikku"
+  ]
+ },
+ {
+  "d": {
+   "id": "rikku",
+   "side": "party",
+   "spriteKey": "rikku-thief",
+   "dress": "thief",
+   "level": 21
+  },
+  "bare": [
+   "rikku-thief",
+   "rikku-thief",
+   "rikku"
+  ],
+  "ns": [
+   "exp-leblanc-rikku-thief",
+   "exp-leblanc-rikku-thief",
+   "exp-leblanc-rikku"
+  ]
+ },
+ {
+  "d": {
+   "id": "rikku",
+   "side": "party",
+   "spriteKey": "rikku"
+  },
+  "bare": [
+   "rikku",
+   "rikku",
+   "rikku"
+  ],
+  "ns": [
+   "exp-leblanc-rikku",
+   "exp-leblanc-rikku",
+   "exp-leblanc-rikku"
+  ]
+ },
+ {
+  "d": {
+   "id": "seymour-flux",
+   "side": "enemy",
+   "spriteKey": "seymour-flux-body",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "seymour-flux-body",
+   "seymour-flux-body",
+   "seymour-flux"
+  ],
+  "ns": [
+   "exp-leblanc-seymour-flux-body",
+   "exp-leblanc-seymour-flux-body",
+   "exp-leblanc-seymour-flux"
+  ]
+ },
+ {
+  "d": {
+   "id": "seymour-macalania",
+   "side": "enemy",
+   "spriteKey": "seymour-macalania",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "seymour-macalania",
+   "seymour-macalania",
+   "seymour-macalania"
+  ],
+  "ns": [
+   "exp-leblanc-seymour-macalania",
+   "exp-leblanc-seymour-macalania",
+   "exp-leblanc-seymour-macalania"
+  ]
+ },
+ {
+  "d": {
+   "id": "seymour-natus",
+   "side": "enemy",
+   "spriteKey": "seymour-natus",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "seymour-natus",
+   "seymour-natus",
+   "seymour-natus"
+  ],
+  "ns": [
+   "exp-leblanc-seymour-natus",
+   "exp-leblanc-seymour-natus",
+   "exp-leblanc-seymour-natus"
+  ]
+ },
+ {
+  "d": {
+   "id": "seymour-omnis",
+   "side": "enemy",
+   "spriteKey": "seymour-omnis",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "seymour-omnis",
+   "seymour-omnis",
+   "seymour-omnis"
+  ],
+  "ns": [
+   "exp-leblanc-seymour-omnis",
+   "exp-leblanc-seymour-omnis",
+   "exp-leblanc-seymour-omnis"
+  ]
+ },
+ {
+  "d": {
+   "id": "shade-baralai",
+   "side": "enemy",
+   "spriteKey": "baralai-shade",
+   "level": 52,
+   "enemy": {
+    "formIndex": 0,
+    "level": 52
+   }
+  },
+  "bare": [
+   "baralai-shade",
+   "baralai-shade",
+   "shade-baralai"
+  ],
+  "ns": [
+   "exp-leblanc-baralai-shade",
+   "exp-leblanc-baralai-shade",
+   "exp-leblanc-shade-baralai"
+  ]
+ },
+ {
+  "d": {
+   "id": "tidus",
+   "side": "party",
+   "spriteKey": "tidus"
+  },
+  "bare": [
+   "tidus",
+   "tidus",
+   "tidus"
+  ],
+  "ns": [
+   "exp-leblanc-tidus",
+   "exp-leblanc-tidus",
+   "exp-leblanc-tidus"
+  ]
+ },
+ {
+  "d": {
+   "id": "vegnagun-tail",
+   "side": "enemy",
+   "spriteKey": "vegnagun-tail",
+   "level": 41,
+   "enemy": {
+    "formIndex": 0,
+    "level": 41
+   }
+  },
+  "bare": [
+   "vegnagun-tail",
+   "vegnagun-tail",
+   "vegnagun-tail"
+  ],
+  "ns": [
+   "exp-leblanc-vegnagun-tail",
+   "exp-leblanc-vegnagun-tail",
+   "exp-leblanc-vegnagun-tail"
+  ]
+ },
+ {
+  "d": {
+   "id": "wakka",
+   "side": "party",
+   "spriteKey": "wakka"
+  },
+  "bare": [
+   "wakka",
+   "wakka",
+   "wakka"
+  ],
+  "ns": [
+   "exp-leblanc-wakka",
+   "exp-leblanc-wakka",
+   "exp-leblanc-wakka"
+  ]
+ },
+ {
+  "d": {
+   "id": "x2-ixion",
+   "side": "enemy",
+   "spriteKey": "x2-ixion",
+   "level": 28,
+   "enemy": {
+    "formIndex": 0,
+    "level": 28
+   }
+  },
+  "bare": [
+   "x2-ixion",
+   "x2-ixion",
+   "x2-ixion"
+  ],
+  "ns": [
+   "exp-leblanc-x2-ixion",
+   "exp-leblanc-x2-ixion",
+   "exp-leblanc-x2-ixion"
+  ]
+ },
+ {
+  "d": {
+   "id": "x2-shiva",
+   "side": "enemy",
+   "spriteKey": "x2-shiva",
+   "level": 41,
+   "enemy": {
+    "formIndex": 0,
+    "level": 41
+   }
+  },
+  "bare": [
+   "x2-shiva",
+   "x2-shiva",
+   "x2-shiva"
+  ],
+  "ns": [
+   "exp-leblanc-x2-shiva",
+   "exp-leblanc-x2-shiva",
+   "exp-leblanc-x2-shiva"
+  ]
+ },
+ {
+  "d": {
+   "id": "yojimbo",
+   "side": "enemy",
+   "spriteKey": "yojimbo-cavern",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "yojimbo-cavern",
+   "yojimbo-cavern",
+   "yojimbo"
+  ],
+  "ns": [
+   "exp-leblanc-yojimbo-cavern",
+   "exp-leblanc-yojimbo-cavern",
+   "exp-leblanc-yojimbo"
+  ]
+ },
+ {
+  "d": {
+   "id": "yu-pagoda-left",
+   "side": "enemy",
+   "spriteKey": "yu-pagoda",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "yu-pagoda",
+   "yu-pagoda",
+   "yu-pagoda-left"
+  ],
+  "ns": [
+   "exp-leblanc-yu-pagoda",
+   "exp-leblanc-yu-pagoda",
+   "exp-leblanc-yu-pagoda-left"
+  ]
+ },
+ {
+  "d": {
+   "id": "yu-pagoda-right",
+   "side": "enemy",
+   "spriteKey": "yu-pagoda",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "yu-pagoda",
+   "yu-pagoda",
+   "yu-pagoda-right"
+  ],
+  "ns": [
+   "exp-leblanc-yu-pagoda",
+   "exp-leblanc-yu-pagoda",
+   "exp-leblanc-yu-pagoda-right"
+  ]
+ },
+ {
+  "d": {
+   "id": "yuna",
+   "side": "party",
+   "spriteKey": "yuna-dark-knight",
+   "dress": "dark-knight",
+   "level": 99
+  },
+  "bare": [
+   "yuna-dark-knight",
+   "yuna-dark-knight",
+   "yuna"
+  ],
+  "ns": [
+   "exp-leblanc-yuna-dark-knight",
+   "exp-leblanc-yuna-dark-knight",
+   "exp-leblanc-yuna"
+  ]
+ },
+ {
+  "d": {
+   "id": "yuna",
+   "side": "party",
+   "spriteKey": "yuna-gunner",
+   "dress": "gunner",
+   "level": 20
+  },
+  "bare": [
+   "yuna-gunner",
+   "yuna-gunner",
+   "yuna"
+  ],
+  "ns": [
+   "exp-leblanc-yuna-gunner",
+   "exp-leblanc-yuna-gunner",
+   "exp-leblanc-yuna"
+  ]
+ },
+ {
+  "d": {
+   "id": "yuna",
+   "side": "party",
+   "spriteKey": "yuna-white-mage",
+   "dress": "white-mage",
+   "level": 23
+  },
+  "bare": [
+   "yuna-white-mage",
+   "yuna-white-mage",
+   "yuna"
+  ],
+  "ns": [
+   "exp-leblanc-yuna-white-mage",
+   "exp-leblanc-yuna-white-mage",
+   "exp-leblanc-yuna"
+  ]
+ },
+ {
+  "d": {
+   "id": "yuna",
+   "side": "party",
+   "spriteKey": "yuna-white-mage",
+   "dress": "white-mage",
+   "level": 32
+  },
+  "bare": [
+   "yuna-white-mage",
+   "yuna-white-mage",
+   "yuna"
+  ],
+  "ns": [
+   "exp-leblanc-yuna-white-mage",
+   "exp-leblanc-yuna-white-mage",
+   "exp-leblanc-yuna"
+  ]
+ },
+ {
+  "d": {
+   "id": "yuna",
+   "side": "party",
+   "spriteKey": "yuna-white-mage",
+   "dress": "white-mage",
+   "level": 46
+  },
+  "bare": [
+   "yuna-white-mage",
+   "yuna-white-mage",
+   "yuna"
+  ],
+  "ns": [
+   "exp-leblanc-yuna-white-mage",
+   "exp-leblanc-yuna-white-mage",
+   "exp-leblanc-yuna"
+  ]
+ },
+ {
+  "d": {
+   "id": "yuna",
+   "side": "party",
+   "spriteKey": "yuna-white-mage",
+   "dress": "white-mage",
+   "level": 54
+  },
+  "bare": [
+   "yuna-white-mage",
+   "yuna-white-mage",
+   "yuna"
+  ],
+  "ns": [
+   "exp-leblanc-yuna-white-mage",
+   "exp-leblanc-yuna-white-mage",
+   "exp-leblanc-yuna"
+  ]
+ },
+ {
+  "d": {
+   "id": "yuna",
+   "side": "party",
+   "spriteKey": "yuna"
+  },
+  "bare": [
+   "yuna",
+   "yuna",
+   "yuna"
+  ],
+  "ns": [
+   "exp-leblanc-yuna",
+   "exp-leblanc-yuna",
+   "exp-leblanc-yuna"
+  ]
+ },
+ {
+  "d": {
+   "id": "yunalesca",
+   "side": "enemy",
+   "spriteKey": "yunalesca-1",
+   "enemy": {
+    "formIndex": 0
+   }
+  },
+  "bare": [
+   "yunalesca-1",
+   "yunalesca-1",
+   "yunalesca"
+  ],
+  "ns": [
+   "exp-leblanc-yunalesca-1",
+   "exp-leblanc-yunalesca-1",
+   "exp-leblanc-yunalesca"
+  ]
+ }
+]
