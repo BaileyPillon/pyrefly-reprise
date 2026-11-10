@@ -33,7 +33,7 @@ export { GULLWINGS_CH1_ID } from './gullwings-ch1-ids.ts';
 /** The card's words (the chapter record and the pause metadata, `./chapter-meta-ffx2-gullwings-ch1.ts`, both read them). Our own words over the sourced beats. */
 export const GULLWINGS_CH1_TEXT = {
   title: 'Gullwings, Chapter 1',
-  subtitle: 'Four hotspots, four guardians', // two lines on the prep card at 1600x900 (the longer one ran to three)
+  subtitle: 'Four hotspots, four guardians', // one line on the prep card at 1600x900 (the longer one ran to three)
   location: 'The Floating Ruins, Besaid, Zanarkand and Kilika',
   // Short enough to read whole on the prep card at 1600x900 (the first draft was clipped mid-sentence; the card scrolls, but nobody should have to).
   blurb: 'The Gullwings have only just learned that a sphere can be worth the trouble. A spider, a dragon, a beast and a machine each guard one, and each has a trick.',
