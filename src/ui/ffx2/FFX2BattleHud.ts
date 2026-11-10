@@ -42,6 +42,8 @@ import { cvdColour, hexToInt } from '../common/colourVision.ts';
 import { mountTriggerHappy } from './TriggerHappy.ts';
 import { mountLadyLuckReels } from './LadyLuckReels.ts';
 import { partyRowHtml } from './PartyRows.ts';
+import { PlateTaps } from './plateTap.ts'; // Special look (FFX-2 only): the plates of a form take a tap while a target is aimed
+import { formTargetOrder } from './specialRows.ts';
 import { enemyGaugesHtml, type ChargePip } from './BossGauges.ts';
 import { DamageLayer } from './DamageLayer.ts';
 import { playSpherechangeFlourish } from './SpherechangeFlourish.ts';
@@ -159,6 +161,7 @@ export class FFX2BattleHud implements HudPort {
   private stage!: HTMLElement;
   private overlay!: HTMLElement;
   private partyEl!: HTMLElement;
+  private readonly plateTaps = new PlateTaps();
   private enemyEl!: HTMLElement;
   private readonly atb = new AtbLive(); // MF-07: the bars run per frame (`update`), the columns are rebuilt only when their structure changes
   private telegraphEl!: HTMLElement;
@@ -431,6 +434,7 @@ export class FFX2BattleHud implements HudPort {
     this.telegraphEl = this.stage.querySelector('.ffx2hud__telegraph') as HTMLElement;
     this.message.mount(this.telegraphEl, this.el);
     this.partyEl = this.stage.querySelector('.ffx2hud__party') as HTMLElement;
+    this.plateTaps.bind(this.partyEl);
     this.commandEl = this.stage.querySelector('.ffx2hud__command') as HTMLElement;
     this.commandInfoEl = this.stage.querySelector('.ffx2-cmd-info') as HTMLElement;
     this.help = new CommandHelp(this.commandInfoEl, () => FFX2_COMMAND_HELP_PLACEMENT_RESOLVED && battleHelpOn(), () => this.placeCommandBand());
@@ -1013,6 +1017,8 @@ export class FFX2BattleHud implements HudPort {
         if (id === actorId) return 'self';
         return this.lastState?.combatants[id]?.side === 'enemy' ? 'enemy' : 'ally';
       },
+      plateTaps: this.plateTaps,
+      targetOrder: (ids) => formTargetOrder(this.lastState, ids),
       onSelection: (sel, candidates) => this.applySelection(sel, candidates),
       onHelp: (label, text) => this.setCommandHelp(label, text),
       actorName: actor?.name ?? actorId,

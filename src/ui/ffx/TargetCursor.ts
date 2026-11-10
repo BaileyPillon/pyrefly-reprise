@@ -121,6 +121,8 @@ export class TargetCursor {
    * selected" feels like in the hand.
    */
   private order: number[] = [];
+  /** Special look (FFX-2 only): the ids in the order the cursor cycles them, first. Absent: sorted by projected x, as always. */
+  private orderHint: readonly CombatantId[] | null = null;
   private readonly onClick: (e: MouseEvent) => void;
   private clickHandler: ((id: CombatantId) => void) | null = null;
   private selectionHandler: ((sel: CursorSelection | null) => void) | null = null;
@@ -357,7 +359,17 @@ export class TargetCursor {
     // A candidate that cannot be projected keeps its engine order at the end
     // rather than being dropped — it is still a legal target.
     withX.sort((a, b) => a.x - b.x || a.i - b.i);
+    const hint = this.orderHint;
+    if (hint) {
+      const rank = (i: number): number => { const k = hint.indexOf(this.entries[i]!.id); return k < 0 ? Number.MAX_SAFE_INTEGER : k; };
+      withX.sort((a, b) => rank(a.i) - rank(b.i) || a.x - b.x || a.i - b.i);
+    }
     this.order = withX.map((w) => w.i);
+  }
+
+  /** An optional cycling order: the ids in `ids` come first, in that order; every other candidate follows by projected x. `null` (the default) is today's order. */
+  setOrder(ids: readonly CombatantId[] | null): void {
+    this.orderHint = ids;
   }
 
   /** Call whenever the presenter's camera may have moved, to re-read positions. */

@@ -39,6 +39,8 @@ import { TargetCursor, type CursorSelection, type TargetEntry, type TargetRect }
 import { resolveTargetMode } from '../ffx/CommandMenuLogic.ts';
 import { aimOnTap } from '../common/touchTapAim.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
+import { leaveLabelOf } from './specialLeave.ts'; // Special look (FFX-2 only): "Leave Floral Fallal"; null for every other row
+import type { PlateTaps } from './plateTap.ts';
 import { commandHelpText, groupHelpText } from './commandHelp.ts';
 import { withTargets } from './withTargets.ts';
 import { keepPlateDocked } from './plateRedock.ts';
@@ -116,6 +118,8 @@ const CHANGE_LABEL = 'Change';
 function spherechangeLabel(c: AvailableCommand): string {
   const cmd = c.command;
   if (cmd.kind !== 'spherechange') return c.label;
+  const leave = leaveLabelOf(c);
+  if (leave) return leave;
   return cmd.extra.specialDressUp ? `${dressphereLabel(cmd.extra.toDressphere)} (Special)` : dressphereLabel(cmd.extra.toDressphere);
 }
 
@@ -189,6 +193,10 @@ export interface CommandMenuDeps {
   onOpen?: (close: () => void) => void;
   /** The cursor's level at each view change: `'top'` list, `'deep'` submenu or target (Wait's split, ffx2-combat-core §1.5). */
   onLevel?: (level: 'top' | 'deep') => void;
+  /** Special look (FFX-2 only): the party list's plate taps. The menu hands it a handler for the length of its life and takes it away on cleanup; it writes nothing to the DOM. */
+  plateTaps?: PlateTaps;
+  /** Special look (FFX-2 only): the order the plates of a form are cycled in (main, right part, left part), or `null` for every ordinary pick. */
+  targetOrder?: (ids: readonly CombatantId[]) => readonly CombatantId[] | null;
 }
 
 /**
@@ -275,9 +283,11 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       return pt ? { x: pt.x, y: pt.y, w: 0, h: 0 } : null;
     });
     cursor.setOnSelection((sel) => deps.onSelection?.(sel, sel ? targetIds.length : 0));
-    cursor.setOnClick((id) => {
+    const clickPath = (id: CombatantId): void => {
       if (view === 'target' && pending && (groupMode || !aimOnTap(cursor, id))) finish(pending, groupMode ? targetIds : [id]); // PR-0264: a touch tap aims first
-    });
+    };
+    cursor.setOnClick(clickPath);
+    deps.plateTaps?.set((id) => { if (targetIds.includes(id)) clickPath(id); }); // Special look: a tap on a plate that is a candidate acts like a click on the figure's own mark; any other plate does nothing
     deps.targetLayer.append(cursor.el);
     keepPlateDocked(cursor, deps.panels, () => view === 'target');
     /** True while the chosen command hits every listed target. */
@@ -287,6 +297,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
     const cleanup = (): void => {
       if (!live) return;
       live = false;
+      deps.plateTaps?.set(null);
       // The menu is gone; Esc belongs to nobody until the next one opens.
       releaseCancel();
       window.removeEventListener('keydown', onKey);
@@ -470,7 +481,11 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       cursor.setHelpLine(pending ? commandHelpText(pending) : ''); // lane pro-look: the pro target flag's damage line
       if (groupMode) cursor.showGroup(entries);
       // Opens on the engine's preferred side: most X-2 skills also list the girls.
-      else cursor.showSingle(entries, 0, pending?.preferredTargets);
+      else {
+        const order = deps.targetOrder?.(targetIds); // Special look: the plates' own order, main then right then left
+        cursor.setOrder(order ?? null); // null clears a hint an earlier target view left
+        cursor.showSingle(entries, 0, pending?.preferredTargets);
+      }
     }
 
     /** Opens a category. A group with nothing enabled in it (a Cursed Change) never opens. */
