@@ -37,6 +37,13 @@ export const DRESSPHERE_COLOURS: Record<string, string> = {
   'floral-fallal': '#F7B6D9',
   'machina-maw': '#3E9E96',
   'full-throttle': '#C93A42',
+  // The six parts of the three Specials (step D1, FFX-2 only). Floral Fallal's two take a neutral cream: pink already means the acting row, the aimed enemy and the Special itself. [ours]
+  'floral-fallal-right-pistil': '#F4F1E8',
+  'floral-fallal-left-pistil': '#F4F1E8',
+  'machina-maw-smasher-r': '#3E9E96',
+  'machina-maw-crusher-l': '#3E9E96',
+  'full-throttle-right': '#C93A42',
+  'full-throttle-left': '#C93A42',
 };
 
 const DEFAULT_COLOUR = '#8E6A3E';
@@ -71,6 +78,13 @@ const ABBR: Record<string, string> = {
   'floral-fallal': 'FF',
   'machina-maw': 'MW',
   'full-throttle': 'FT',
+  // The six parts of the three Specials (step D1, FFX-2 only): without these rows both Pistils would print FF.
+  'floral-fallal-right-pistil': 'RP',
+  'floral-fallal-left-pistil': 'LP',
+  'machina-maw-smasher-r': 'SR',
+  'machina-maw-crusher-l': 'CL',
+  'full-throttle-right': 'DW',
+  'full-throttle-left': 'SW',
 };
 
 /**

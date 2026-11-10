@@ -15,6 +15,8 @@
 
 import type { AtbSnapshot, CombatantId, FFX2Combatant } from '../../battle/common/types.ts';
 import { dressphereAbbr, dressphereColour, dressphereLabel } from './dressphereIcons.ts';
+import { partCropOf, partFaceHtml } from './partCrop.ts'; // Special look (FFX-2 only): a part's tile is a crop of the figure
+import { badgeHtml, faceDressOf, formRoleOf } from './specialRows.ts'; // Special look (FFX-2 only): null / the unit's own dress / '' for a unit in no form, which is every unit while the switch is OFF
 import { captionHtml, ffx2RowTagsHtml } from '../common/statusRows.ts';
 import { faceLadder } from '../common/partyFace.ts';
 import { faceLayersHtml } from '../common/portrait.ts';
@@ -108,8 +110,10 @@ export interface PartyRowOptions {
  * nothing ever shows a broken image.
  */
 function faceStackHtml(c: FFX2Combatant, dressphere: string, monogram: string, ns?: string, proMark: RowMark = null): string {
+  const role = formRoleOf(c);
+  if (role && role.role !== 'main') return partFaceHtml(c, monogram, partCropOf(role.special, role.role), proMark); // a part's tile: the crop of the figure, never a portrait or a URL of its own
   // Inside an art namespace there are no portraits: the head is the crop of the namespaced idle painting (`faceLadder`).
-  const { art, portraits } = faceLadder(c.id, dressphere, ns);
+  const { art, portraits } = faceLadder(c.id, faceDressOf(c, dressphere), ns); // the main of a form shows HER head (the dress she stood on), not the figure's crown
   // The stacking itself lives in `ui/common/portrait.ts` so the prep screen's
   // roster — which draws Paine's initial where this draws her face — can adopt
   // it in one line (docs/handoff/fix3-ffx2-hud-prep.md).
@@ -146,7 +150,12 @@ export function partyRowHtml(
   // Status display O2/O3 (Bailey's pick, 2026-09-29): square tags in place of the text chips, and
   // a caption where a status takes the command away ("ASLEEP"). `ui/common/statusRows.ts`.
   const statuses = ffx2RowTagsHtml(c);
-  return `<div class="ig-stat${acting}" data-actor-id="${c.id}" style="margin-right: calc(var(--ig-stat-step) * ${opts.index})${rowMarkStyle(proMark)}">
+  // Special look (FFX-2 only): the plates of a form. A unit in no form has no role, so these three are '' and the row below is the string it always was.
+  const role = formRoleOf(c);
+  const formCls = role ? ` ig-stat--form ig-stat--form-${role.role === 'main' ? 'main' : 'part'}` : '';
+  const formAttr = role ? ` data-form-role="${role.role}" data-form-special="${role.special}"` : '';
+  const badge = role?.role === 'main' ? badgeHtml(role.special) : '';
+  return `<div class="ig-stat${acting}${formCls}" data-actor-id="${c.id}"${formAttr} style="margin-right: calc(var(--ig-stat-step) * ${opts.index})${rowMarkStyle(proMark)}">
     ${faceStackHtml(c, dressphere, monogram, opts.artNamespace, proMark)}
     <div class="ffx2stat__body">
       <div class="ffx2stat__top">
@@ -159,6 +168,6 @@ export function partyRowHtml(
         <i class="ffx2atb__fill" style="${live ? scaleStyle(live.fill) : `width:${fillPct}%`}"></i>
         ${charge}
       </div>
-    </div>
+    </div>${badge}
   </div>`;
 }
