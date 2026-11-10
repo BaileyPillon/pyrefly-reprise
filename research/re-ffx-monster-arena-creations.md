@@ -17,7 +17,7 @@ Companion: `docs/plans/ch-gauntlet-review.md` (the paper preflight). The researc
 
 ## 1. The records [bytes]
 
-HP, MP, overkill threshold, STR / DEF / MAG / MDEF / AGI, then flags. All nine: **no elemental affinity of any kind** (except the Cactuar King); **AP 50,000 (Originals) or 8,000 (the area three), gil 0**; certain drop; steal and arena price as shown. Immune to Scan (extra word) and to Sensor (all nine; Neslug is also immune to Doom); Threaten byte 0 (lands) on all; Poison, Zombie, Death, Petrify, Confuse, Berserk, Provoke, Sleep, Darkness 255 on all nine; **Slow lands on Jormungand only** (byte 0), 255 elsewhere; the four Breaks 255 everywhere except **Jormungand 90**; **Silence lands on Neslug only**. Shell, Protect, Reflect, the Nuls, Regen, Haste land (0) on all except **Th'uban's Reflect (255)**.
+HP, MP, overkill threshold, STR / DEF / MAG / MDEF / AGI, then flags. All nine: **no elemental affinity of any kind** (except the Cactuar King); **AP 50,000 (Originals) or 8,000 (the area three), gil 0**; certain drop; steal and arena price as shown. Immune to Scan (extra word) and to Sensor (all nine; Neslug is also immune to Doom); Threaten byte 0 on all (the byte is the Threaten chance, so 0 = it never lands; see section 6, errata); Poison, Zombie, Death, Petrify, Confuse, Berserk, Provoke, Sleep, Darkness 255 on all nine; **Slow lands on Jormungand only** (byte 0), 255 elsewhere; the four Breaks 255 everywhere except **Jormungand 90**; **Silence lands on Neslug only**. Shell, Protect, Reflect, the Nuls, Regen, Haste land (0) on all except **Th'uban's Reflect (255)**.
 
 | Id | Creature | HP | MP | STR | DEF | MAG | MDEF | AGI | Other flags | Drop (common / rare) | Steal (common / rare) | Arena price |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---|---|---|---:|
@@ -88,7 +88,7 @@ Hook names as in the earlier notes; "queues nothing" means the turn is lost and 
 
 ### 3.4 Earth Eater (`m279`)
 
-- **Standing:** each turn a coin flip (50/50): **one Attack** on a random member, or **two Megaton Punches** on random members. **On every hit it takes while standing it counters with one Megaton Punch** on a random living member (Death 100; the party's Ribbon answers it). It **adds up the HP damage it takes**; **when the total passes 100,000** it **falls**: Armored off. [run]
+- **Standing:** each turn a coin flip (50/50): **one Attack** on a random member, or **two Megaton Punches** on random members. **On every hit it takes while standing it counters with one Megaton Punch** on a random living member (Death 100; the Ribbon is no Death ward in the repo's engine, see section 6, errata). It **adds up the HP damage it takes**; **when the total passes 100,000** it **falls**: Armored off. [run]
 - **Down:** its first two turns do nothing, on the **third it "Gets up"** (Power Break and Darkness cleansed from itself, **Armored back on**, the counter and total reset). **Every hit while it is down is answered by a Flare it casts at itself, which its own Reflect bounces onto a random party member** (2,355 to 2,660 each, Shell halves). So **the player wants to knock it down with a burst and then wait out two turns, not keep hitting it**. [run] [arith]
 - Jegged's account ("counters with Megaton Punch standing, reflects Flare on its back") matches. [guide]
 
@@ -152,6 +152,7 @@ The same idea as Spherimorph (row 41, `re-ffx-spherimorph.md`) at 1,500,000 HP: 
 - **Neslug is not a plain brute:** a shell machine with permanent Regen and physical immunity (3.2).
 - **Earth Eater's two modes** are the whole fight (3.4); a plain grind gets a Megaton Punch per hit.
 - **The Cactuar King is a survival-and-speed check, not a grind:** 100,000 HP is two capped hits, but 83 percent of its turns (and every hit it takes) are a lethal Needle, and it leaves after about 18 of its turns.
+- **Errata found while building the chapter (2026-11-10):** (1) **Threaten:** the record's byte is the Threaten *chance* (a default creature has 100), so byte 0 means Threaten never lands on any of the nine; the summary's "(lands)" read it the wrong way round (the chapter ships `threatenChance: 0`, the repo's convention for "immune"). (2) **Earth Eater's Megaton Punch and the Ribbon:** the Ribbon does not stop Death in the repo's engine (it is no Death ward there), so the Punch kills the member it lands on unless the party wears a Deathproof armour; section 3.4's "the party's Ribbon answers it" was a guess. (3) **Earth Eater's down-state Flare:** the bytes (3.4) have no counter-attack gate, so a Flare that its own Reflect no longer bounces (Dispel) would land on itself and be answered by the next Flare; the sources do not say what the game does there, and the chapter cuts that one loop (a hit it deals to itself asks for nothing). (4) **Zanmato byte (record +0x112):** this note prints none; the plan that cites it says "3 on the area three, 4 on the Originals", but the records give 3 to the area three and to Neslug (an Original) and 4 to the other five bodies.
 
 ## 7. Sources against the files
 
